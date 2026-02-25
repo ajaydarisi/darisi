@@ -1,0 +1,21 @@
+{
+  "name": "Darisi",
+  "short_name": "Darisi",
+  "description": "Premium creative technology studio. Build. Design. Launch.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0B",
+  "theme_color": "#8B1E2D",
+  "icons": [
+    {
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

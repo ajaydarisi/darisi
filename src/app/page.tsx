@@ -15,7 +15,6 @@ const jsonLd = [
     logo: `${SITE_URL}/logo.svg`,
     description:
       "Darisi is a premium creative technology studio crafting digital products, apps, platforms, and design systems with precision and purpose.",
-    sameAs: [],
   },
   {
     "@context": "https://schema.org",
