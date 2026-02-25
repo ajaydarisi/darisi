@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer id="contact" className="py-16 border-t border-border">
+    <footer id="contact" aria-label="Darisi footer" className="py-16 border-t border-border">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div>

@@ -24,35 +24,42 @@ const projects = [
 
 export function Work() {
   return (
-    <section id="work" className="py-24">
+    <section id="work" aria-labelledby="work-heading" className="py-24">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <h2 className="text-2xl font-medium text-foreground mb-8">Work</h2>
+        <h2 id="work-heading" className="text-2xl font-medium text-foreground mb-8">
+          Work by Darisi
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <a
+            <article
               key={project.title}
-              href={project.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-surface border border-border rounded-2xl p-6 hover:bg-elevated transition-all duration-200 ease-out"
+              className="bg-surface border border-border rounded-2xl hover:bg-elevated transition-all duration-200 ease-out"
             >
-              <h3 className="text-lg font-medium text-foreground">
-                {project.title}
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                {project.description}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs text-muted border border-border rounded-lg px-2 py-1"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </a>
+              <a
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6"
+                aria-label={`View ${project.title} — a Darisi project`}
+              >
+                <h3 className="text-lg font-medium text-foreground">
+                  {project.title}
+                </h3>
+                <p className="mt-2 text-sm text-muted leading-relaxed">
+                  {project.description}
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-2" aria-label="Technologies used">
+                  {project.tech.map((t) => (
+                    <li
+                      key={t}
+                      className="text-xs text-muted border border-border rounded-lg px-2 py-1"
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </a>
+            </article>
           ))}
         </div>
       </div>
