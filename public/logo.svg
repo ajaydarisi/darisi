@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Golden Ratio "D" Logo — Darisi
+    φ = 1.618
+    Height = 340px, Width = 340/φ ≈ 210px
+    Ratio: 340:210 = 1.619 ≈ φ
+    Vertical stem + cubic bezier bowl
+  -->
+  <path
+    d="M 151 86 L 151 426 M 151 86 C 431 86 431 426 151 426"
+    stroke="#8B1E2D"
+    stroke-width="36"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
