@@ -95,7 +95,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body className="bg-dot-pattern">{children}</body>
     </html>
   );
 }
