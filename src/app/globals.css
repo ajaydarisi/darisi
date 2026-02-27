@@ -43,6 +43,22 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-width: thin;
+    scrollbar-color: #8B1E2D #141414;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: #141414;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #8B1E2D;
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #A3263B;
   }
   html {
     scroll-behavior: smooth;
