@@ -6,7 +6,7 @@ const stats = [
   { value: "3", label: "Projects Delivered" },
   { value: "24/7", label: "Availability" },
   { value: "100%", label: "Client Satisfaction" },
-  { value: "5+", label: "Technologies Mastered" },
+  { value: "100%", label: "Deadlines Met" },
 ];
 
 export function Stats() {
