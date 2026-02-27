@@ -31,7 +31,7 @@ export function Hero() {
         >
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
           <span className="text-xs font-medium text-muted tracking-wide uppercase">
-            Creative Technology Studio
+            Freelance Developer & Designer
           </span>
         </div>
 
@@ -66,7 +66,7 @@ export function Hero() {
           }`}
           style={{ transitionDelay: "450ms" }}
         >
-          We craft modern digital experiences — from product design to
+          I craft modern digital experiences — from product design to
           full-stack engineering. Precision-built tools, apps, and platforms
           that move fast and feel right.
         </p>
@@ -80,12 +80,12 @@ export function Hero() {
           style={{ transitionDelay: "600ms" }}
         >
           <Button asChild size="lg">
-            <a href="#work" aria-label="Explore Darisi portfolio work">
-              Explore Our Work
+            <a href="#work" aria-label="Explore my portfolio work">
+              Explore My Work
             </a>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <a href="#contact" aria-label="Get in touch with Darisi">
+            <a href="#contact" aria-label="Get in touch with Ajay Darisi">
               Get in Touch
             </a>
           </Button>

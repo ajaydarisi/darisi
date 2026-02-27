@@ -42,10 +42,10 @@ export function Work() {
             id="work-heading"
             className="text-2xl md:text-3xl font-medium text-foreground mb-4"
           >
-            Work by Darisi
+            Selected Work
           </h2>
           <p className="text-muted mb-12 max-w-xl">
-            A selection of products and platforms we&apos;ve built — from
+            A selection of products and platforms I&apos;ve built — from
             concept to production.
           </p>
         </AnimateOnScroll>
@@ -91,7 +91,7 @@ export function Work() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 mt-5 text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
-                    aria-label={`View ${project.title} — a Darisi project`}
+                    aria-label={`View ${project.title}`}
                   >
                     View Project
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />

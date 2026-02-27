@@ -11,9 +11,9 @@ const inter = Inter({
 const SITE_URL = "https://darisi.in";
 const SITE_NAME = "Darisi";
 const SITE_TITLE =
-  "Darisi — Build. Design. Launch. | Creative Technology Studio";
+  "Darisi — Build. Design. Launch. | Ajay Darisi, Freelance Developer & Designer";
 const SITE_DESCRIPTION =
-  "Darisi is a premium creative technology studio crafting digital products, apps, platforms, and design systems with precision and purpose. Build. Design. Launch.";
+  "I'm Ajay Darisi — a freelance developer and designer crafting digital products, apps, platforms, and design systems with precision and purpose. Available for hire.";
 
 export const viewport: Viewport = {
   themeColor: "#0B0B0B",
@@ -25,14 +25,14 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "Darisi",
-    "Darisi studio",
-    "Darisi digital agency",
-    "creative technology studio",
+    "Ajay Darisi",
+    "freelance developer",
+    "freelance designer",
+    "freelance consultant",
     "digital product design",
-    "full-stack development",
-    "app development",
-    "web development agency",
-    "Next.js development",
+    "full-stack developer for hire",
+    "app development freelancer",
+    "Next.js developer",
     "design systems",
     "Build Design Launch",
   ],
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Darisi — Build. Design. Launch. Premium creative technology studio",
+        alt: "Darisi — Build. Design. Launch. Ajay Darisi, freelance developer and designer",
         type: "image/png",
       },
     ],

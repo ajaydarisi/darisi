@@ -20,7 +20,7 @@ const services = [
     icon: Palette,
     title: "Design Systems",
     description:
-      "Consistent, scalable UI component libraries and design tokens that keep teams aligned.",
+      "Consistent, scalable UI component libraries and design tokens that keep your product aligned.",
   },
   {
     icon: Layers,
@@ -40,10 +40,10 @@ export function Services() {
               id="services-heading"
               className="text-2xl md:text-3xl font-medium text-foreground"
             >
-              What We Do
+              What I Do
             </h2>
             <p className="mt-4 text-muted max-w-xl mx-auto">
-              We build digital products that combine engineering precision with
+              I build digital products that combine engineering precision with
               design clarity.
             </p>
           </div>

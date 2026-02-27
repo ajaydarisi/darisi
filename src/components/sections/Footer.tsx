@@ -64,7 +64,7 @@ export function Footer() {
               </span>
             </div>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              A premium creative technology studio crafting digital products,
+              Freelance developer and designer crafting digital products,
               apps, and platforms with precision and purpose.
             </p>
           </div>
@@ -120,18 +120,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Darisi. All rights reserved.
-          </p>
-          <p className="text-xs text-muted inline-flex items-center gap-1.5">
-            Managed by
-            <a
-              href="https://ajay.darisi.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary text-foreground font-bold text-sm transition-colors duration-200"
-            >
-              Ajay Darisi
-            </a>
+            &copy; {new Date().getFullYear()} Ajay Darisi. All rights reserved.
           </p>
         </div>
       </div>

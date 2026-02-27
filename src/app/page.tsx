@@ -12,12 +12,18 @@ const SITE_URL = "https://darisi.in";
 const jsonLd = [
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Darisi",
+    "@type": "Person",
+    name: "Ajay Darisi",
+    alternateName: "Darisi",
     url: SITE_URL,
-    logo: `${SITE_URL}/logo.svg`,
+    image: `${SITE_URL}/logo.svg`,
     description:
-      "Darisi is a premium creative technology studio crafting digital products, apps, platforms, and design systems with precision and purpose.",
+      "Freelance developer and designer crafting digital products, apps, platforms, and design systems with precision and purpose.",
+    jobTitle: "Freelance Developer & Designer",
+    sameAs: [
+      "https://github.com/ajaydarisi",
+      "https://linkedin.com/in/ajaydarisi",
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -25,26 +31,26 @@ const jsonLd = [
     name: "Darisi",
     url: SITE_URL,
     description:
-      "Darisi is a premium creative technology studio. Build. Design. Launch.",
+      "Ajay Darisi — freelance developer and designer. Build. Design. Launch.",
   },
   {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Digital Product Development",
     provider: {
-      "@type": "Organization",
-      name: "Darisi",
+      "@type": "Person",
+      name: "Ajay Darisi",
       url: SITE_URL,
     },
     description:
-      "Full-stack engineering, product design, app development, and design systems by Darisi.",
+      "Full-stack engineering, product design, app development, and design systems by Ajay Darisi.",
     areaServed: "Worldwide",
   },
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Darisi Portfolio",
-    description: "Digital products and platforms built by Darisi.",
+    description: "Digital products and platforms built by Ajay Darisi.",
     mainEntity: {
       "@type": "ItemList",
       itemListElement: [
@@ -57,7 +63,7 @@ const jsonLd = [
             description:
               "Full-stack jewelry e-commerce platform with bilingual support, admin panel, and Razorpay payment integration.",
             url: "https://bfg.darisi.in/",
-            creator: { "@type": "Organization", name: "Darisi" },
+            creator: { "@type": "Person", name: "Ajay Darisi" },
           },
         },
         {
@@ -69,7 +75,7 @@ const jsonLd = [
             description:
               "Two-sided freelance marketplace connecting clients with developers.",
             url: "https://market-place-for-websites.vercel.app/",
-            creator: { "@type": "Organization", name: "Darisi" },
+            creator: { "@type": "Person", name: "Ajay Darisi" },
           },
         },
         {
@@ -81,7 +87,7 @@ const jsonLd = [
             description:
               "Tally-like accounting and inventory system for textile wholesalers.",
             url: "https://textile-inventory-app.vercel.app/",
-            creator: { "@type": "Organization", name: "Darisi" },
+            creator: { "@type": "Person", name: "Ajay Darisi" },
           },
         },
       ],

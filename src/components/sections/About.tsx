@@ -33,26 +33,25 @@ export function About() {
                 id="about-heading"
                 className="text-2xl md:text-3xl font-medium text-foreground mb-8"
               >
-                About Darisi
+                About Me
               </h2>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={100}>
               <p className="text-muted leading-relaxed text-lg">
-                <strong className="text-foreground">Darisi</strong> is a modern
-                digital brand building apps, design systems, and curated online
-                experiences. We believe in quiet power — where clean code meets
-                purposeful design. Every product we ship is built with precision,
+                I&apos;m <strong className="text-foreground">Ajay Darisi</strong> — a freelance
+                developer and designer building apps, design systems, and curated
+                digital experiences. I believe in quiet power — where clean code meets
+                purposeful design. Every product I ship is built with precision,
                 minimal aesthetics, and long-term thinking.
               </p>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={200}>
               <p className="text-muted leading-relaxed text-lg mt-6">
-                From early-stage concepts to production-ready platforms,{" "}
-                <strong className="text-foreground">Darisi</strong> operates at
-                the intersection of engineering and design — creating tools and
-                experiences that feel effortless.
+                From early-stage concepts to production-ready platforms, I
+                operate at the intersection of engineering and design — creating
+                tools and experiences that feel effortless.
               </p>
             </AnimateOnScroll>
 
@@ -93,7 +92,7 @@ export function About() {
                     &ldquo;Build with precision. Design with purpose. Launch
                     with confidence.&rdquo;
                   </blockquote>
-                  <p className="mt-4 text-sm text-muted">— Darisi Philosophy</p>
+                  <p className="mt-4 text-sm text-muted">— My Philosophy</p>
                 </div>
               </div>
             </AnimateOnScroll>

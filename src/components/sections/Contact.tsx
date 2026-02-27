@@ -25,7 +25,7 @@ export function Contact() {
               Let&apos;s Build Something Great
             </h2>
             <p className="mt-4 text-muted max-w-lg mx-auto leading-relaxed">
-              Have a project in mind? We&apos;d love to hear about it. Reach out
+              Have a project in mind? I&apos;d love to hear about it. Reach out
               and let&apos;s turn your ideas into reality.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
@@ -36,7 +36,7 @@ export function Contact() {
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <a href="#work">View Our Work</a>
+                <a href="#work">View My Work</a>
               </Button>
             </div>
           </div>
