@@ -105,10 +105,10 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <About />
         <Services />
         <Work />
         <Stats />
-        <About />
         <Contact />
       </main>
       <Footer />
