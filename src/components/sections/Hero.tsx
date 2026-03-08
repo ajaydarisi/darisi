@@ -55,7 +55,7 @@ export function Hero() {
           style={{ transitionDelay: "300ms" }}
           role="doc-subtitle"
         >
-          Build. Design. Launch.
+          Your Vision. Precision-Built.
         </p>
 
         <p
@@ -66,9 +66,9 @@ export function Hero() {
           }`}
           style={{ transitionDelay: "450ms" }}
         >
-          I craft modern digital experiences — from product design to
-          full-stack engineering. Precision-built tools, apps, and platforms
-          that move fast and feel right.
+          I help startups and businesses ship products that users love — from
+          first wireframe to production deploy. Fast timelines, clean code,
+          zero headaches.
         </p>
 
         <div
@@ -85,12 +85,53 @@ export function Hero() {
             </a>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <a href="#contact" aria-label="Get in touch with Ajay Darisi">
-              Get in Touch
+            <a href="#contact" aria-label="Start your project with Ajay Darisi">
+              Start Your Project
             </a>
           </Button>
         </div>
+
+        <div
+          className={`flex items-center gap-1.5 mt-4 transition-all duration-700 ease-out ${
+            mounted
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "750ms" }}
+        >
+          <svg
+            className="w-3.5 h-3.5 text-muted"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span className="text-xs text-muted">
+            Available around the clock
+          </span>
+        </div>
       </div>
+
+      {/* Scroll indicator */}
+      <a
+        href="#services"
+        className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 group transition-all duration-700 ease-out ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        }`}
+        style={{ transitionDelay: "900ms" }}
+        aria-label="Scroll down"
+      >
+        <span className="text-[10px] uppercase tracking-[0.2em] text-muted/60 group-hover:text-primary/60 transition-colors duration-300">
+          Scroll down
+        </span>
+        <div className="relative w-6 h-10 rounded-full border-2 border-muted/30 group-hover:border-primary/40 transition-colors duration-300">
+          <div className="absolute left-1/2 -translate-x-1/2 top-2 w-1 h-2.5 rounded-full bg-primary animate-scroll-dot" />
+        </div>
+      </a>
     </section>
   );
 }

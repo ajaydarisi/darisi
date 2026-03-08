@@ -1,9 +1,11 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { Process } from "@/components/sections/Process";
 import { Work } from "@/components/sections/Work";
 import { Stats } from "@/components/sections/Stats";
 import { About } from "@/components/sections/About";
+import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 
@@ -45,6 +47,52 @@ const jsonLd = [
     description:
       "Full-stack engineering, product design, app development, and design systems by Ajay Darisi.",
     areaServed: "Worldwide",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What's your typical project timeline?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Most projects take 4–8 weeks from kickoff to launch, depending on scope. I'll give you a realistic timeline during our discovery call — no vague estimates.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do you handle revisions?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Each project includes two rounds of revisions. I'd rather get it right the first time through clear communication upfront, but the buffer is there if we need it.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What's your tech stack?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "I primarily work with Next.js, React, TypeScript, Supabase, and Tailwind CSS. I choose tools based on what's best for your project, not personal preference.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What happens after launch?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "I don't disappear after deployment. I offer 30 days of post-launch support included, and ongoing maintenance packages if you need them.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do I get started?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Fill out the contact form or email me directly. I'll respond within 24 hours with next steps.",
+        },
+      },
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -107,8 +155,10 @@ export default function Home() {
         <Hero />
         <About />
         <Services />
+        <Process />
         <Work />
         <Stats />
+        <FAQ />
         <Contact />
       </main>
       <Footer />

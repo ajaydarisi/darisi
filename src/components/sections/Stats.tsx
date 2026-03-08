@@ -3,10 +3,10 @@
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 const stats = [
-  { value: "3", label: "Projects Delivered" },
-  { value: "24/7", label: "Availability" },
-  { value: "100%", label: "Client Satisfaction" },
-  { value: "100%", label: "Deadlines Met" },
+  { value: "3", label: "Projects Delivered", detail: "and counting" },
+  { value: "24/7", label: "Availability", detail: "always reachable" },
+  { value: "100%", label: "Client Satisfaction", detail: "every project" },
+  { value: "100%", label: "Deadlines Met", detail: "on time, every time" },
 ];
 
 export function Stats() {
@@ -22,6 +22,9 @@ export function Stats() {
                 </span>
                 <span className="block mt-2 text-sm text-muted">
                   {stat.label}
+                </span>
+                <span className="block mt-1 text-xs text-muted/60">
+                  {stat.detail}
                 </span>
               </div>
             </AnimateOnScroll>

@@ -9,24 +9,32 @@ const services = [
     title: "Web Development",
     description:
       "Full-stack web applications with Next.js, React, and modern tooling. Performant, accessible, and built to scale.",
+    outcome:
+      "You get a fast, accessible web app ready for thousands of users.",
   },
   {
     icon: Smartphone,
     title: "App Development",
     description:
       "Cross-platform mobile apps that feel native and perform beautifully across every device.",
+    outcome:
+      "You get a cross-platform app that feels native on every device.",
   },
   {
     icon: Palette,
     title: "Design Systems",
     description:
       "Consistent, scalable UI component libraries and design tokens that keep your product aligned.",
+    outcome:
+      "You get a scalable UI library that keeps your team aligned.",
   },
   {
     icon: Layers,
     title: "Product Design",
     description:
       "From concept to pixel-perfect interfaces with thoughtful UX and clean visual design.",
+    outcome:
+      "You get a polished interface backed by thoughtful UX research.",
   },
 ];
 
@@ -40,7 +48,7 @@ export function Services() {
               id="services-heading"
               className="text-2xl md:text-3xl font-medium text-foreground"
             >
-              What I Do
+              How I Can Help
             </h2>
             <p className="mt-4 text-muted max-w-xl mx-auto">
               I build digital products that combine engineering precision with
@@ -62,10 +70,25 @@ export function Services() {
                 <p className="mt-2 text-sm text-muted leading-relaxed">
                   {service.description}
                 </p>
+                <p className="mt-2 text-xs text-muted/70 italic">
+                  {service.outcome}
+                </p>
               </div>
             </AnimateOnScroll>
           ))}
         </div>
+
+        <AnimateOnScroll variant="fade-up" delay={500}>
+          <p className="text-center mt-12 text-sm text-muted">
+            Not sure what you need?{" "}
+            <a
+              href="#contact"
+              className="text-primary hover:text-primary-hover transition-colors duration-200"
+            >
+              Let&apos;s figure it out together.
+            </a>
+          </p>
+        </AnimateOnScroll>
       </div>
     </section>
   );
