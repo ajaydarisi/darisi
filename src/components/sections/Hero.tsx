@@ -119,7 +119,7 @@ export function Hero() {
       {/* Scroll indicator */}
       <a
         href="#services"
-        className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 group transition-all duration-700 ease-out ${
+        className={`absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 group transition-all duration-700 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
         style={{ transitionDelay: "900ms" }}
@@ -129,7 +129,7 @@ export function Hero() {
           Scroll down
         </span>
         <div className="relative w-6 h-10 rounded-full border-2 border-muted/30 group-hover:border-primary/40 transition-colors duration-300">
-          <div className="absolute left-1/2 -translate-x-1/2 top-2 w-1 h-2.5 rounded-full bg-primary animate-scroll-dot" />
+          <div className="absolute top-2 left-0 right-0 mx-auto w-1 h-2.5 rounded-full bg-primary animate-scroll-dot" />
         </div>
       </a>
     </section>
