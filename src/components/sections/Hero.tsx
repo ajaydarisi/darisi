@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <section
@@ -128,8 +131,8 @@ export function Hero() {
         <span className="text-[10px] uppercase tracking-[0.2em] text-muted/60 group-hover:text-primary/60 transition-colors duration-300">
           Scroll down
         </span>
-        <div className="relative w-6 h-10 rounded-full border-2 border-muted/30 group-hover:border-primary/40 transition-colors duration-300">
-          <div className="absolute top-2 left-0 right-0 mx-auto w-1 h-2.5 rounded-full bg-primary animate-scroll-dot" />
+        <div className="w-6 h-10 rounded-full border-2 border-muted/30 group-hover:border-primary/40 transition-colors duration-300 pt-2">
+          <div className="w-1 h-2.5 rounded-full bg-primary animate-scroll-dot mx-auto block" />
         </div>
       </a>
     </section>
