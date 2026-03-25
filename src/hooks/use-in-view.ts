@@ -16,15 +16,30 @@ export function useInView(options: UseInViewOptions = {}) {
   } = options;
   const ref = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const [hasMeasured, setHasMeasured] = useState(false);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = requestAnimationFrame(() => {
+        setHasMeasured(true);
+        setHasEnteredView(true);
+        setIsInView(true);
+      });
+
+      return () => cancelAnimationFrame(frame);
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
+        setHasMeasured(true);
+
         if (entry.isIntersecting) {
           setIsInView(true);
+          setHasEnteredView(true);
           if (triggerOnce) observer.unobserve(element);
         } else if (!triggerOnce) {
           setIsInView(false);
@@ -37,5 +52,5 @@ export function useInView(options: UseInViewOptions = {}) {
     return () => observer.disconnect();
   }, [threshold, rootMargin, triggerOnce]);
 
-  return { ref, isInView };
+  return { ref, isInView, hasMeasured, hasEnteredView };
 }

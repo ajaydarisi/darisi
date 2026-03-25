@@ -144,6 +144,19 @@
   }
 }
 
+@keyframes hero-rise {
+  from {
+    transform: translateY(20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-rise {
+  animation: hero-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .animate-scroll-dot {
   animation: scroll-dot 1.5s ease-in-out infinite;
 }
@@ -154,6 +167,51 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.mobile-menu-panel {
+  opacity: 0;
+  transform: translateY(-1rem);
+  transition:
+    opacity 300ms ease-out,
+    transform 300ms ease-out;
+}
+
+.mobile-menu-panel[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-menu-panel[data-state="closed"] {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+.mobile-menu-link,
+.mobile-menu-cta {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 300ms ease-out,
+    transform 300ms ease-out;
+  transition-delay: var(--menu-delay, 0ms);
+}
+
+.mobile-menu-panel[data-state="open"] .mobile-menu-link,
+.mobile-menu-panel[data-state="open"] .mobile-menu-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-menu-panel[data-state="closed"] .mobile-menu-link,
+.mobile-menu-panel[data-state="closed"] .mobile-menu-cta {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition-delay: 0ms;
+}
+
+.faq-trigger[data-state="open"] .faq-icon {
+  transform: rotate(180deg);
 }
 
 /* Form select dropdown arrow */

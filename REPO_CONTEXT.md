@@ -9,14 +9,14 @@ This file is the source of truth for high-level repo context in new chats. Read 
 - Single-page portfolio and freelance studio site for `darisi.in`
 - Next.js App Router project with static export enabled in `next.config.ts`
 - No backend, database, CMS, or API routes in this repo
-- All site content is hardcoded in React components and SEO metadata/JSON-LD
+- Homepage content is rendered by section components and shared site content in `src/lib/site-content.ts`
 
 ## Entrypoints And Render Tree
 
 - `src/app/layout.tsx`
   - Owns root layout, `next/font/google` font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
 - `src/app/page.tsx`
-  - Owns homepage composition and inline JSON-LD
+  - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
   - `Navbar -> Hero -> About -> Services -> Process -> Work -> Stats -> FAQ -> Contact -> Footer`
 
@@ -30,11 +30,11 @@ This file is the source of truth for high-level repo context in new chats. Read 
   - `Work.tsx`: featured projects
   - `Stats.tsx`: metrics strip
   - `FAQ.tsx`: accordion questions and answers
-  - `Contact.tsx`: contact CTA and Formspree-backed form
+  - `Contact.tsx`: contact CTA and Formspark-backed form
   - `Navbar.tsx` and `Footer.tsx`: navigation, links, brand, and social/contact links
-- SEO and structured-data content is duplicated in `src/app/page.tsx`
-  - `jsonLd` includes person, website, service, FAQ, and portfolio data
-  - When updating public-facing copy for FAQ/work/about positioning, check whether `jsonLd` should be updated too
+- Shared content and provider config live in `src/lib/site-content.ts`
+  - Owns portfolio entries, FAQ entries, contact copy, Formspark endpoint config, and JSON-LD builders
+  - When updating public-facing FAQ/work/contact content, update this module so the UI and structured data stay aligned
 
 ## Shared Primitives And Patterns
 
@@ -76,12 +76,6 @@ This file is the source of truth for high-level repo context in new chats. Read 
 ## Known Caveats
 
 - `src/components/sections/Contact.tsx`
-  - Uses Formspree, but the endpoint is still a placeholder: `https://formspree.io/f/YOUR_FORM_ID`
-- `src/components/sections/Work.tsx`
-  - References `/screenshots/bfg.png`, `/screenshots/devmarket.png`, and `/screenshots/textile.png`, but there is currently no `public/screenshots/` directory
-- `npm run lint`
-  - Currently passes with 4 `@next/next/no-img-element` warnings in `About.tsx`, `Footer.tsx`, `Navbar.tsx`, and `Work.tsx`
-- `npm run build`
-  - Currently succeeds, but Next.js warns that it inferred the workspace root from another lockfile outside this repo
+  - Uses Formspark via `NEXT_PUBLIC_FORMSPARK_ENDPOINT`; when the env var is unset, the form is intentionally disabled and the email fallback is shown
 - `README.md`
   - Still contains default create-next-app boilerplate and is not the source of truth for this project

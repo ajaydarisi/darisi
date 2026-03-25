@@ -1,15 +1,6 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-
   return (
     <section
       aria-label="Darisi — Hero"
@@ -25,13 +16,7 @@ export function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-32">
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-8 transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="animate-hero-rise mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5">
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
           <span className="text-xs font-medium text-muted tracking-wide uppercase">
             Freelance Developer & Designer
@@ -39,35 +24,23 @@ export function Hero() {
         </div>
 
         <h1
-          className={`text-6xl md:text-8xl font-semibold tracking-tight text-gradient-primary transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "150ms" }}
+          className="animate-hero-rise text-6xl font-semibold tracking-tight text-gradient-primary md:text-8xl"
+          style={{ animationDelay: "150ms" }}
         >
           DARISI
         </h1>
 
         <p
-          className={`mt-4 text-xl md:text-2xl text-muted font-medium transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "300ms" }}
+          className="animate-hero-rise mt-4 text-xl font-medium text-muted md:text-2xl"
+          style={{ animationDelay: "150ms" }}
           role="doc-subtitle"
         >
           Your Vision. Precision-Built.
         </p>
 
         <p
-          className={`mt-6 max-w-xl text-muted leading-relaxed transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "450ms" }}
+          className="animate-hero-rise mt-6 max-w-xl leading-relaxed text-muted"
+          style={{ animationDelay: "300ms" }}
         >
           I help startups and businesses ship products that users love — from
           first wireframe to production deploy. Fast timelines, clean code,
@@ -75,12 +48,8 @@ export function Hero() {
         </p>
 
         <div
-          className={`flex flex-col sm:flex-row gap-4 mt-10 transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "600ms" }}
+          className="animate-hero-rise mt-10 flex flex-col gap-4 sm:flex-row"
+          style={{ animationDelay: "450ms" }}
         >
           <Button asChild size="lg">
             <a href="#work" aria-label="Explore my portfolio work">
@@ -95,12 +64,8 @@ export function Hero() {
         </div>
 
         <div
-          className={`flex items-center gap-1.5 mt-4 transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "750ms" }}
+          className="animate-hero-rise mt-4 flex items-center gap-1.5"
+          style={{ animationDelay: "600ms" }}
         >
           <svg
             className="w-3.5 h-3.5 text-muted"
@@ -122,10 +87,8 @@ export function Hero() {
       {/* Scroll indicator */}
       <a
         href="#services"
-        className={`absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 group transition-all duration-700 ease-out ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        }`}
-        style={{ transitionDelay: "900ms" }}
+        className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group"
+        style={{ animationDelay: "750ms" }}
         aria-label="Scroll down"
       >
         <span className="text-[10px] uppercase tracking-[0.2em] text-muted/60 group-hover:text-primary/60 transition-colors duration-300">

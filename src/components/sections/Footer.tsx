@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { Mail } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/site-content";
 
 const quickLinks = [
   { label: "Services", href: "#services" },
@@ -43,7 +45,7 @@ export function Footer() {
           {/* Brand column */}
           <div>
             <div className="flex items-center gap-2.5">
-              <img
+              <Image
                 src="/logo.svg"
                 alt="Darisi logo"
                 className="h-6 w-6"
@@ -85,11 +87,11 @@ export function Footer() {
               Get in Touch
             </h3>
             <a
-              href="mailto:ajaydarisi5@gmail.com"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors duration-200"
             >
               <Mail className="w-4 h-4" />
-              ajaydarisi5@gmail.com
+              {CONTACT_EMAIL}
             </a>
             <div className="flex items-center gap-4 mt-6">
               {socialLinks.map((social) => (

@@ -1,40 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
-
-const projects = [
-  {
-    title: "Bhagyalakshmi Future Gold",
-    category: "E-Commerce",
-    description:
-      "Full-stack jewelry e-commerce platform with bilingual support (English & Telugu), admin panel, and Razorpay payment integration.",
-    tech: ["Next.js", "Supabase", "Razorpay", "Tailwind CSS"],
-    href: "https://bfg.darisi.in/",
-    image: "/screenshots/bfg.png",
-    gradient: "from-amber-500/20 via-primary/10 to-amber-900/20",
-  },
-  {
-    title: "DevMarket",
-    category: "Marketplace",
-    description:
-      "Two-sided freelance marketplace connecting clients with developers — project posting, proposals, built-in messaging, and role-based onboarding.",
-    tech: ["Next.js", "Supabase", "TanStack Query", "TypeScript"],
-    href: "https://market-place-for-websites.vercel.app/",
-    image: "/screenshots/devmarket.png",
-    gradient: "from-blue-500/20 via-primary/10 to-indigo-900/20",
-  },
-  {
-    title: "Textile Inventory Manager",
-    category: "Enterprise",
-    description:
-      "Tally-like accounting and inventory system for textile wholesalers with double-entry accounting, vouchers, stock tracking, and financial reports.",
-    tech: ["Next.js", "Supabase", "PostgreSQL", "shadcn/ui"],
-    href: "https://market.darisi.in/",
-    image: "/screenshots/textile.png",
-    gradient: "from-emerald-500/20 via-primary/10 to-teal-900/20",
-  },
-];
+import { projects } from "@/lib/site-content";
 
 export function Work() {
   return (
@@ -64,9 +33,11 @@ export function Work() {
                   />
                   <div className="absolute inset-0 bg-grid-pattern opacity-40" />
                   {project.image && (
-                    <img
+                    <Image
                       src={project.image}
                       alt={`Screenshot of ${project.title}`}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
                       className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                   )}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Target, Palette, TrendingUp } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
@@ -82,9 +83,11 @@ export function About() {
               <div className="bg-surface border border-border rounded-2xl p-8 lg:p-10 relative overflow-hidden h-full flex items-center justify-center">
                 <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent" />
                 <div className="relative text-center">
-                  <img
+                  <Image
                     src="/logo.svg"
                     alt=""
+                    width={80}
+                    height={80}
                     className="w-20 h-20 mx-auto opacity-20"
                     aria-hidden="true"
                   />
