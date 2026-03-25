@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Darisi
 
-## Getting Started
+Portfolio and freelance studio website for Ajay Darisi at `darisi.in`.
 
-First, run the development server:
+This repo is a single-page Next.js App Router site exported as static files. It showcases services, process, selected work, FAQs, and contact details with no backend, database, CMS, or API routes.
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript with strict mode
+- Tailwind CSS v4
+- shadcn/ui styling patterns and Radix primitives
+- Lucide React icons
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the main commands:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Notes:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` starts the local development server
+- `npm run build` creates the static export in `out/`
+- Static export is configured in `next.config.ts`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```text
+src/
+  app/
+    layout.tsx      Root layout, metadata, icons, manifest, OG/Twitter tags
+    page.tsx        Homepage composition and JSON-LD structured data
+    globals.css     Theme tokens, animations, patterns, shared global styles
+  components/
+    sections/       Homepage sections
+    ui/             Shared UI primitives
+  hooks/
+    use-in-view.ts  IntersectionObserver hook for scroll reveals
+  lib/
+    utils.ts        cn() helper
+public/
+  Icons, logo, manifest, og-image, sitemap, robots
+```
 
-To learn more about Next.js, take a look at the following resources:
+Homepage section order:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+Navbar -> Hero -> About -> Services -> Process -> Work -> Stats -> FAQ -> Contact -> Footer
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Content Ownership
 
-## Deploy on Vercel
+- Most visible site content lives in `src/components/sections/`
+- SEO and structured data live in `src/app/layout.tsx` and `src/app/page.tsx`
+- `src/app/page.tsx` contains inline JSON-LD for person, website, service, FAQ, and portfolio data
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you update public-facing copy in the sections, also check whether the structured data in `src/app/page.tsx` should be updated to match.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Shared Patterns
+
+- `src/components/ui/button.tsx` provides the shared button variants
+- `src/components/ui/animate-on-scroll.tsx` and `src/hooks/use-in-view.ts` power the scroll-based reveal animations
+- `src/components/sections/Hero.tsx` uses its own mount animation instead of `AnimateOnScroll`
+- `src/app/globals.css` defines the color system, patterns, keyframes, and reduced-motion handling
+

@@ -1,71 +1,11 @@
 # Darisi — Project Guide
 
-## Project Overview
+## Repository Context
 
-Portfolio and freelance studio website for Ajay Darisi at **darisi.in**. Single-page static site showcasing services, portfolio work, and contact info. Built with Next.js static export — no server, no database, no CMS.
+Read `REPO_CONTEXT.md` first for current repo facts, architecture, file ownership, commands, and known caveats.
 
-## Tech Stack
-
-- **Framework**: Next.js 16.1.6 (static export via `output: "export"`)
-- **Language**: TypeScript 5.9.3 (pinned, strict mode)
-- **UI**: React 19.2.3, shadcn/ui (New York style), Radix UI, Lucide React icons
-- **Styling**: Tailwind CSS v4 with `@tailwindcss/postcss`, CSS variables for theming
-- **Utilities**: `clsx` + `tailwind-merge` via `cn()` helper, `class-variance-authority`
-
-## Commands
-
-```bash
-npm run dev      # Dev server on localhost:3000
-npm run build    # Static export to /out
-npm run lint     # ESLint
-```
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx          # Root layout, metadata, SEO, viewport
-│   ├── page.tsx            # Homepage with JSON-LD structured data
-│   ├── globals.css         # Theme variables, animations, patterns
-│   └── icon.svg            # Favicon
-├── components/
-│   ├── sections/           # Page sections (render order):
-│   │   ├── Navbar.tsx      # Sticky header + mobile overlay menu
-│   │   ├── Hero.tsx        # Landing hero with staggered animations
-│   │   ├── Services.tsx    # Service cards (4 offerings)
-│   │   ├── Work.tsx        # Portfolio projects (3 projects)
-│   │   ├── Stats.tsx       # KPI metrics
-│   │   ├── About.tsx       # About + philosophy
-│   │   ├── Contact.tsx     # CTA section
-│   │   └── Footer.tsx      # Footer with links & socials
-│   └── ui/
-│       ├── button.tsx      # CVA button (default/outline/ghost)
-│       └── animate-on-scroll.tsx  # Scroll animation wrapper
-├── hooks/
-│   └── use-in-view.ts      # IntersectionObserver hook for animations
-└── lib/
-    └── utils.ts            # cn() utility
-```
-
-## Architecture & Patterns
-
-- **Static export**: `output: "export"` in `next.config.ts`, images unoptimized
-- **Section-based**: Each page section is its own component in `src/components/sections/`
-- **Animation system**: `useInView` hook detects scroll → `AnimateOnScroll` wrapper applies CSS transitions (fade-up, fade-in, fade-left, fade-right, scale-in)
-- **Styling**: Tailwind-first with `cn()` for class merging. Theme via CSS custom properties in `globals.css`
-- **Dark theme only**: Background `#0B0B0B`, foreground `#F5F5F5`, primary accent `#8B1E2D` (burgundy)
-- **All content hardcoded**: No API routes, no database, no CMS, no form backend (contact uses mailto)
-- **SEO**: JSON-LD schemas, OpenGraph, Twitter cards, sitemap.xml, robots.txt
-
-## Conventions
-
-- `"use client"` directive for interactive components; server components by default
-- Path alias: `@/*` → `./src/*`
-- Mobile-first responsive design (Tailwind `md:` breakpoints)
-- Semantic HTML with ARIA labels and keyboard navigation
-- `prefers-reduced-motion` respected in animations
-- shadcn/ui components configured via `components.json`
+- `REPO_CONTEXT.md` is the source of truth for high-level repo understanding in new chats.
+- Use this file for workflow expectations and project-specific collaboration rules.
 
 ---
 

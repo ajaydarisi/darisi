@@ -30,7 +30,7 @@ const projects = [
     description:
       "Tally-like accounting and inventory system for textile wholesalers with double-entry accounting, vouchers, stock tracking, and financial reports.",
     tech: ["Next.js", "Supabase", "PostgreSQL", "shadcn/ui"],
-    href: "https://textile-inventory-app.vercel.app/",
+    href: "https://market.darisi.in/",
     image: "/screenshots/textile.png",
     gradient: "from-emerald-500/20 via-primary/10 to-teal-900/20",
   },
@@ -70,13 +70,18 @@ export function Work() {
                       className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${project.title} in a new tab`}
+                    className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
+                  >
                     <span className="text-sm font-medium text-foreground">
                       View Project
                     </span>
-                  </div>
-                  <span className="absolute top-4 right-4 text-xs font-medium text-muted bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full border border-border">
+                  </a>
+                  <span className="pointer-events-none absolute top-4 right-4 z-20 text-xs font-medium text-muted bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full border border-border">
                     {project.category}
                   </span>
                 </div>
