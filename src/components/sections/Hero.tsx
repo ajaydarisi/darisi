@@ -4,7 +4,7 @@ export function Hero() {
   return (
     <section
       aria-label="Darisi — Hero"
-      className="relative min-h-[85vh] flex items-center overflow-hidden"
+      className="relative flex min-h-[calc(100svh-4rem-1px)] items-center overflow-hidden md:min-h-[85vh]"
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -15,8 +15,8 @@ export function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-32">
-        <div className="animate-hero-rise mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-10 sm:py-20 lg:px-8 lg:py-32">
+        <div className="animate-hero-rise mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3.5 py-1.5 sm:mb-8 sm:px-4">
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
           <span className="text-xs font-medium text-muted tracking-wide uppercase">
             Freelance Developer & Designer
@@ -24,14 +24,14 @@ export function Hero() {
         </div>
 
         <h1
-          className="animate-hero-rise text-6xl font-semibold tracking-tight text-gradient-primary md:text-8xl"
+          className="animate-hero-rise text-5xl font-semibold tracking-tight text-gradient-primary sm:text-6xl md:text-8xl"
           style={{ animationDelay: "150ms" }}
         >
           DARISI
         </h1>
 
         <p
-          className="animate-hero-rise mt-4 text-xl font-medium text-muted md:text-2xl"
+          className="animate-hero-rise mt-3 text-lg font-medium text-muted sm:mt-4 sm:text-xl md:text-2xl"
           style={{ animationDelay: "150ms" }}
           role="doc-subtitle"
         >
@@ -39,7 +39,7 @@ export function Hero() {
         </p>
 
         <p
-          className="animate-hero-rise mt-6 max-w-xl leading-relaxed text-muted"
+          className="animate-hero-rise mt-5 max-w-xl text-base leading-relaxed text-muted sm:mt-6 sm:text-lg"
           style={{ animationDelay: "300ms" }}
         >
           I help startups and businesses ship products that users love — from
@@ -48,15 +48,20 @@ export function Hero() {
         </p>
 
         <div
-          className="animate-hero-rise mt-10 flex flex-col gap-4 sm:flex-row"
+          className="animate-hero-rise mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4"
           style={{ animationDelay: "450ms" }}
         >
-          <Button asChild size="lg">
+          <Button asChild size="default" className="sm:h-12 sm:px-8 sm:text-base">
             <a href="#work" aria-label="Explore my portfolio work">
               Explore My Work
             </a>
           </Button>
-          <Button asChild size="lg" variant="outline">
+          <Button
+            asChild
+            size="default"
+            variant="outline"
+            className="sm:h-12 sm:px-8 sm:text-base"
+          >
             <a href="#contact" aria-label="Start your project with Ajay Darisi">
               Start Your Project
             </a>
@@ -64,7 +69,7 @@ export function Hero() {
         </div>
 
         <div
-          className="animate-hero-rise mt-4 flex items-center gap-1.5"
+          className="animate-hero-rise mt-4 hidden items-center gap-1.5 sm:flex"
           style={{ animationDelay: "600ms" }}
         >
           <svg
@@ -87,7 +92,7 @@ export function Hero() {
       {/* Scroll indicator */}
       <a
         href="#services"
-        className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group"
+        className="group absolute bottom-4 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 md:flex animate-hero-rise"
         style={{ animationDelay: "750ms" }}
         aria-label="Scroll down"
       >

@@ -43,22 +43,6 @@
 @layer base {
   * {
     @apply border-border;
-    scrollbar-width: thin;
-    scrollbar-color: #8B1E2D transparent;
-  }
-  *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  *::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  *::-webkit-scrollbar-thumb {
-    background: #8B1E2D;
-    border-radius: 9999px;
-  }
-  *::-webkit-scrollbar-thumb:hover {
-    background: #A3263B;
   }
   html {
     scroll-behavior: smooth;
@@ -68,6 +52,41 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     min-height: 100vh;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  @layer base {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #8B1E2D transparent;
+    }
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    *::-webkit-scrollbar-thumb {
+      background: #8B1E2D;
+      border-radius: 9999px;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+      background: #A3263B;
+    }
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  @layer base {
+    * {
+      scrollbar-width: none;
+    }
+    *::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
   }
 }
 
