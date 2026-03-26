@@ -53,6 +53,13 @@
     @apply font-sans antialiased bg-background text-foreground;
     min-height: 100vh;
   }
+
+  body[data-scroll-locked]:has([data-slot="select-content"]) {
+    overflow: visible !important;
+    overscroll-behavior: auto !important;
+    position: static !important;
+    pointer-events: auto !important;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -186,59 +193,6 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 4s ease-in-out infinite;
-}
-
-.mobile-menu-panel {
-  opacity: 0;
-  transform: translateY(-1rem);
-  transition:
-    opacity 300ms ease-out,
-    transform 300ms ease-out;
-}
-
-.mobile-menu-panel[data-state="open"] {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mobile-menu-panel[data-state="closed"] {
-  opacity: 0;
-  transform: translateY(-1rem);
-}
-
-.mobile-menu-link,
-.mobile-menu-cta {
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition:
-    opacity 300ms ease-out,
-    transform 300ms ease-out;
-  transition-delay: var(--menu-delay, 0ms);
-}
-
-.mobile-menu-panel[data-state="open"] .mobile-menu-link,
-.mobile-menu-panel[data-state="open"] .mobile-menu-cta {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mobile-menu-panel[data-state="closed"] .mobile-menu-link,
-.mobile-menu-panel[data-state="closed"] .mobile-menu-cta {
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition-delay: 0ms;
-}
-
-.faq-trigger[data-state="open"] .faq-icon {
-  transform: rotate(180deg);
-}
-
-/* Form select dropdown arrow */
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23B8B8B8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
 }
 
 /* Respect reduced motion preference */

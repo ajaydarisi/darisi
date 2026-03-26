@@ -1,6 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import {
+  PLAUSIBLE_API_HOST,
+  PLAUSIBLE_DOMAIN,
+  hasPlausibleAnalytics,
+} from "@/lib/analytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,9 +17,9 @@ const inter = Inter({
 const SITE_URL = "https://darisi.in";
 const SITE_NAME = "Darisi";
 const SITE_TITLE =
-  "Darisi — Build. Design. Launch. | Ajay Darisi, Freelance Developer & Designer";
+  "Ajay Darisi | Freelance Product Engineer for Web Apps, E-commerce & Internal Tools";
 const SITE_DESCRIPTION =
-  "I'm Ajay Darisi — a freelance developer and designer crafting digital products, apps, platforms, and design systems with precision and purpose. Available for hire.";
+  "Ajay Darisi builds web apps, e-commerce experiences, and internal tools for startups and growing businesses through Darisi.";
 
 export const viewport: Viewport = {
   themeColor: "#0B0B0B",
@@ -26,15 +32,15 @@ export const metadata: Metadata = {
   keywords: [
     "Darisi",
     "Ajay Darisi",
-    "freelance developer",
-    "freelance designer",
-    "freelance consultant",
-    "digital product design",
-    "full-stack developer for hire",
-    "app development freelancer",
-    "Next.js developer",
-    "design systems",
-    "Build Design Launch",
+    "freelance product engineer",
+    "web app developer",
+    "e-commerce developer",
+    "marketplace developer",
+    "internal tools developer",
+    "Next.js freelancer",
+    "product designer developer",
+    "startup product engineer",
+    "Darisi",
   ],
   authors: [{ name: "Ajay Darisi" }],
   creator: "Ajay Darisi",
@@ -54,7 +60,7 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Darisi — Build. Design. Launch. Ajay Darisi, freelance developer and designer",
+        alt: "Ajay Darisi through Darisi - freelance product engineer for web apps, e-commerce, and internal tools",
         type: "image/png",
       },
     ],
@@ -95,7 +101,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-dot-pattern">{children}</body>
+      <body className="bg-dot-pattern">
+        {hasPlausibleAnalytics ? (
+          <Script
+            defer
+            data-domain={PLAUSIBLE_DOMAIN}
+            src={`${PLAUSIBLE_API_HOST}/js/script.js`}
+            strategy="afterInteractive"
+          />
+        ) : null}
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,12 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Dialog } from "radix-ui";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-const links = ["Services", "Work", "About", "Contact"];
+const links = ["Work", "Services", "About", "Contact"];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,9 +30,9 @@ export function Navbar() {
   }, [mobileOpen]);
 
   return (
-    <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
+    <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
       <header
-        className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        className={`sticky top-0 z-[60] border-b transition-all duration-300 ${
           scrolled
             ? "border-border bg-background/90 shadow-lg shadow-black/20 backdrop-blur-xl"
             : "border-transparent bg-background/80 backdrop-blur-md"
@@ -38,7 +45,7 @@ export function Navbar() {
           <a
             href="#"
             className="flex items-center gap-2.5"
-            aria-label="Darisi — Home"
+            aria-label="Ajay Darisi home"
           >
             <Image
               src="/logo.svg"
@@ -63,13 +70,15 @@ export function Navbar() {
               </a>
             ))}
             <Button asChild size="sm" variant="outline">
-              <a href="#contact">Get in Touch</a>
+              <a href="#contact">Start a Project</a>
             </Button>
           </div>
 
-          <Dialog.Trigger asChild>
-            <button
-              className="p-2 text-muted transition-colors hover:text-foreground md:hidden"
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
               {mobileOpen ? (
@@ -77,52 +86,41 @@ export function Navbar() {
               ) : (
                 <Menu className="h-5 w-5" />
               )}
-            </button>
-          </Dialog.Trigger>
+            </Button>
+          </SheetTrigger>
         </nav>
       </header>
 
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 data-[state=closed]:opacity-0 data-[state=open]:opacity-100 md:hidden" />
-        <Dialog.Content className="mobile-menu-panel fixed left-0 right-0 top-16 z-50 border-b border-border bg-background shadow-2xl shadow-black/40 focus:outline-none md:hidden">
-          <Dialog.Title className="sr-only">Mobile navigation</Dialog.Title>
-          <Dialog.Description className="sr-only">
-            Navigate to the main sections of the Darisi website.
-          </Dialog.Description>
+      <SheetContent
+        side="top"
+        hideClose
+        className="top-16 rounded-none border-x-0 border-t-0 bg-background p-0 md:hidden"
+      >
+        <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
+        <SheetDescription className="sr-only">
+          Navigate to the main sections of the Darisi website.
+        </SheetDescription>
 
-          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
-            {links.map((link, index) => (
+        <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
+          {links.map((link) => (
+            <SheetClose key={link} asChild>
               <a
-                key={link}
                 href={`#${link.toLowerCase()}`}
-                className="mobile-menu-link flex items-center rounded-xl px-4 py-3 text-base text-muted transition-colors duration-300 hover:bg-surface hover:text-foreground"
-                style={
-                  {
-                    "--menu-delay": `${75 + index * 50}ms`,
-                  } as CSSProperties
-                }
-                onClick={() => setMobileOpen(false)}
+                className="flex items-center rounded-xl px-4 py-3 text-base text-muted transition-colors duration-300 hover:bg-surface hover:text-foreground"
               >
                 {link}
               </a>
-            ))}
-            <div
-              className="mobile-menu-cta mt-3 border-t border-border pt-3"
-              style={
-                {
-                  "--menu-delay": `${75 + links.length * 50}ms`,
-                } as CSSProperties
-              }
-            >
-              <Button asChild className="w-full" size="default">
-                <a href="#contact" onClick={() => setMobileOpen(false)}>
-                  Get in Touch
-                </a>
-              </Button>
-            </div>
-          </nav>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+            </SheetClose>
+          ))}
+          <div className="mt-3 border-t border-border pt-3">
+            <Button asChild className="w-full" size="default">
+              <a href="#contact" onClick={() => setMobileOpen(false)}>
+                Start a Project
+              </a>
+            </Button>
+          </div>
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 }

@@ -12,12 +12,13 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary-hover",
         outline:
           "border border-border bg-transparent text-foreground hover:bg-surface",
-        ghost: "text-muted hover:text-foreground",
+        ghost: "text-muted hover:bg-accent hover:text-accent-foreground",
       },
       size: {
         default: "h-10 px-6 py-2 rounded-xl",
         sm: "h-8 px-4 text-xs rounded-xl",
         lg: "h-12 px-8 text-base rounded-xl",
+        icon: "size-10 rounded-xl",
       },
     },
     defaultVariants: {

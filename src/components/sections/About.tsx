@@ -1,24 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { Target, Palette, TrendingUp } from "lucide-react";
+import { Compass, LayoutTemplate, Workflow } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import { Card, CardContent } from "@/components/ui/card";
 
 const values = [
   {
-    icon: Target,
-    title: "Precision Engineering",
-    description: "Every line of code is intentional, tested, and optimized.",
+    icon: Compass,
+    title: "Product clarity first",
+    description:
+      "I like untangling messy requirements until the next right product decision is obvious.",
   },
   {
-    icon: Palette,
-    title: "Minimal Aesthetics",
-    description: "Clean design that communicates clearly and feels effortless.",
+    icon: LayoutTemplate,
+    title: "Design that earns its keep",
+    description:
+      "Interfaces should feel intentional, reduce friction, and make the product easier to trust.",
   },
   {
-    icon: TrendingUp,
-    title: "Long-term Thinking",
-    description: "Architecture built for growth, not just today's requirements.",
+    icon: Workflow,
+    title: "Systems that survive launch",
+    description:
+      "I build for real usage, operational edge cases, and the people who have to maintain the product later.",
   },
 ];
 
@@ -40,19 +44,21 @@ export function About() {
 
             <AnimateOnScroll variant="fade-up" delay={100}>
               <p className="text-muted leading-relaxed text-lg">
-                I&apos;m <strong className="text-foreground">Ajay Darisi</strong> — a freelance
-                developer and designer building apps, design systems, and curated
-                digital experiences. I believe in quiet power — where clean code meets
-                purposeful design. Every product I ship is built with precision,
-                minimal aesthetics, and long-term thinking.
+                I&apos;m{" "}
+                <strong className="text-foreground">Ajay Darisi</strong>, a
+                freelance product engineer and designer. Clients bring me in
+                when they need someone who can shape the product, design the
+                experience, and ship the build without splitting ownership
+                across multiple people.
               </p>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={200}>
               <p className="text-muted leading-relaxed text-lg mt-6">
-                From early-stage concepts to production-ready platforms, I
-                operate at the intersection of engineering and design — creating
-                tools and experiences that feel effortless.
+                Darisi is the brand around that way of working: calm
+                communication, clean execution, and digital products that feel
+                considered instead of overbuilt. The strongest projects usually
+                sit in web apps, e-commerce, marketplaces, and internal tools.
               </p>
             </AnimateOnScroll>
 
@@ -80,9 +86,9 @@ export function About() {
           {/* Decorative column */}
           <div className="lg:col-span-2">
             <AnimateOnScroll variant="fade-left" delay={200}>
-              <div className="bg-surface border border-border rounded-2xl p-8 lg:p-10 relative overflow-hidden h-full flex items-center justify-center">
+              <Card className="relative flex h-full items-center justify-center overflow-hidden p-8 lg:p-10">
                 <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent" />
-                <div className="relative text-center">
+                <CardContent className="relative p-0 text-center">
                   <Image
                     src="/logo.svg"
                     alt=""
@@ -92,12 +98,12 @@ export function About() {
                     aria-hidden="true"
                   />
                   <blockquote className="mt-6 text-lg md:text-xl font-medium text-foreground/80 italic leading-relaxed">
-                    &ldquo;Build with precision. Design with purpose. Launch
-                    with confidence.&rdquo;
+                    &ldquo;The best work happens when product thinking and
+                    implementation stay in the same conversation.&rdquo;
                   </blockquote>
-                  <p className="mt-4 text-sm text-muted">— My Philosophy</p>
-                </div>
-              </div>
+                  <p className="mt-4 text-sm text-muted">— Ajay Darisi</p>
+                </CardContent>
+              </Card>
             </AnimateOnScroll>
           </div>
         </div>

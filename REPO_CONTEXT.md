@@ -6,7 +6,7 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 ## Repo Summary
 
-- Single-page portfolio and freelance studio site for `darisi.in`
+- Single-page lead-generation portfolio for `darisi.in`
 - Next.js App Router project with static export enabled in `next.config.ts`
 - No backend, database, CMS, or API routes in this repo
 - Homepage content is rendered by section components and shared site content in `src/lib/site-content.ts`
@@ -18,23 +18,24 @@ This file is the source of truth for high-level repo context in new chats. Read 
 - `src/app/page.tsx`
   - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
-  - `Navbar -> Hero -> About -> Services -> Process -> Work -> Stats -> FAQ -> Contact -> Footer`
+  - `Navbar -> Hero -> Work -> Trust -> Services -> Process -> About -> BestFit -> FAQ -> Contact -> Footer`
 
 ## Content Ownership
 
 - Visible homepage content lives in `src/components/sections/`
-  - `Hero.tsx`: hero copy and primary CTAs
-  - `About.tsx`: personal intro and values
-  - `Services.tsx`: service offerings
+  - `Hero.tsx`: lead-generation hero copy and primary CTAs
+  - `Work.tsx`: mini case studies for featured projects
+  - `Trust.tsx`: delivery commitments and trust-building proof
+  - `Services.tsx`: proof-backed service focus
   - `Process.tsx`: delivery process steps
-  - `Work.tsx`: featured projects
-  - `Stats.tsx`: metrics strip
-  - `FAQ.tsx`: accordion questions and answers
+  - `About.tsx`: personal intro and values
+  - `BestFit.tsx`: ideal engagement types and boundaries
+  - `FAQ.tsx`: objection-handling questions and answers
   - `Contact.tsx`: contact CTA and Formspark-backed form
   - `Navbar.tsx` and `Footer.tsx`: navigation, links, brand, and social/contact links
 - Shared content and provider config live in `src/lib/site-content.ts`
-  - Owns portfolio entries, FAQ entries, contact copy, Formspark endpoint config, and JSON-LD builders
-  - When updating public-facing FAQ/work/contact content, update this module so the UI and structured data stay aligned
+  - Owns portfolio entries, service/trust/fit copy, FAQ entries, contact copy, Formspark endpoint config, and JSON-LD builders
+  - When updating public-facing work/FAQ/contact/trust copy, update this module so the UI and structured data stay aligned
 
 ## Shared Primitives And Patterns
 
@@ -50,6 +51,8 @@ This file is the source of truth for high-level repo context in new chats. Read 
   - Tailwind v4 imports, theme tokens, custom background patterns, keyframes, reduced-motion handling, and select styling
 - `src/lib/utils.ts`
   - `cn()` helper for class merging
+- `src/lib/analytics.ts`
+  - Plausible script config and custom event helper
 
 ## Build And Deploy
 
@@ -77,5 +80,5 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 - `src/components/sections/Contact.tsx`
   - Uses Formspark via `NEXT_PUBLIC_FORMSPARK_ENDPOINT`; when the env var is unset, the form is intentionally disabled and the email fallback is shown
-- `README.md`
-  - Still contains default create-next-app boilerplate and is not the source of truth for this project
+- `src/app/layout.tsx`
+  - Loads Plausible only when `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is set

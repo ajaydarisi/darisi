@@ -7,30 +7,30 @@ const steps = [
   {
     step: 1,
     icon: Search,
-    title: "Discovery",
+    title: "Scope & Fit",
     description:
-      "We discuss your goals, audience, and timeline. I ask the hard questions upfront so there are no surprises later.",
+      "We clarify the business goal, audience, constraints, and what success should look like before design or build starts.",
   },
   {
     step: 2,
     icon: PenTool,
-    title: "Design",
+    title: "UX & Interface",
     description:
-      "Wireframes and visual concepts. You see the product before a single line of code is written.",
+      "I shape flows, wireframes, and interface direction so the product feels clear before development gets expensive.",
   },
   {
     step: 3,
     icon: Code,
-    title: "Develop",
+    title: "Build & Integrate",
     description:
-      "Clean, production-grade code. Regular updates so you always know where things stand.",
+      "The product gets built with production-ready code, regular updates, and practical decisions around data, CMS, and operations.",
   },
   {
     step: 4,
     icon: Rocket,
-    title: "Launch",
+    title: "Launch & Support",
     description:
-      "Deployment, testing, and handoff. I stick around to make sure everything runs smoothly.",
+      "We launch cleanly, smooth out post-release issues, and make handoff feel organized instead of rushed.",
   },
 ];
 
@@ -44,11 +44,11 @@ export function Process() {
               id="process-heading"
               className="text-2xl md:text-3xl font-medium text-foreground"
             >
-              How I Work
+              How We Work
             </h2>
             <p className="mt-4 text-muted max-w-xl mx-auto">
-              A straightforward process designed to keep you informed and your
-              project on track.
+              A focused delivery process that keeps decisions visible and avoids
+              handoff-heavy chaos.
             </p>
           </div>
         </AnimateOnScroll>

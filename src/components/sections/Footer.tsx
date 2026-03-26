@@ -1,10 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import { Mail } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
 
 const quickLinks = [
-  { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
@@ -57,8 +60,8 @@ export function Footer() {
               </span>
             </div>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              Freelance developer and designer crafting digital products,
-              apps, and platforms with precision and purpose.
+              Ajay Darisi builds web apps, e-commerce experiences, and internal
+              tools through Darisi.
             </p>
           </div>
 
@@ -89,6 +92,11 @@ export function Footer() {
             <a
               href={`mailto:${CONTACT_EMAIL}`}
               className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors duration-200"
+              onClick={() =>
+                trackEvent("email_click", {
+                  location: "footer",
+                })
+              }
             >
               <Mail className="w-4 h-4" />
               {CONTACT_EMAIL}
