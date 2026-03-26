@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Mail } from "lucide-react";
-import { trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
 
 const quickLinks = [
   { label: "Work", href: "#work" },
   { label: "Services", href: "#services" },
+  { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -47,7 +50,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand column */}
           <div>
-            <div className="flex items-center gap-2.5">
+            <Link href="/" className="inline-flex items-center gap-2.5">
               <Image
                 src="/logo.svg"
                 alt="Darisi logo"
@@ -58,10 +61,11 @@ export function Footer() {
               <span className="text-lg font-bold tracking-widest text-foreground">
                 DARISI
               </span>
-            </div>
+            </Link>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              Ajay Darisi builds web apps, e-commerce experiences, and internal
-              tools through Darisi.
+              Darisi is Ajay Darisi&apos;s freelance product engineering
+              practice for teams that need web apps, internal systems, and
+              platform features shipped with calm execution.
             </p>
           </div>
 
@@ -93,7 +97,7 @@ export function Footer() {
               href={`mailto:${CONTACT_EMAIL}`}
               className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors duration-200"
               onClick={() =>
-                trackEvent("email_click", {
+                trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, {
                   location: "footer",
                 })
               }
@@ -107,7 +111,7 @@ export function Footer() {
                   key={social.label}
                   href={social.href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="me noopener noreferrer"
                   className="w-9 h-9 rounded-lg hover:text-primary bg-surface border border-border flex items-center justify-center text-muted hover:text-foreground hover:border-primary/30 transition-all duration-200"
                   aria-label={social.label}
                 >
@@ -121,7 +125,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Ajay Darisi. All rights reserved.
+            &copy; {new Date().getFullYear()} Darisi. All rights reserved.
           </p>
         </div>
       </div>

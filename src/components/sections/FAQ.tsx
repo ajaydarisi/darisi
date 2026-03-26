@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { faqEntries } from "@/lib/site-content";
 
 export function FAQ() {
@@ -26,17 +27,36 @@ export function FAQ() {
               id="faq-heading"
               className="mt-4 text-2xl font-medium text-foreground md:text-3xl"
             >
-              Questions buyers usually ask before reaching out
+              Questions teams ask before hiring a freelance product engineer
             </h2>
             <p className="mt-4 text-muted">
-              The practical stuff: fit, timelines, pricing approach, and what
-              working together looks like.
+              The practical details around fit, collaboration, scope, and the
+              kinds of web app, internal tool, and platform work I am best
+              suited to take on.
             </p>
           </div>
         </AnimateOnScroll>
 
         <AnimateOnScroll variant="fade-up" delay={100}>
-          <Accordion type="single" collapsible className="divide-y divide-border">
+          <Accordion
+            type="single"
+            collapsible
+            className="divide-y divide-border"
+            onValueChange={(value) => {
+              if (!value) {
+                return;
+              }
+
+              const index = Number(value.replace("faq-", ""));
+              const question = faqEntries[index]?.question;
+
+              if (question) {
+                trackEvent(ANALYTICS_EVENTS.faqOpen, {
+                  question,
+                });
+              }
+            }}
+          >
             {faqEntries.map((faq, index) => (
               <AccordionItem key={faq.question} value={`faq-${index}`}>
                 <AccordionTrigger>{faq.question}</AccordionTrigger>

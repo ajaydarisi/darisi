@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { Compass, LayoutTemplate, Workflow } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Card, CardContent } from "@/components/ui/card";
+import { Compass, LayoutTemplate, Workflow } from "lucide-react";
+import Image from "next/image";
+import { Badge } from "../ui/badge";
 
 const values = [
   {
@@ -34,31 +35,35 @@ export function About() {
           {/* Content column */}
           <div className="lg:col-span-3">
             <AnimateOnScroll variant="fade-up">
+              <Badge
+                variant="default"
+                className="text-[10px] uppercase tracking-[0.2em]"
+              >
+                How I work
+              </Badge>
               <h2
                 id="about-heading"
-                className="text-2xl md:text-3xl font-medium text-foreground mb-8"
+                className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
               >
-                About Me
+                Freelance product engineering from Bengaluru for global teams.
               </h2>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={100}>
-              <p className="text-muted leading-relaxed text-lg">
-                I&apos;m{" "}
-                <strong className="text-foreground">Ajay Darisi</strong>, a
-                freelance product engineer and designer. Clients bring me in
-                when they need someone who can shape the product, design the
-                experience, and ship the build without splitting ownership
-                across multiple people.
+              <p className="mt-8 text-lg leading-relaxed text-muted">
+                I&apos;m based in Bengaluru, India, and through Darisi I take on
+                independent product work for teams that want one steady owner
+                across product clarity, interface direction, and implementation.
               </p>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={200}>
               <p className="text-muted leading-relaxed text-lg mt-6">
-                Darisi is the brand around that way of working: calm
-                communication, clean execution, and digital products that feel
-                considered instead of overbuilt. The strongest projects usually
-                sit in web apps, e-commerce, marketplaces, and internal tools.
+                Darisi is not a studio with layers around it. It is my personal
+                freelance brand for web apps, internal systems, and platform
+                features that need calm collaboration, strong technical
+                judgment, and delivery that does not lose coherence halfway
+                through the build.
               </p>
             </AnimateOnScroll>
 
@@ -98,10 +103,10 @@ export function About() {
                     aria-hidden="true"
                   />
                   <blockquote className="mt-6 text-lg md:text-xl font-medium text-foreground/80 italic leading-relaxed">
-                    &ldquo;The best work happens when product thinking and
-                    implementation stay in the same conversation.&rdquo;
+                    &ldquo;The strongest freelance work usually feels calm:
+                    fewer handoffs, clearer decisions, and execution that keeps
+                    moving.&rdquo;
                   </blockquote>
-                  <p className="mt-4 text-sm text-muted">— Ajay Darisi</p>
                 </CardContent>
               </Card>
             </AnimateOnScroll>

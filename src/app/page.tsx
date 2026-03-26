@@ -5,7 +5,6 @@ import { Trust } from "@/components/sections/Trust";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
 import { About } from "@/components/sections/About";
-import { BestFit } from "@/components/sections/BestFit";
 import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
@@ -21,14 +20,13 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <Work />
         <Trust />
         <Services />
         <Process />
         <About />
-        <BestFit />
         <FAQ />
         <Contact />
       </main>

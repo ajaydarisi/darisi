@@ -7,30 +7,30 @@ const steps = [
   {
     step: 1,
     icon: Search,
-    title: "Scope & Fit",
+    title: "Brief & Fit",
     description:
-      "We clarify the business goal, audience, constraints, and what success should look like before design or build starts.",
+      "We clarify the product goal, the blocker, the audience, and whether the project is actually a good fit before committing to a build.",
   },
   {
     step: 2,
     icon: PenTool,
-    title: "UX & Interface",
+    title: "Shape the Approach",
     description:
-      "I shape flows, wireframes, and interface direction so the product feels clear before development gets expensive.",
+      "I turn the rough problem into a clear plan for flows, interface direction, scope boundaries, and technical decisions.",
   },
   {
     step: 3,
     icon: Code,
-    title: "Build & Integrate",
+    title: "Build in Public",
     description:
-      "The product gets built with production-ready code, regular updates, and practical decisions around data, CMS, and operations.",
+      "I build with regular updates, practical tradeoff calls, and close attention to the details that usually slow product teams down.",
   },
   {
     step: 4,
     icon: Rocket,
-    title: "Launch & Support",
+    title: "Launch & Stabilize",
     description:
-      "We launch cleanly, smooth out post-release issues, and make handoff feel organized instead of rushed.",
+      "We ship cleanly, smooth out the early issues, and make sure the product feels steady instead of abandoned the moment it goes live.",
   },
 ];
 
@@ -44,10 +44,11 @@ export function Process() {
               id="process-heading"
               className="text-2xl md:text-3xl font-medium text-foreground"
             >
-              How We Work
+              How I run freelance web app and internal tool projects
             </h2>
             <p className="mt-4 text-muted max-w-xl mx-auto">
-              A focused delivery process that keeps decisions visible and avoids
+              A freelance delivery process designed to keep decisions visible,
+              scope practical, and momentum steady for global teams without
               handoff-heavy chaos.
             </p>
           </div>

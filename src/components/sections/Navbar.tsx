@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import {
   Sheet,
   SheetClose,
@@ -13,7 +15,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const links = ["Work", "Services", "About", "Contact"];
+const links = [
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
+  { label: "Process", href: "#process" },
+  { label: "About", href: "#about" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
+];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -22,12 +31,11 @@ export function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      if (mobileOpen) setMobileOpen(false);
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [mobileOpen]);
+  }, []);
 
   return (
     <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -42,10 +50,10 @@ export function Navbar() {
           aria-label="Main navigation"
           className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8"
         >
-          <a
-            href="#"
+          <Link
+            href="/"
             className="flex items-center gap-2.5"
-            aria-label="Ajay Darisi home"
+            aria-label="Darisi home"
           >
             <Image
               src="/logo.svg"
@@ -57,25 +65,35 @@ export function Navbar() {
             <span className="text-lg font-bold tracking-widest text-foreground">
               DARISI
             </span>
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-8 md:flex">
             {links.map((link) => (
               <a
-                key={link}
-                href={`#${link.toLowerCase()}`}
+                key={link.label}
+                href={link.href}
                 className="text-sm text-muted transition-colors duration-200 hover:text-foreground"
               >
-                {link}
+                {link.label}
               </a>
             ))}
             <Button asChild size="sm" variant="outline">
-              <a href="#contact">Start a Project</a>
+              <a
+                href="#contact"
+                onClick={() =>
+                  trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
+                    location: "desktop_nav",
+                  })
+                }
+              >
+                Start a Project
+              </a>
             </Button>
           </div>
 
           <SheetTrigger asChild>
             <Button
+              type="button"
               variant="ghost"
               size="icon"
               className="md:hidden"
@@ -103,18 +121,26 @@ export function Navbar() {
 
         <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
           {links.map((link) => (
-            <SheetClose key={link} asChild>
+            <SheetClose key={link.label} asChild>
               <a
-                href={`#${link.toLowerCase()}`}
+                href={link.href}
                 className="flex items-center rounded-xl px-4 py-3 text-base text-muted transition-colors duration-300 hover:bg-surface hover:text-foreground"
               >
-                {link}
+                {link.label}
               </a>
             </SheetClose>
           ))}
           <div className="mt-3 border-t border-border pt-3">
             <Button asChild className="w-full" size="default">
-              <a href="#contact" onClick={() => setMobileOpen(false)}>
+              <a
+                href="#contact"
+                onClick={() => {
+                  trackEvent(ANALYTICS_EVENTS.navMobileCtaClick, {
+                    location: "mobile_nav",
+                  });
+                  setMobileOpen(false);
+                }}
+              >
                 Start a Project
               </a>
             </Button>

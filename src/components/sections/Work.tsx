@@ -5,7 +5,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
 
 export function Work() {
@@ -24,13 +24,13 @@ export function Work() {
               id="work-heading"
               className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
             >
-              Recent work across commerce, marketplace, and operations-heavy
-              products.
+              Selected freelance work across web apps, marketplaces, and
+              internal tools.
             </h2>
             <p className="mt-4 text-muted leading-relaxed">
-              Each project below shows the business context, my role, and what
-              changed as a result. The outbound links are there to support the
-              story, not replace it.
+              Each example shows the business problem, my role, and the shipped
+              outcome so you can judge fit before reaching out about your own
+              product or operations workflow.
             </p>
           </div>
         </AnimateOnScroll>
@@ -121,7 +121,7 @@ export function Work() {
                           rel={isExternal ? "noopener noreferrer" : undefined}
                           className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary"
                           onClick={() =>
-                            trackEvent("work_project_click", {
+                            trackEvent(ANALYTICS_EVENTS.workProjectClick, {
                               project: project.title,
                               destination: isExternal ? "external" : "contact",
                             })

@@ -1,12 +1,12 @@
 "use client";
 
-import { LayoutPanelTop, ShoppingCart, Waypoints } from "lucide-react";
+import { LayoutPanelTop, ShieldCheck, Workflow } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { serviceOfferings } from "@/lib/site-content";
+import { serviceFocusAreas } from "@/lib/site-content";
 
-const icons = [LayoutPanelTop, ShoppingCart, Waypoints];
+const icons = [LayoutPanelTop, Workflow, ShieldCheck];
 
 export function Services() {
   return (
@@ -24,17 +24,21 @@ export function Services() {
               id="services-heading"
               className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
             >
-              What I Build
+              Freelance product engineering for web apps, internal systems, and
+              platform work.
             </h2>
             <p className="mt-4 mx-auto max-w-2xl text-muted leading-relaxed">
-              The service menu is intentionally narrow. These are the areas where
-              product thinking and implementation reinforce each other.
+              I stay focused on software where clear UX, dependable
+              engineering, and practical product judgment matter more than
+              flashy surface area. That usually means web apps, internal tools,
+              payments, auth, and internationalization-heavy features that are
+              hard to ship cleanly.
             </p>
           </div>
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {serviceOfferings.map((service, index) => {
+          {serviceFocusAreas.map((service, index) => {
             const Icon = icons[index] ?? LayoutPanelTop;
 
             return (
@@ -59,9 +63,9 @@ export function Services() {
                         {service.description}
                       </p>
                       <p className="mt-5 rounded-xl border border-border bg-background/60 px-4 py-3 text-sm leading-relaxed text-muted">
-                        {service.proof}
+                        {service.examples}
                       </p>
-                  </CardContent>
+                    </CardContent>
                   </article>
                 </Card>
               </AnimateOnScroll>
@@ -71,8 +75,10 @@ export function Services() {
 
         <AnimateOnScroll variant="fade-up" delay={400}>
           <p className="mt-12 text-center text-sm leading-relaxed text-muted">
-            Every engagement also includes product structure, interface design,
-            and a reusable front-end system where it adds leverage.
+            If you need a content-heavy brochure site, I may not be the right
+            fit. If you need product logic, admin complexity, or platform
+            features to feel clear, credible, and shippable, this is the right
+            lane.
           </p>
         </AnimateOnScroll>
       </div>

@@ -1,7 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { AlertCircle, CheckCircle, Info, Mail, Send } from "lucide-react";
+import { useRef, useState } from "react";
+import {
+  AlertCircle,
+  ArrowUpRight,
+  CheckCircle,
+  Info,
+  Mail,
+  Send,
+} from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,21 +16,12 @@ import { Card } from "@/components/ui/card";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { trackEvent } from "@/lib/analytics";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import {
   CONTACT_EMAIL,
   FORMSPARK_ENDPOINT,
   contactContent,
-  contactProjectTypes,
-  contactTimelineOptions,
   hasContactForm,
 } from "@/lib/site-content";
 
@@ -31,6 +29,18 @@ type FormStatus = "idle" | "submitting" | "success" | "error";
 
 export function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const hasTrackedFormStart = useRef(false);
+
+  function handleFormStart() {
+    if (hasTrackedFormStart.current) {
+      return;
+    }
+
+    hasTrackedFormStart.current = true;
+    trackEvent(ANALYTICS_EVENTS.contactFormStart, {
+      source: "contact_form",
+    });
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,16 +65,23 @@ export function Contact() {
       });
 
       if (res.ok) {
-        trackEvent("contact_form_submit", {
+        trackEvent(ANALYTICS_EVENTS.contactFormSubmit, {
           source: "contact_form",
-          project_type: String(data.projectType || "unknown"),
         });
         setStatus("success");
         form.reset();
       } else {
+        trackEvent(ANALYTICS_EVENTS.contactFormError, {
+          source: "contact_form",
+          reason: "server_response",
+        });
         setStatus("error");
       }
     } catch {
+      trackEvent(ANALYTICS_EVENTS.contactFormError, {
+        source: "contact_form",
+        reason: "network_failure",
+      });
       setStatus("error");
     }
   }
@@ -93,7 +110,7 @@ export function Contact() {
                   id="contact-heading"
                   className="mt-4 text-2xl md:text-4xl font-medium text-foreground"
                 >
-                  Tell me what you are building.
+                  Tell me what you need to ship next.
                 </h2>
                 <p className="mt-4 text-muted leading-relaxed">
                   {contactContent.intro}
@@ -106,27 +123,36 @@ export function Contact() {
                     <AlertDescription>
                       I will review the scope, reply with the clearest next step
                       I can offer, and keep the conversation practical. No
-                      pressure, no hard sell.
+                      pressure, no agency-style sales process, and no long
+                      delay before you know whether the fit is right.
                     </AlertDescription>
                   </div>
                 </Alert>
 
-                <div className="mt-8 flex items-center gap-3 text-sm text-muted">
-                  <Mail className="h-4 w-4 text-primary" />
-                  <span>
-                    Prefer email? Reach me directly at{" "}
-                    <a
-                      href={`mailto:${CONTACT_EMAIL}`}
-                      className="text-foreground transition-colors duration-200 hover:text-primary"
-                      onClick={() =>
-                        trackEvent("email_click", {
-                          location: "contact",
-                        })
-                      }
-                    >
-                      {CONTACT_EMAIL}
-                    </a>
-                  </span>
+                <div className="mt-8 rounded-2xl border border-border bg-background/50 p-5">
+                  <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                    <Mail className="h-4 w-4 text-primary" />
+                    <span>{contactContent.quickEmailLabel}</span>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {contactContent.quickEmailHelper}
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <Button asChild variant="outline">
+                      <a
+                        href={`mailto:${CONTACT_EMAIL}`}
+                        onClick={() =>
+                          trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, {
+                            location: "contact_panel",
+                          })
+                        }
+                      >
+                        Email Me Directly
+                        <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    </Button>
+                    <p className="text-sm text-muted">{CONTACT_EMAIL}</p>
+                  </div>
                 </div>
               </div>
 
@@ -144,14 +170,21 @@ export function Contact() {
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={() => setStatus("idle")}
+                      onClick={() => {
+                        hasTrackedFormStart.current = false;
+                        setStatus("idle");
+                      }}
                       className="mt-2"
                     >
                       Send another message
                     </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form
+                    onSubmit={handleSubmit}
+                    onFocusCapture={handleFormStart}
+                    className="space-y-5"
+                  >
                     {!hasContactForm ? (
                       <Alert
                         id="contact-unavailable"
@@ -215,79 +248,6 @@ export function Contact() {
                       </div>
 
                       <div>
-                        <Label htmlFor="company" className="mb-2 block">
-                          Company or Brand{" "}
-                          <span className="font-normal text-muted">
-                            (optional)
-                          </span>
-                        </Label>
-                        <Input
-                          type="text"
-                          id="company"
-                          name="company"
-                          placeholder="Your company, brand, or team"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                        <div>
-                          <Label htmlFor="projectType" className="mb-2 block">
-                            Project Type
-                          </Label>
-                          <Select
-                            name="projectType"
-                            required
-                          >
-                            <SelectTrigger id="projectType">
-                              <SelectValue placeholder="Select a type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {contactProjectTypes.map((type) => (
-                                <SelectItem key={type} value={type}>
-                                  {type}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label htmlFor="timeline" className="mb-2 block">
-                            Timeline
-                          </Label>
-                          <Select
-                            name="timeline"
-                            required
-                          >
-                            <SelectTrigger id="timeline">
-                              <SelectValue placeholder="Select a timeline" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {contactTimelineOptions.map((timeline) => (
-                                <SelectItem key={timeline} value={timeline}>
-                                  {timeline}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="budget" className="mb-2 block">
-                          Budget Context{" "}
-                          <span className="font-normal text-muted">
-                            (optional)
-                          </span>
-                        </Label>
-                        <Input
-                          type="text"
-                          id="budget"
-                          name="budget"
-                          placeholder="A range, ceiling, or note on budget is helpful"
-                        />
-                      </div>
-
-                      <div>
                         <Label htmlFor="message" className="mb-2 block">
                           Message
                         </Label>
@@ -297,7 +257,7 @@ export function Contact() {
                           rows={5}
                           required
                           className="resize-none"
-                          placeholder="What are you building, who is it for, and what do you need help with?"
+                          placeholder="What are you building, who is it for, and what do you need help with? If helpful, include timeline, company, or budget context here too."
                         />
                       </div>
                     </fieldset>
@@ -337,6 +297,11 @@ export function Contact() {
                           {contactContent.responsePromise}
                         </span>{" "}
                         {contactContent.nextStepNote}
+                      </p>
+                      <p className="text-sm leading-relaxed text-muted">
+                        Rough answers are fine. If the project is early, sharing
+                        the audience, blocker, and likely timeline is enough to
+                        get the right conversation started.
                       </p>
                     </div>
                   </form>
