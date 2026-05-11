@@ -3,27 +3,28 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
-  --color-background: #0B0B0B;
-  --color-foreground: #F5F5F5;
-  --color-surface: #141414;
-  --color-elevated: #1A1A1A;
-  --color-primary: #8B1E2D;
-  --color-primary-hover: #A3263B;
-  --color-primary-foreground: #F5F5F5;
-  --color-muted: #C6C6C6;
-  --color-muted-foreground: #C6C6C6;
-  --color-border: #2A2A2A;
-  --color-input: #2A2A2A;
-  --color-ring: #8B1E2D;
-  --color-accent: #1A1A1A;
-  --color-accent-foreground: #F5F5F5;
-  --color-secondary: #141414;
-  --color-secondary-foreground: #F5F5F5;
-  --color-card: #141414;
-  --color-card-foreground: #F5F5F5;
-  --color-popover: #141414;
-  --color-popover-foreground: #F5F5F5;
-  --color-destructive: #7f1d1d;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --font-sans: var(--font-inter), "Inter", sans-serif;
 
@@ -38,6 +39,95 @@
 
 :root {
   --radius: 0.75rem;
+  --background: #0B0B0B;
+  --foreground: #F5F5F5;
+  --surface: #141414;
+  --elevated: #1A1A1A;
+  --primary: #8B1E2D;
+  --primary-hover: #A3263B;
+  --primary-foreground: #F5F5F5;
+  --muted: #C6C6C6;
+  --muted-foreground: #C6C6C6;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #8B1E2D;
+  --accent: #1A1A1A;
+  --accent-foreground: #F5F5F5;
+  --secondary: #141414;
+  --secondary-foreground: #F5F5F5;
+  --card: #141414;
+  --card-foreground: #F5F5F5;
+  --popover: #141414;
+  --popover-foreground: #F5F5F5;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fecaca;
+  --focus-outline: rgba(163, 38, 59, 0.9);
+  --scrollbar-thumb: #8B1E2D;
+  --scrollbar-thumb-hover: #A3263B;
+  --pattern-dot-color: rgba(255, 255, 255, 0.03);
+  --pattern-grid-color: rgba(255, 255, 255, 0.02);
+  --text-gradient-primary: linear-gradient(
+    135deg,
+    #f5f5f5 0%,
+    #8b1e2d 50%,
+    #f5f5f5 100%
+  );
+  --skip-link-background: rgba(11, 11, 11, 0.96);
+  --skip-link-foreground: #f5f5f5;
+  --skip-link-border: rgba(139, 30, 45, 0.35);
+  --shadow-floating: 0 18px 48px rgba(0, 0, 0, 0.28);
+  --shadow-popover: 0 18px 40px rgba(0, 0, 0, 0.3);
+  --shadow-sheet: 0 24px 80px rgba(0, 0, 0, 0.4);
+  --overlay-background: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --background: #F8FAFC;
+  --foreground: #111111;
+  --surface: #FFFFFF;
+  --elevated: #EEF2F6;
+  --primary: #8B1E2D;
+  --primary-hover: #6F1724;
+  --primary-foreground: #FFFFFF;
+  --muted: #343434;
+  --muted-foreground: #343434;
+  --border: #D9E0E8;
+  --input: #D9E0E8;
+  --ring: #8B1E2D;
+  --accent: #EEF2F6;
+  --accent-foreground: #111111;
+  --secondary: #EEF2F6;
+  --secondary-foreground: #111111;
+  --card: #FFFFFF;
+  --card-foreground: #111111;
+  --popover: #FFFFFF;
+  --popover-foreground: #111111;
+  --destructive: #B42318;
+  --destructive-foreground: #7A271A;
+  --focus-outline: rgba(139, 30, 45, 0.76);
+  --scrollbar-thumb: #8B1E2D;
+  --scrollbar-thumb-hover: #6F1724;
+  --pattern-dot-color: rgba(22, 22, 22, 0.065);
+  --pattern-grid-color: rgba(22, 22, 22, 0.045);
+  --text-gradient-primary: linear-gradient(
+    135deg,
+    #111111 0%,
+    #8b1e2d 48%,
+    #111111 100%
+  );
+  --skip-link-background: rgba(255, 255, 255, 0.96);
+  --skip-link-foreground: #111111;
+  --skip-link-border: rgba(139, 30, 45, 0.32);
+  --shadow-floating: 0 18px 48px rgba(40, 47, 60, 0.12);
+  --shadow-popover: 0 18px 40px rgba(40, 47, 60, 0.14);
+  --shadow-sheet: 0 24px 80px rgba(40, 47, 60, 0.16);
+  --overlay-background: rgba(22, 22, 22, 0.36);
+  color-scheme: light;
 }
 
 @layer base {
@@ -52,6 +142,9 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     min-height: 100vh;
+    transition:
+      background-color 300ms ease,
+      color 300ms ease;
   }
 
   a {
@@ -59,7 +152,7 @@
   }
 
   a:focus-visible {
-    outline: 2px solid rgba(163, 38, 59, 0.9);
+    outline: 2px solid var(--focus-outline);
     outline-offset: 4px;
     border-radius: 0.75rem;
   }
@@ -76,7 +169,7 @@
   @layer base {
     * {
       scrollbar-width: thin;
-      scrollbar-color: #8B1E2D transparent;
+      scrollbar-color: var(--scrollbar-thumb) transparent;
     }
     *::-webkit-scrollbar {
       width: 8px;
@@ -86,11 +179,11 @@
       background: transparent;
     }
     *::-webkit-scrollbar-thumb {
-      background: #8B1E2D;
+      background: var(--scrollbar-thumb);
       border-radius: 9999px;
     }
     *::-webkit-scrollbar-thumb:hover {
-      background: #A3263B;
+      background: var(--scrollbar-thumb-hover);
     }
   }
 }
@@ -111,7 +204,7 @@
 .bg-dot-pattern {
   background-image: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.03) 1px,
+    var(--pattern-dot-color) 1px,
     transparent 1px
   );
   background-size: 32px 32px;
@@ -119,16 +212,16 @@
 
 .bg-grid-pattern {
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.02) 1px,
+      var(--pattern-grid-color) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(90deg, var(--pattern-grid-color) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 /* Gradient text effect */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #f5f5f5 0%, #8b1e2d 50%, #f5f5f5 100%);
+  background: var(--text-gradient-primary);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -212,10 +305,10 @@
   z-index: 80;
   transform: translateY(-200%);
   border-radius: 9999px;
-  border: 1px solid rgba(139, 30, 45, 0.35);
-  background: rgba(11, 11, 11, 0.96);
+  border: 1px solid var(--skip-link-border);
+  background: var(--skip-link-background);
   padding: 0.75rem 1rem;
-  color: #f5f5f5;
+  color: var(--skip-link-foreground);
   transition: transform 200ms ease;
 }
 

@@ -30,14 +30,42 @@ export const viewport: Viewport = siteViewport;
 
 export const metadata: Metadata = siteMetadata;
 
+const themeInitScript = `
+(function() {
+  var theme = "dark";
+  try {
+    var storedTheme = window.localStorage.getItem("darisi-theme");
+    theme = storedTheme === "light" || storedTheme === "dark"
+      ? storedTheme
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+  } catch (error) {
+    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+  document.documentElement.dataset.theme = theme;
+  var themeColor = theme === "light" ? "#F8FAFC" : "#0B0B0B";
+  var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", themeColor);
+  }
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="bg-dot-pattern">
+        <script
+          id="theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import {
   Sheet,
@@ -42,7 +43,7 @@ export function Navbar() {
       <header
         className={`sticky top-0 z-[60] border-b transition-all duration-300 ${
           scrolled
-            ? "border-border bg-background/90 shadow-lg shadow-black/20 backdrop-blur-xl"
+            ? "border-border bg-background/90 shadow-[var(--shadow-floating)] backdrop-blur-xl"
             : "border-transparent bg-background/80 backdrop-blur-md"
         }`}
       >
@@ -77,18 +78,21 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
-            <Button asChild size="sm" variant="outline">
-              <a
-                href="#contact"
-                onClick={() =>
-                  trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
-                    location: "desktop_nav",
-                  })
-                }
-              >
-                Start a Project
-              </a>
-            </Button>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <Button asChild size="sm" variant="outline">
+                <a
+                  href="#contact"
+                  onClick={() =>
+                    trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
+                      location: "desktop_nav",
+                    })
+                  }
+                >
+                  Start a Project
+                </a>
+              </Button>
+            </div>
           </div>
 
           <SheetTrigger asChild>
@@ -131,6 +135,9 @@ export function Navbar() {
             </SheetClose>
           ))}
           <div className="mt-3 border-t border-border pt-3">
+            <div className="mb-3 flex justify-end px-4">
+              <ThemeToggle />
+            </div>
             <Button asChild className="w-full" size="default">
               <a
                 href="#contact"

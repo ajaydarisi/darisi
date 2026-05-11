@@ -268,10 +268,10 @@ export function Contact() {
                         variant="destructive"
                         className="flex gap-3"
                       >
-                        <AlertCircle className="mt-0.5 h-4 w-4 text-red-300" />
+                        <AlertCircle className="mt-0.5 h-4 w-4 text-destructive-foreground" />
                         <div>
                           <AlertTitle>Something went wrong</AlertTitle>
-                          <AlertDescription className="text-red-200/90">
+                          <AlertDescription className="text-destructive-foreground">
                             Please try again or email me directly.
                           </AlertDescription>
                         </div>
