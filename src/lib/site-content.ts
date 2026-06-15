@@ -60,6 +60,7 @@ const SERVICE_ID = `${SITE_URL}/#service`;
 const WORK_ID = `${SITE_URL}/#selected-work`;
 const FAQ_ID = `${SITE_URL}/#faq`;
 
+export const CHATBOT_URL = "https://chat.darisi.in";
 export const CONTACT_EMAIL = seoConfig.contactEmail;
 export const FORMSPARK_ENDPOINT =
   process.env.NEXT_PUBLIC_FORMSPARK_ENDPOINT?.trim() ?? "";

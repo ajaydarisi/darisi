@@ -11,6 +11,7 @@ export const ANALYTICS_EVENTS = {
   contactFormError: "contact_form_error",
   fallbackEmailClick: "fallback_email_click",
   faqOpen: "faq_open",
+  chatbotClick: "chatbot_click",
 } as const;
 
 type AnalyticsEventName =
