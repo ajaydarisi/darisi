@@ -58,7 +58,7 @@ export function Hero() {
             }}
             role="doc-subtitle"
           >
-            I am a freelance product engineer based in Bengaluru,
+            I am a freelance software engineer based in Bengaluru,
             India.
           </p>
 

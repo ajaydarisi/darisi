@@ -63,7 +63,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              Darisi is Ajay Darisi&apos;s freelance product engineering
+              Darisi is Ajay Darisi&apos;s freelance software engineering
               practice for teams that need web apps, internal systems, and
               platform features shipped with calm execution.
             </p>

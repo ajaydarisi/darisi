@@ -24,7 +24,7 @@ export function Services() {
               id="services-heading"
               className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
             >
-              Freelance product engineering for web apps, internal systems, and
+              Freelance software engineering for web apps, internal systems, and
               platform work.
             </h2>
             <p className="mt-4 mx-auto max-w-2xl text-muted leading-relaxed">

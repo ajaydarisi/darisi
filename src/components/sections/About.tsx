@@ -45,7 +45,7 @@ export function About() {
                 id="about-heading"
                 className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
               >
-                Freelance product engineering from Bengaluru for global teams.
+                Freelance software engineering from Bengaluru for global teams.
               </h2>
             </AnimateOnScroll>
 

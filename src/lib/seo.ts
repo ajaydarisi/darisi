@@ -40,19 +40,19 @@ export const seoConfig: SeoConfig = {
   personAlternateName: "Darisi",
   contactEmail: "ajaydarisi5@gmail.com",
   title:
-    "Freelance Product Engineer for Web Apps, Internal Systems & Platform Features | Darisi",
+    "Freelance Software Engineer for Web Apps, Internal Systems & Platform Features | Darisi",
   description:
-    "Ajay Darisi is a freelance product engineer based in Bengaluru, India, helping teams worldwide ship product web apps, internal systems, payments, auth, and internationalization-heavy software through Darisi.",
+    "Ajay Darisi is a freelance software engineer based in Bengaluru, India, helping teams worldwide ship product web apps, internal systems, payments, auth, and internationalization-heavy software through Darisi.",
   shortDescription:
-    "Darisi is Ajay Darisi's freelance product engineering practice for product web apps, internal systems, and platform features.",
+    "Darisi is Ajay Darisi's freelance software engineering practice for product web apps, internal systems, and platform features.",
   serviceName:
-    "Freelance Product Engineering for Web Apps, Internal Systems & Platform Features",
+    "Freelance Software Engineering for Web Apps, Internal Systems & Platform Features",
   serviceType:
-    "Freelance Product Engineering for Web Apps, Internal Systems, Payments, Auth, and Internationalization",
-  jobTitle: "Freelance Product Engineer",
+    "Freelance Software Engineering for Web Apps, Internal Systems, Payments, Auth, and Internationalization",
+  jobTitle: "Freelance Software Engineer",
   ogImagePath: "/og-image.png",
   ogImageAlt:
-    "Darisi by Ajay Darisi - freelance product engineer for web apps, internal systems, and platform features",
+    "Darisi by Ajay Darisi - freelance software engineer for web apps, internal systems, and platform features",
   locale: "en_US",
   language: "en",
   areaServed: "Worldwide",
@@ -82,7 +82,7 @@ export const seoConfig: SeoConfig = {
   keywords: [
     "Ajay Darisi",
     "Darisi",
-    "freelance product engineer",
+    "freelance software engineer",
     "product web apps freelancer",
     "internal systems developer",
     "internal tools developer",

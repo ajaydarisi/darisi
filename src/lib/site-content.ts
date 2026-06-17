@@ -188,7 +188,7 @@ export const projects: ProjectEntry[] = [
 
 const baseFaqs: FaqEntry[] = [
   {
-    question: "What kind of freelance product engineering work are you best at?",
+    question: "What kind of freelance software engineering work are you best at?",
     answer:
       "The best fit is product-grade web apps, internal systems, CRM and admin workflows, and platform features like payments, auth, registration, and internationalization. I am strongest when the work needs both product thinking and dependable engineering.",
   },
@@ -230,7 +230,7 @@ export function getContactContent(
   return {
     intro: contactFormEnabled
       ? "Tell me what you are building, who it is for, and where things are stuck. I work from Bengaluru with global teams on product web apps, internal systems, payments, auth, and internationalization-heavy software. Rough answers are fine."
-      : "The project form is temporarily unavailable, but I am still taking on new freelance product engineering work. Email me directly with a few lines of context and I will reply within 24 hours with next steps.",
+      : "The project form is temporarily unavailable, but I am still taking on new freelance software engineering work. Email me directly with a few lines of context and I will reply within 24 hours with next steps.",
     formUnavailableTitle: "Form temporarily unavailable",
     formUnavailableMessage: `Form submissions are temporarily unavailable right now. Email me directly at ${CONTACT_EMAIL} and I will reply within 24 hours.`,
     gettingStartedAnswer: contactFormEnabled

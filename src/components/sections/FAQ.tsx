@@ -27,7 +27,7 @@ export function FAQ() {
               id="faq-heading"
               className="mt-4 text-2xl font-medium text-foreground md:text-3xl"
             >
-              Questions teams ask before hiring a freelance product engineer
+              Questions teams ask before hiring a freelance software engineer
             </h2>
             <p className="mt-4 text-muted">
               The practical details around fit, collaboration, scope, and the
