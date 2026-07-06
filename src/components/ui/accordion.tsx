@@ -28,7 +28,7 @@ const AccordionTrigger = React.forwardRef<
       ref={ref}
       data-slot="accordion-trigger"
       className={cn(
-        "group flex flex-1 items-center justify-between gap-4 py-6 text-left text-base font-medium text-foreground transition-all hover:text-primary",
+        "group flex flex-1 items-center justify-between gap-4 py-6 text-left text-base font-medium text-foreground transition-all hover:text-primary-text",
         className
       )}
       {...props}

@@ -46,7 +46,7 @@ const themeInitScript = `
       : "light";
   }
   document.documentElement.dataset.theme = theme;
-  var themeColor = theme === "light" ? "#F8FAFC" : "#0B0B0B";
+  var themeColor = theme === "light" ? "#F7FAF9" : "#0B0F0E";
   var themeColorMeta = document.querySelector('meta[name="theme-color"]');
   if (themeColorMeta) {
     themeColorMeta.setAttribute("content", themeColor);

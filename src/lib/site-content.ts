@@ -41,6 +41,12 @@ export interface FaqEntry {
   answer: string;
 }
 
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+}
+
 interface ContactContent {
   intro: string;
   formUnavailableTitle: string;
@@ -257,6 +263,11 @@ export function getFaqEntries(contactFormEnabled = hasContactForm): FaqEntry[] {
 
 export const contactContent = getContactContent();
 export const faqEntries = getFaqEntries();
+
+// Real client testimonials. The Testimonials section renders nothing while this
+// array is empty. Add genuine quotes with attribution here — do not use
+// placeholder or fabricated quotes on the live site.
+export const testimonials: Testimonial[] = [];
 
 export function buildJsonLd(contactFormEnabled = hasContactForm) {
   const faqs = getFaqEntries(contactFormEnabled);

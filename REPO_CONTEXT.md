@@ -18,7 +18,8 @@ This file is the source of truth for high-level repo context in new chats. Read 
 - `src/app/page.tsx`
   - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
-  - `Navbar -> Hero -> Work -> Trust -> Services -> Process -> About -> BestFit -> FAQ -> Contact -> Footer`
+  - `Navbar -> Hero -> Work -> Trust -> Testimonials -> Services -> Process -> About -> FAQ -> Contact -> Footer`
+  - `ChatAgent` is a floating button rendered after `Footer` (hides itself while `#contact` is in view)
 
 ## Content Ownership
 
@@ -26,10 +27,10 @@ This file is the source of truth for high-level repo context in new chats. Read 
   - `Hero.tsx`: lead-generation hero copy and primary CTAs
   - `Work.tsx`: mini case studies for featured projects
   - `Trust.tsx`: delivery commitments and trust-building proof
+  - `Testimonials.tsx`: client quotes; renders only when `testimonials` in `site-content.ts` is non-empty
   - `Services.tsx`: proof-backed service focus
   - `Process.tsx`: delivery process steps
   - `About.tsx`: personal intro and values
-  - `BestFit.tsx`: ideal engagement types and boundaries
   - `FAQ.tsx`: objection-handling questions and answers
   - `Contact.tsx`: contact CTA and Formspark-backed form
   - `Navbar.tsx` and `Footer.tsx`: navigation, links, brand, and social/contact links

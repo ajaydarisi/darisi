@@ -9,8 +9,8 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "darisi-theme";
 const THEME_CHANGE_EVENT = "darisi-theme-change";
 const THEME_COLORS: Record<Theme, string> = {
-  dark: "#0B0B0B",
-  light: "#F8FAFC",
+  dark: "#0B0F0E",
+  light: "#F7FAF9",
 };
 
 function isTheme(value: string | null): value is Theme {
@@ -63,12 +63,13 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>(() =>
+    typeof document !== "undefined" ? getActiveTheme() : "dark"
+  );
 
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      setTheme(getActiveTheme());
-    });
+    // Initial theme is already read from dataset.theme in the useState
+    // initializer; here we only subscribe to later theme/preference changes.
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleThemeChange = () => {
       setTheme(getActiveTheme());
@@ -97,7 +98,6 @@ export function ThemeToggle({ className }: { className?: string }) {
     mediaQuery.addEventListener("change", handlePreferenceChange);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
       window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
       window.removeEventListener("storage", handleStorageChange);
       mediaQuery.removeEventListener("change", handlePreferenceChange);
@@ -120,6 +120,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       type="button"
+      suppressHydrationWarning
       aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
       aria-pressed={isLight}
       onClick={toggleTheme}
@@ -141,8 +142,9 @@ export function ThemeToggle({ className }: { className?: string }) {
       />
       <span
         aria-hidden="true"
+        suppressHydrationWarning
         className={cn(
-          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary shadow-[var(--shadow-floating)] transition-transform duration-300 ease-out",
+          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary-text shadow-[var(--shadow-floating)] transition-transform duration-300 ease-out",
           isLight ? "translate-x-8" : "translate-x-0"
         )}
       >

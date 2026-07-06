@@ -13,13 +13,13 @@ import { faqEntries } from "@/lib/site-content";
 
 export function FAQ() {
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="py-24">
+    <section id="faq" aria-labelledby="faq-heading" className="bg-surface py-24">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         <AnimateOnScroll variant="fade-up">
           <div className="mb-16 text-center">
             <Badge
               variant="default"
-              className="text-[10px] uppercase tracking-[0.2em]"
+              className="text-[11px] uppercase tracking-[0.2em]"
             >
               FAQ
             </Badge>
@@ -29,7 +29,7 @@ export function FAQ() {
             >
               Questions teams ask before hiring a freelance software engineer
             </h2>
-            <p className="mt-4 text-muted">
+            <p className="mt-4 text-foreground/90">
               The practical details around fit, collaboration, scope, and the
               kinds of web app, internal tool, and platform work I am best
               suited to take on.

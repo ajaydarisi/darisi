@@ -10,13 +10,13 @@ const icons = [MessageSquareText, Clock3, Rocket];
 
 export function Trust() {
   return (
-    <section aria-labelledby="trust-heading" className="py-24">
+    <section aria-labelledby="trust-heading" className="bg-surface py-24">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <AnimateOnScroll variant="fade-up">
           <div className="text-center">
             <Badge
               variant="default"
-              className="text-[10px] uppercase tracking-[0.2em]"
+              className="text-[11px] uppercase tracking-[0.2em]"
             >
               Working With Darisi
             </Badge>
@@ -26,7 +26,7 @@ export function Trust() {
             >
               A direct freelance model for product work that needs to ship.
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-muted">
+            <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-foreground/90">
               Darisi is meant to feel personal, focused, and easy to work with
               for teams hiring help on web apps, internal systems, and
               platform-heavy builds. The goal is fewer handoffs, clearer
@@ -49,7 +49,7 @@ export function Trust() {
                 <Card className="h-full bg-background/60">
                   <CardContent className="px-6 pb-6 pt-6">
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
-                      <Icon className="h-5 w-5 text-primary" />
+                      <Icon className="h-5 w-5 text-primary-text" />
                     </div>
                     <h3 className="mt-5 text-lg font-medium text-foreground">
                       {point.title}

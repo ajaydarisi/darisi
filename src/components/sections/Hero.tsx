@@ -18,7 +18,7 @@ export function Hero() {
   return (
     <section
       aria-label="Darisi hero"
-      className="relative flex min-h-[calc(100svh-6rem)] items-center overflow-hidden"
+      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px] animate-pulse-glow" />
@@ -31,7 +31,7 @@ export function Hero() {
         <div className="max-w-3xl">
           <Badge
             variant="outline"
-            className={`border-primary/30 bg-primary/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] text-primary/80 transition-all duration-700 ease-out ${
+            className={`border-primary/30 bg-primary/5 px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] text-primary-text transition-all duration-700 ease-out ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
@@ -39,7 +39,7 @@ export function Hero() {
           </Badge>
 
           <h1
-            className={`mt-6 max-w-5xl text-4xl font-semibold leading-tight tracking-tight text-gradient-primary transition-all duration-700 ease-out md:text-6xl lg:text-7xl ${
+            className={`mt-6 max-w-4xl text-4xl font-semibold leading-tight tracking-tight text-gradient-primary transition-all duration-700 ease-out md:text-5xl lg:text-6xl ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
             style={{ transitionDelay: "150ms" }}
@@ -48,7 +48,7 @@ export function Hero() {
           </h1>
 
           <p
-            className={`mt-6 max-w-2xl text-lg leading-relaxed text-muted md:text-xl ${
+            className={`mt-6 max-w-2xl text-lg leading-relaxed text-foreground md:text-xl ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
             style={{
@@ -58,8 +58,8 @@ export function Hero() {
             }}
             role="doc-subtitle"
           >
-            I am a freelance software engineer based in Bengaluru,
-            India.
+            I am a freelance software engineer who takes one steady role across
+            product clarity, UX direction, and build.
           </p>
 
           <p
@@ -72,9 +72,9 @@ export function Hero() {
               transitionTimingFunction: "ease-out",
             }}
           >
-            I am strongest when the work needs calm ownership across product
-            clarity, UX direction, and build, especially for CRM and admin
-            workflows, registration systems, and platform-heavy launches.
+            Strongest on CRM and admin workflows, registration systems, and
+            platform-heavy launches, for global teams in Bengaluru and beyond
+            that want fewer handoffs and clearer decisions.
           </p>
 
           <div
@@ -157,11 +157,11 @@ export function Hero() {
 
       <a
         href="#work"
-        className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group"
+        className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group [@media(max-height:740px)]:hidden"
         style={{ animationDelay: "800ms" }}
         aria-label="Scroll down to selected work"
       >
-        <span className="text-[10px] uppercase tracking-[0.2em] text-muted/60 transition-colors duration-300 group-hover:text-primary/60">
+        <span className="text-[11px] uppercase tracking-[0.2em] text-muted-subtle transition-colors duration-300 group-hover:text-primary-text">
           Scroll to proof
         </span>
         <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-300 group-hover:border-primary/40">

@@ -28,6 +28,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +37,32 @@ export function Navbar() {
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = links
+      .map((link) => document.getElementById(link.href.replace("#", "")))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sections.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]) {
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -69,15 +96,24 @@ export function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-muted transition-colors duration-200 hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            ))}
+            {links.map((link) => {
+              const isActive = activeSection === link.href.replace("#", "");
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative text-sm transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary-text after:transition-all after:duration-300 after:content-[''] ${
+                    isActive
+                      ? "text-foreground after:w-full"
+                      : "text-muted hover:text-foreground after:w-0"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
             <div className="flex items-center gap-3">
               <ThemeToggle />
               <Button asChild size="sm" variant="outline">
@@ -124,16 +160,25 @@ export function Navbar() {
         </SheetDescription>
 
         <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
-          {links.map((link) => (
-            <SheetClose key={link.label} asChild>
-              <a
-                href={link.href}
-                className="flex items-center rounded-xl px-4 py-3 text-base text-muted transition-colors duration-300 hover:bg-surface hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            </SheetClose>
-          ))}
+          {links.map((link) => {
+            const isActive = activeSection === link.href.replace("#", "");
+
+            return (
+              <SheetClose key={link.label} asChild>
+                <a
+                  href={link.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`flex items-center rounded-xl px-4 py-3 text-base transition-colors duration-300 hover:bg-surface hover:text-foreground ${
+                    isActive
+                      ? "bg-surface text-foreground"
+                      : "text-muted"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </SheetClose>
+            );
+          })}
           <div className="mt-3 border-t border-border pt-3">
             <div className="mb-3 flex justify-end px-4">
               <ThemeToggle />

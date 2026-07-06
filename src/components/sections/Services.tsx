@@ -16,7 +16,7 @@ export function Services() {
           <div className="text-center mb-16">
             <Badge
               variant="default"
-              className="text-[10px] uppercase tracking-[0.2em]"
+              className="text-[11px] uppercase tracking-[0.2em]"
             >
               Services
             </Badge>
@@ -27,7 +27,7 @@ export function Services() {
               Freelance software engineering for web apps, internal systems, and
               platform work.
             </h2>
-            <p className="mt-4 mx-auto max-w-2xl text-muted leading-relaxed">
+            <p className="mt-4 mx-auto max-w-2xl text-foreground/90 leading-relaxed">
               I stay focused on software where clear UX, dependable
               engineering, and practical product judgment matter more than
               flashy surface area. That usually means web apps, internal tools,
@@ -52,9 +52,9 @@ export function Services() {
                   className="group h-full transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <article>
-                    <CardContent className="px-8 pb-8 pt-8">
+                    <CardContent className="px-6 pb-6 pt-6">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                        <Icon className="h-6 w-6 text-primary" />
+                        <Icon className="h-6 w-6 text-primary-text" />
                       </div>
                       <h3 className="mt-5 text-xl font-medium text-foreground">
                         {service.title}

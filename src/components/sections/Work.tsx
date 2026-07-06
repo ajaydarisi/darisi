@@ -16,7 +16,7 @@ export function Work() {
           <div className="max-w-2xl">
             <Badge
               variant="default"
-              className="text-[10px] uppercase tracking-[0.2em]"
+              className="text-[11px] uppercase tracking-[0.2em]"
             >
               Selected Work
             </Badge>
@@ -27,7 +27,7 @@ export function Work() {
               Selected freelance work across web apps, marketplaces, and
               internal tools.
             </h2>
-            <p className="mt-4 text-muted leading-relaxed">
+            <p className="mt-4 text-foreground/90 leading-relaxed">
               Each example shows the business problem, my role, and the shipped
               outcome so you can judge fit before reaching out about your own
               product or operations workflow.
@@ -47,10 +47,10 @@ export function Work() {
               >
                 <Card
                   asChild
-                  className="group flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                  className="group relative flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <article>
-                    <div className="relative h-52 overflow-hidden">
+                    <div className="relative aspect-[16/10] overflow-hidden">
                       <div
                         className={`absolute inset-0 bg-linear-to-br ${project.gradient}`}
                       />
@@ -119,7 +119,7 @@ export function Work() {
                           href={project.action.href}
                           target={isExternal ? "_blank" : undefined}
                           rel={isExternal ? "noopener noreferrer" : undefined}
-                          className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary"
+                          className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary-text after:absolute after:inset-0 after:content-['']"
                           onClick={() =>
                             trackEvent(ANALYTICS_EVENTS.workProjectClick, {
                               project: project.title,
@@ -135,7 +135,7 @@ export function Work() {
                           )}
                         </a>
                         {project.action.helper ? (
-                          <p className="mt-3 text-xs leading-relaxed text-muted/80">
+                          <p className="mt-3 text-xs leading-relaxed text-muted-subtle">
                             {project.action.helper}
                           </p>
                         ) : null}

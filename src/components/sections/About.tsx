@@ -37,7 +37,7 @@ export function About() {
             <AnimateOnScroll variant="fade-up">
               <Badge
                 variant="default"
-                className="text-[10px] uppercase tracking-[0.2em]"
+                className="text-[11px] uppercase tracking-[0.2em]"
               >
                 How I work
               </Badge>
@@ -50,7 +50,7 @@ export function About() {
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={100}>
-              <p className="mt-8 text-lg leading-relaxed text-muted">
+              <p className="mt-8 text-lg leading-relaxed text-foreground/90">
                 I&apos;m based in Bengaluru, India, and through Darisi I take on
                 independent product work for teams that want one steady owner
                 across product clarity, interface direction, and implementation.
@@ -72,7 +72,7 @@ export function About() {
                 <AnimateOnScroll key={value.title} variant="fade-up" delay={300 + index * 100}>
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <value.icon className="w-5 h-5 text-primary" />
+                      <value.icon className="w-5 h-5 text-primary-text" />
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-foreground">

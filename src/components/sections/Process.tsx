@@ -36,7 +36,7 @@ const steps = [
 
 export function Process() {
   return (
-    <section id="process" aria-labelledby="process-heading" className="py-24">
+    <section id="process" aria-labelledby="process-heading" className="bg-surface py-24">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <AnimateOnScroll variant="fade-up">
           <div className="text-center mb-16">
@@ -46,7 +46,7 @@ export function Process() {
             >
               How I run freelance web app and internal tool projects
             </h2>
-            <p className="mt-4 text-muted max-w-xl mx-auto">
+            <p className="mt-4 text-foreground/90 max-w-xl mx-auto">
               A freelance delivery process designed to keep decisions visible,
               scope practical, and momentum steady for global teams without
               handoff-heavy chaos.
@@ -67,11 +67,11 @@ export function Process() {
               variant="fade-up"
               delay={index * 150}
             >
-              <div className="relative text-center">
-                <div className="relative z-10 w-20 h-20 mx-auto rounded-2xl bg-surface border border-border flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300">
-                  <step.icon className="w-8 h-8 text-primary" />
+              <div className="group relative text-center">
+                <div className="relative z-10 w-20 h-20 mx-auto rounded-2xl bg-elevated border border-border flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300">
+                  <step.icon className="w-8 h-8 text-primary-text" />
                 </div>
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-medium mt-4">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary-text text-xs font-medium mt-4">
                   {step.step}
                 </span>
                 <h3 className="mt-3 text-lg font-medium text-foreground">
