@@ -38,7 +38,7 @@ export const seoConfig: SeoConfig = {
   siteName: "Darisi",
   personName: "Ajay Darisi",
   personAlternateName: "Darisi",
-  contactEmail: "ajaydarisi5@gmail.com",
+  contactEmail: "ajay@darisi.in",
   title:
     "Freelance Software Engineer for Web Apps, Internal Systems & Platform Features | Darisi",
   description:
@@ -109,7 +109,7 @@ if (bingSiteVerification) {
 }
 
 export const siteViewport: Viewport = {
-  themeColor: "#0B0B0B",
+  themeColor: "#0B0F0E",
 };
 
 export const siteMetadata: Metadata = {
