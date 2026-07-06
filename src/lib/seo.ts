@@ -38,7 +38,7 @@ export const seoConfig: SeoConfig = {
   siteName: "Darisi",
   personName: "Ajay Darisi",
   personAlternateName: "Darisi",
-  contactEmail: "ajay@darisi.in",
+  contactEmail: "contact@darisi.in",
   title:
     "Freelance Software Engineer for Web Apps, Internal Systems & Platform Features | Darisi",
   description:
