@@ -5,7 +5,6 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
-import { heroProofStats } from "@/lib/site-content";
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +16,7 @@ export function Hero() {
 
   return (
     <section
-      aria-label="Darisi hero"
+      aria-label="Introduction"
       className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -35,7 +34,7 @@ export function Hero() {
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            Darisi | Bengaluru, India | Global Remote
+            Software Engineer | Bengaluru, India
           </Badge>
 
           <h1
@@ -58,8 +57,8 @@ export function Hero() {
             }}
             role="doc-subtitle"
           >
-            I am a freelance software engineer who takes one steady role across
-            product clarity, UX direction, and build.
+            I&apos;m Ajay Darisi, a software engineer who builds product web
+            apps, internal tools, and the platform layers behind them.
           </p>
 
           <p
@@ -72,9 +71,9 @@ export function Hero() {
               transitionTimingFunction: "ease-out",
             }}
           >
-            Strongest on CRM and admin workflows, registration systems, and
-            platform-heavy launches, for global teams in Bengaluru and beyond
-            that want fewer handoffs and clearer decisions.
+            Most of my time goes into CRM and admin workflows, registration
+            systems, payments, auth, and multi-language flows — the parts of a
+            product that have to be both clear and dependable.
           </p>
 
           <div
@@ -89,69 +88,34 @@ export function Hero() {
           >
             <Button asChild size="lg">
               <a
-                href="#contact"
-                aria-label="Start your web app or internal systems project with Ajay Darisi"
+                href="#work"
+                aria-label="View Ajay Darisi's selected work"
                 onClick={() =>
                   trackEvent(ANALYTICS_EVENTS.heroPrimaryCtaClick, {
-                    location: "hero",
-                    target: "contact",
-                  })
-                }
-              >
-                Start Your Project
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <a
-                href="#work"
-                aria-label="See Ajay Darisi selected work"
-                onClick={() =>
-                  trackEvent(ANALYTICS_EVENTS.heroSecondaryCtaClick, {
                     location: "hero",
                     target: "work",
                   })
                 }
               >
-                See Selected Work
+                View My Work
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a
+                href="#contact"
+                aria-label="Get in touch with Ajay Darisi"
+                onClick={() =>
+                  trackEvent(ANALYTICS_EVENTS.heroSecondaryCtaClick, {
+                    location: "hero",
+                    target: "contact",
+                  })
+                }
+              >
+                Get in Touch
               </a>
             </Button>
           </div>
-
-          <div
-            className={`mt-8 grid gap-3 sm:grid-cols-3 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{
-              transitionDelay: "600ms",
-              transitionDuration: "700ms",
-              transitionTimingFunction: "ease-out",
-            }}
-          >
-            {heroProofStats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-border bg-background/50 px-4 py-4"
-              >
-                <p className="text-xl font-semibold text-foreground">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-sm text-muted">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-          <p
-            className={`mt-5 text-sm text-muted ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{
-              transitionDelay: "700ms",
-              transitionDuration: "700ms",
-              transitionTimingFunction: "ease-out",
-            }}
-          >
-            Replies within 24 hours. 30 days of post-launch support included.
-          </p>
         </div>
       </div>
 
@@ -159,10 +123,10 @@ export function Hero() {
         href="#work"
         className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group [@media(max-height:740px)]:hidden"
         style={{ animationDelay: "800ms" }}
-        aria-label="Scroll down to selected work"
+        aria-label="Scroll down to my work"
       >
         <span className="text-[11px] uppercase tracking-[0.2em] text-muted-subtle transition-colors duration-300 group-hover:text-primary-text">
-          Scroll to proof
+          Scroll to work
         </span>
         <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-300 group-hover:border-primary/40">
           <div className="mx-auto block h-2.5 w-1 rounded-full bg-primary animate-scroll-dot" />

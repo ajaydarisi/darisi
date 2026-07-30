@@ -6,7 +6,7 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 ## Repo Summary
 
-- Single-page lead-generation portfolio for `darisi.in`
+- Single-page personal portfolio for `darisi.in`
 - Next.js App Router project with static export enabled in `next.config.ts`
 - No backend, database, CMS, or API routes in this repo
 - Homepage content is rendered by section components and shared site content in `src/lib/site-content.ts`
@@ -18,25 +18,20 @@ This file is the source of truth for high-level repo context in new chats. Read 
 - `src/app/page.tsx`
   - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
-  - `Navbar -> Hero -> Work -> Trust -> Testimonials -> Services -> Process -> About -> FAQ -> Contact -> Footer`
-  - `ChatAgent` is a floating button rendered after `Footer` (hides itself while `#contact` is in view)
+  - `Navbar -> Hero -> Work -> Skills -> About -> Contact -> Footer`
 
 ## Content Ownership
 
 - Visible homepage content lives in `src/components/sections/`
-  - `Hero.tsx`: lead-generation hero copy and primary CTAs
+  - `Hero.tsx`: personal intro copy and primary CTAs
   - `Work.tsx`: mini case studies for featured projects
-  - `Trust.tsx`: delivery commitments and trust-building proof
-  - `Testimonials.tsx`: client quotes; renders only when `testimonials` in `site-content.ts` is non-empty
-  - `Services.tsx`: proof-backed service focus
-  - `Process.tsx`: delivery process steps
+  - `Skills.tsx`: skill areas and tools
   - `About.tsx`: personal intro and values
-  - `FAQ.tsx`: objection-handling questions and answers
-  - `Contact.tsx`: contact CTA and Formspark-backed form
+  - `Contact.tsx`: contact heading plus email / GitHub / LinkedIn links, no form
   - `Navbar.tsx` and `Footer.tsx`: navigation, links, brand, and social/contact links
 - Shared content and provider config live in `src/lib/site-content.ts`
-  - Owns portfolio entries, service/trust/fit copy, FAQ entries, contact copy, Formspark endpoint config, and JSON-LD builders
-  - When updating public-facing work/FAQ/contact/trust copy, update this module so the UI and structured data stay aligned
+  - Owns project entries, skill areas, contact email, and JSON-LD builders
+  - When updating public-facing work/skills/contact copy, update this module so the UI and structured data stay aligned
 
 ## Shared Primitives And Patterns
 
@@ -79,7 +74,5 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 ## Known Caveats
 
-- `src/components/sections/Contact.tsx`
-  - Uses Formspark via `NEXT_PUBLIC_FORMSPARK_ENDPOINT`; when the env var is unset, the form is intentionally disabled and the email fallback is shown
 - `src/app/layout.tsx`
   - Loads Plausible only when `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is set

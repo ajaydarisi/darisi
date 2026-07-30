@@ -4,13 +4,13 @@ import { LayoutPanelTop, ShieldCheck, Workflow } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { serviceFocusAreas } from "@/lib/site-content";
+import { skillAreas } from "@/lib/site-content";
 
 const icons = [LayoutPanelTop, Workflow, ShieldCheck];
 
-export function Services() {
+export function Skills() {
   return (
-    <section id="services" aria-labelledby="services-heading" className="py-24">
+    <section id="skills" aria-labelledby="skills-heading" className="bg-surface py-24">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <AnimateOnScroll variant="fade-up">
           <div className="text-center mb-16">
@@ -18,32 +18,29 @@ export function Services() {
               variant="default"
               className="text-[11px] uppercase tracking-[0.2em]"
             >
-              Services
+              Skills
             </Badge>
             <h2
-              id="services-heading"
+              id="skills-heading"
               className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
             >
-              Freelance software engineering for web apps, internal systems, and
-              platform work.
+              What I work with.
             </h2>
             <p className="mt-4 mx-auto max-w-2xl text-foreground/90 leading-relaxed">
-              I stay focused on software where clear UX, dependable
-              engineering, and practical product judgment matter more than
-              flashy surface area. That usually means web apps, internal tools,
-              payments, auth, and internationalization-heavy features that are
-              hard to ship cleanly.
+              The areas I&apos;ve spent the most time in, and the tools I reach
+              for when building product surfaces, internal systems, and the
+              platform layers underneath them.
             </p>
           </div>
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {serviceFocusAreas.map((service, index) => {
+          {skillAreas.map((skill, index) => {
             const Icon = icons[index] ?? LayoutPanelTop;
 
             return (
               <AnimateOnScroll
-                key={service.title}
+                key={skill.title}
                 variant="fade-up"
                 delay={index * 100}
               >
@@ -57,13 +54,13 @@ export function Services() {
                         <Icon className="h-6 w-6 text-primary-text" />
                       </div>
                       <h3 className="mt-5 text-xl font-medium text-foreground">
-                        {service.title}
+                        {skill.title}
                       </h3>
                       <p className="mt-3 text-sm leading-relaxed text-muted">
-                        {service.description}
+                        {skill.description}
                       </p>
                       <p className="mt-5 rounded-xl border border-border bg-background/60 px-4 py-3 text-sm leading-relaxed text-muted">
-                        {service.examples}
+                        {skill.tools}
                       </p>
                     </CardContent>
                   </article>
@@ -72,15 +69,6 @@ export function Services() {
             );
           })}
         </div>
-
-        <AnimateOnScroll variant="fade-up" delay={400}>
-          <p className="mt-12 text-center text-sm leading-relaxed text-muted">
-            If you need a content-heavy brochure site, I may not be the right
-            fit. If you need product logic, admin complexity, or platform
-            features to feel clear, credible, and shippable, this is the right
-            lane.
-          </p>
-        </AnimateOnScroll>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,21 +24,17 @@ export function Work() {
               id="work-heading"
               className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
             >
-              Selected freelance work across web apps, marketplaces, and
-              internal tools.
+              Projects I&apos;ve designed and built, end to end.
             </h2>
             <p className="mt-4 text-foreground/90 leading-relaxed">
-              Each example shows the business problem, my role, and the shipped
-              outcome so you can judge fit before reaching out about your own
-              product or operations workflow.
+              Each one lays out the problem, what I owned, and what actually
+              shipped.
             </p>
           </div>
         </AnimateOnScroll>
 
         <div className="mt-14 grid grid-cols-1 gap-8 xl:grid-cols-3">
           {projects.map((project, index) => {
-            const isExternal = project.action.external;
-
             return (
               <AnimateOnScroll
                 key={project.title}
@@ -115,28 +111,24 @@ export function Work() {
                       </ul>
 
                       <div className="mt-auto pt-6">
-                        <a
-                          href={project.action.href}
-                          target={isExternal ? "_blank" : undefined}
-                          rel={isExternal ? "noopener noreferrer" : undefined}
-                          className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary-text after:absolute after:inset-0 after:content-['']"
-                          onClick={() =>
-                            trackEvent(ANALYTICS_EVENTS.workProjectClick, {
-                              project: project.title,
-                              destination: isExternal ? "external" : "contact",
-                            })
-                          }
-                        >
-                          {project.action.label}
-                          {isExternal ? (
+                        {project.action ? (
+                          <a
+                            href={project.action.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary-text after:absolute after:inset-0 after:content-['']"
+                            onClick={() =>
+                              trackEvent(ANALYTICS_EVENTS.workProjectClick, {
+                                project: project.title,
+                              })
+                            }
+                          >
+                            {project.action.label}
                             <ArrowUpRight className="h-4 w-4" />
-                          ) : (
-                            <ArrowRight className="h-4 w-4" />
-                          )}
-                        </a>
-                        {project.action.helper ? (
-                          <p className="mt-3 text-xs leading-relaxed text-muted-subtle">
-                            {project.action.helper}
+                          </a>
+                        ) : project.note ? (
+                          <p className="text-xs leading-relaxed text-muted-subtle">
+                            {project.note}
                           </p>
                         ) : null}
                       </div>

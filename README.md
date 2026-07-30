@@ -1,8 +1,8 @@
 # Darisi
 
-Lead-generation portfolio website for Ajay Darisi at `darisi.in`.
+Personal portfolio website for Ajay Darisi at `darisi.in`.
 
-This repo is a single-page Next.js App Router site exported as static files. It is positioned as a lead-generation portfolio for Ajay Darisi and showcases selected work, service focus, delivery process, FAQs, and contact details with no backend, database, CMS, or API routes.
+This repo is a single-page Next.js App Router site exported as static files. It showcases selected work, skills, background, and contact details with no backend, database, CMS, or API routes.
 
 ## Tech Stack
 
@@ -57,15 +57,15 @@ public/
 Homepage section order:
 
 ```text
-Navbar -> Hero -> Work -> Trust -> Services -> Process -> About -> BestFit -> FAQ -> Contact -> Footer
+Navbar -> Hero -> Work -> Skills -> About -> Contact -> Footer
 ```
 
 ## Content Ownership
 
 - Most visible site content lives in `src/components/sections/`
 - SEO and structured data live in `src/app/layout.tsx` and `src/app/page.tsx`
-- `src/app/page.tsx` contains inline JSON-LD for person, website, service, FAQ, and portfolio data
-- Shared lead-gen copy for work, contact, FAQs, trust, and best-fit positioning lives in `src/lib/site-content.ts`
+- `src/app/page.tsx` contains inline JSON-LD for person, website, and portfolio data
+- `src/lib/site-content.ts` owns project entries, skill areas, contact email, and JSON-LD builders
 
 If you update public-facing copy in the sections, also check whether the shared content and structured data should be updated to match.
 
@@ -81,6 +81,5 @@ If you update public-facing copy in the sections, also check whether the shared 
 
 Copy `.env.example` to `.env` and set the values you need:
 
-- `NEXT_PUBLIC_FORMSPARK_ENDPOINT` enables the contact form
 - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` enables Plausible pageviews and custom events
 - `NEXT_PUBLIC_PLAUSIBLE_API_HOST` optionally points to a custom/self-hosted Plausible instance
