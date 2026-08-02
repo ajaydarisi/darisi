@@ -9,14 +9,11 @@ export interface SeoConfig {
   title: string;
   description: string;
   shortDescription: string;
-  serviceName: string;
-  serviceType: string;
   jobTitle: string;
   ogImagePath: string;
   ogImageAlt: string;
   locale: string;
   language: string;
-  areaServed: string;
   location: {
     city: string;
     region: string;
@@ -33,29 +30,28 @@ const googleSiteVerification =
   process.env.GOOGLE_SITE_VERIFICATION?.trim() ?? "";
 const bingSiteVerification = process.env.BING_SITE_VERIFICATION?.trim() ?? "";
 
+const GITHUB_URL = "https://github.com/ajaydarisi";
+const LINKEDIN_URL = "https://linkedin.com/in/ajaydarisi";
+
+export const socialUrls = { github: GITHUB_URL, linkedin: LINKEDIN_URL };
+
 export const seoConfig: SeoConfig = {
   siteUrl: "https://darisi.in",
   siteName: "Darisi",
   personName: "Ajay Darisi",
   personAlternateName: "Darisi",
   contactEmail: "contact@darisi.in",
-  title:
-    "Freelance Software Engineer for Web Apps, Internal Systems & Platform Features | Darisi",
+  title: "Ajay Darisi — Software Engineer | Portfolio",
   description:
-    "Ajay Darisi is a freelance software engineer based in Bengaluru, India, helping teams worldwide ship product web apps, internal systems, payments, auth, and internationalization-heavy software through Darisi.",
+    "Ajay Darisi is a software engineer based in Bengaluru, India. Portfolio of product web apps, internal tools, and platform work across payments, authentication, and internationalization.",
   shortDescription:
-    "Darisi is Ajay Darisi's freelance software engineering practice for product web apps, internal systems, and platform features.",
-  serviceName:
-    "Freelance Software Engineering for Web Apps, Internal Systems & Platform Features",
-  serviceType:
-    "Freelance Software Engineering for Web Apps, Internal Systems, Payments, Auth, and Internationalization",
-  jobTitle: "Freelance Software Engineer",
+    "Personal portfolio of Ajay Darisi, a software engineer in Bengaluru, India.",
+  jobTitle: "Software Engineer",
   ogImagePath: "/og-image.png",
   ogImageAlt:
-    "Darisi by Ajay Darisi - freelance software engineer for web apps, internal systems, and platform features",
+    "Ajay Darisi — software engineer portfolio: product web apps, internal tools, and platform work",
   locale: "en_US",
   language: "en",
-  areaServed: "Worldwide",
   location: {
     city: "Bengaluru",
     region: "Karnataka",
@@ -63,10 +59,7 @@ export const seoConfig: SeoConfig = {
     countryCode: "IN",
     label: "Bengaluru, Karnataka, India",
   },
-  sameAs: [
-    "https://github.com/ajaydarisi",
-    "https://linkedin.com/in/ajaydarisi",
-  ],
+  sameAs: [GITHUB_URL, LINKEDIN_URL],
   knowsAbout: [
     "Product web apps",
     "Internal systems",
@@ -82,17 +75,14 @@ export const seoConfig: SeoConfig = {
   keywords: [
     "Ajay Darisi",
     "Darisi",
-    "freelance software engineer",
-    "product web apps freelancer",
-    "internal systems developer",
+    "software engineer",
+    "software engineer portfolio",
+    "Next.js developer",
+    "TypeScript developer",
+    "React developer",
     "internal tools developer",
-    "payments integration developer",
-    "authentication developer",
-    "internationalization developer",
-    "Next.js freelancer",
-    "TypeScript freelancer",
+    "payments integration",
     "software engineer Bengaluru",
-    "freelance developer India",
   ],
 };
 

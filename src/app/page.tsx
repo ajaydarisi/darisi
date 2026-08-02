@@ -1,15 +1,10 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Work } from "@/components/sections/Work";
-import { Trust } from "@/components/sections/Trust";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { Services } from "@/components/sections/Services";
-import { Process } from "@/components/sections/Process";
+import { Skills } from "@/components/sections/Skills";
 import { About } from "@/components/sections/About";
-import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
-import { ChatAgent } from "@/components/ui/chat-agent";
 import { buildJsonLd } from "@/lib/site-content";
 
 const jsonLd = buildJsonLd();
@@ -25,16 +20,11 @@ export default function Home() {
       <main id="main-content" tabIndex={-1}>
         <Hero />
         <Work />
-        <Trust />
-        <Testimonials />
-        <Services />
-        <Process />
+        <Skills />
         <About />
-        <FAQ />
         <Contact />
       </main>
       <Footer />
-      <ChatAgent />
     </>
   );
 }

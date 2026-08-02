@@ -5,13 +5,12 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
+import { socialUrls } from "@/lib/seo";
 
 const quickLinks = [
   { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
+  { label: "Skills", href: "#skills" },
   { label: "About", href: "#about" },
-  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -35,17 +34,13 @@ function LinkedInIcon({ className }: { className?: string }) {
 }
 
 const socialLinks = [
-  { icon: GitHubIcon, href: "https://github.com/ajaydarisi", label: "GitHub" },
-  {
-    icon: LinkedInIcon,
-    href: "https://linkedin.com/in/ajaydarisi",
-    label: "LinkedIn",
-  },
+  { icon: GitHubIcon, href: socialUrls.github, label: "GitHub" },
+  { icon: LinkedInIcon, href: socialUrls.linkedin, label: "LinkedIn" },
 ];
 
 export function Footer() {
   return (
-    <footer aria-label="Darisi footer" className="py-16 border-t border-border">
+    <footer aria-label="Site footer" className="py-16 border-t border-border">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand column */}
@@ -63,9 +58,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              Darisi is Ajay Darisi&apos;s freelance software engineering
-              practice for teams that need web apps, internal systems, and
-              platform features shipped with calm execution.
+              Personal site of Ajay Darisi, a software engineer in Bengaluru,
+              India, building product web apps, internal tools, and platform
+              features.
             </p>
           </div>
 
@@ -125,7 +120,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Darisi. All rights reserved.
+            &copy; {new Date().getFullYear()} Ajay Darisi.
           </p>
         </div>
       </div>

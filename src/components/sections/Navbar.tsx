@@ -18,10 +18,8 @@ import {
 
 const links = [
   { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
+  { label: "Skills", href: "#skills" },
   { label: "About", href: "#about" },
-  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -125,7 +123,7 @@ export function Navbar() {
                     })
                   }
                 >
-                  Start a Project
+                  Get in Touch
                 </a>
               </Button>
             </div>
@@ -156,7 +154,7 @@ export function Navbar() {
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
-          Navigate to the main sections of the Darisi website.
+          Navigate to the main sections of Ajay Darisi&apos;s site.
         </SheetDescription>
 
         <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
@@ -193,7 +191,7 @@ export function Navbar() {
                   setMobileOpen(false);
                 }}
               >
-                Start a Project
+                Get in Touch
               </a>
             </Button>
           </div>

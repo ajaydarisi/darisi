@@ -45,25 +45,26 @@ export function About() {
                 id="about-heading"
                 className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
               >
-                Freelance software engineering from Bengaluru for global teams.
+                Software engineer in Bengaluru, India.
               </h2>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={100}>
               <p className="mt-8 text-lg leading-relaxed text-foreground/90">
-                I&apos;m based in Bengaluru, India, and through Darisi I take on
-                independent product work for teams that want one steady owner
-                across product clarity, interface direction, and implementation.
+                I&apos;m based in Bengaluru and I work on product web apps and
+                internal systems. What I enjoy most is the seam where product
+                clarity, interface decisions, and implementation meet — the
+                place where a vague requirement turns into something people
+                can actually use.
               </p>
             </AnimateOnScroll>
 
             <AnimateOnScroll variant="fade-up" delay={200}>
               <p className="text-muted leading-relaxed text-lg mt-6">
-                Darisi is not a studio with layers around it. It is my personal
-                freelance brand for web apps, internal systems, and platform
-                features that need calm collaboration, strong technical
-                judgment, and delivery that does not lose coherence halfway
-                through the build.
+                darisi.in is my personal site. It&apos;s where I keep the
+                things I&apos;ve designed and built, along with how I think
+                about putting software together. Everything here is work
+                I&apos;ve personally shaped end to end.
               </p>
             </AnimateOnScroll>
 
@@ -103,8 +104,8 @@ export function About() {
                     aria-hidden="true"
                   />
                   <blockquote className="mt-6 text-lg md:text-xl font-medium text-foreground/80 italic leading-relaxed">
-                    &ldquo;The strongest freelance work usually feels calm:
-                    fewer handoffs, clearer decisions, and execution that keeps
+                    &ldquo;The best software usually feels calm: fewer
+                    handoffs, clearer decisions, and execution that keeps
                     moving.&rdquo;
                   </blockquote>
                 </CardContent>
