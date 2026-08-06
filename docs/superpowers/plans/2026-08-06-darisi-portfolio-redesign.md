@@ -152,7 +152,7 @@ Expected: exit code 0.
 - Consumes: `projects`, `skillAreas`, existing contact/social data, image assets, and analytics events.
 - Produces: all remaining responsive homepage sections using no new data model.
 
-- [ ] **Step 1: Replace card-grid work with alternating case evidence rows**
+- [x] **Step 1: Replace card-grid work with alternating case evidence rows**
 
 ```tsx
 {projects.map((project, index) => (
@@ -164,15 +164,15 @@ Expected: exit code 0.
 
 Keep `Problem`, `Role`, and `Outcome` in that order, preserve public external-link safety attributes, and make TexLedger visibly internal rather than presenting an inactive button.
 
-- [ ] **Step 2: Recast capabilities, about, and contact as the supplied editorial bands**
+- [x] **Step 2: Recast capabilities, about, and contact as the supplied editorial bands**
 
 Use the current content but apply the reference sequence: dark/high-contrast three-capability band, principle rows plus quote, then the paper-grid contact section and prompt chips. Keep the contact email, GitHub, LinkedIn, and existing analytics events.
 
-- [ ] **Step 3: Compact the footer and preserve blog discovery**
+- [x] **Step 3: Compact the footer and preserve blog discovery**
 
 Keep the existing logo asset, contact address, social links, copyright, and a blog link in the footer; remove only the primary-nav Blog entry.
 
-- [ ] **Step 4: Run lint after the homepage section changes**
+- [x] **Step 4: Run lint after the homepage section changes**
 
 Run: `npm run lint`
 
