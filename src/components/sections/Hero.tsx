@@ -78,7 +78,7 @@ export function Hero() {
               text={SUPPORTING_PHRASE}
               speed={3.5}
               delay={1.5}
-              color="var(--muted)"
+              color="var(--muted-foreground)"
               shineColor="var(--primary-text)"
               className={SUPPORTING_PHRASE_CLASS}
             />

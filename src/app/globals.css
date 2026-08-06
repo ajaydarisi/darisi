@@ -86,7 +86,7 @@
   --popover: #162F2C;
   --popover-foreground: #EDE9E0;
   --destructive: #E05B3A;
-  --destructive-foreground: #F6F2EA;
+  --destructive-foreground: #0A1F1D;
   --focus-outline: var(--ring);
   --scrollbar-thumb: var(--primary);
   --scrollbar-thumb-hover: var(--primary-hover);
@@ -126,7 +126,7 @@ html[data-theme="light"] {
   --input: #D5D0C5;
   --ring: #1D6B63;
   --accent: #C4714E;
-  --accent-foreground: #F6F2EA;
+  --accent-foreground: #0A1F1D;
   --secondary: #EDE9E0;
   --secondary-foreground: #3D4F4B;
   --card: #EDE9E0;
