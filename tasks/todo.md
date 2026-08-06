@@ -1,3 +1,15 @@
+# Website redesign from supplied portfolio mockups
+
+Status: **planned — implementation in progress**
+
+- [x] Inspect the supplied light, dark, work-index, and design-system references alongside the current portfolio.
+- [x] Confirm the route and theme behavior implied by the redesign brief, then record the approved implementation spec.
+- [ ] Rebuild the responsive homepage, shared theme treatment, and work-index page while retaining the existing logo asset.
+- [ ] Verify the light and dark variants at mobile and desktop sizes, then run lint and production build.
+- [ ] Add a short review with implementation and verification evidence.
+
+---
+
 # Reposition darisi.in: freelance lead-gen site → personal portfolio
 
 Status: **implemented, verified, committed** — see `## Review` at the end of this file.
