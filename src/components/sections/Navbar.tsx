@@ -116,7 +116,7 @@ export function Navbar() {
                   className={`relative py-2 font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] transition-colors duration-[var(--motion-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-primary-text after:transition-transform after:duration-[var(--motion-base)] after:content-[''] ${
                     isActive
                       ? "text-foreground after:scale-x-100"
-                      : "text-muted hover:text-foreground after:scale-x-0"
+                      : "text-muted-foreground hover:text-foreground after:scale-x-0"
                   }`}
                 >
                   {link.label}
@@ -179,7 +179,7 @@ export function Navbar() {
                   className={`flex items-center border-b border-border-subtle px-1 py-4 font-display text-2xl transition-colors duration-[var(--motion-base)] hover:text-primary-text ${
                     isActive
                       ? "text-primary-text"
-                      : "text-muted"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {link.label}
@@ -189,7 +189,7 @@ export function Navbar() {
           })}
           <div className="mt-6">
             <div className="mb-4 flex items-center justify-between">
-              <span className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted">
+              <span className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 Theme
               </span>
               <ThemeToggle />

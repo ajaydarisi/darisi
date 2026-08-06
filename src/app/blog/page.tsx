@@ -72,7 +72,7 @@ export default function BlogIndex() {
                           <h2 className="mt-4 text-xl font-medium tracking-[-0.025em] text-foreground">
                             {post.title}
                           </h2>
-                          <p className="mt-2 text-sm leading-relaxed text-muted">
+                          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                             {post.description}
                           </p>
                           <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 group-hover:text-primary-text">

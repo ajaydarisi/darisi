@@ -24,13 +24,13 @@ export function Footer() {
             <Link href="/" className="inline-flex items-center">
               <BrandMark variant="wordmark" alt="Darisi" className="h-8 w-auto" />
             </Link>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Product web apps, internal tools, and platform work by Ajay Darisi.
             </p>
           </div>
 
           <nav aria-label="Footer navigation">
-            <ul className="flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted">
+            <ul className="flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted-foreground">
               {links.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="transition-colors hover:text-foreground">
@@ -42,7 +42,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="flex flex-col gap-5 pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-5 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <a
             href={`mailto:${CONTACT_EMAIL}`}
             className="inline-flex items-center gap-2 transition-colors hover:text-foreground"

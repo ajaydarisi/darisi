@@ -37,7 +37,7 @@ export function Contact() {
               </p>
               <ul className="mt-4 flex flex-wrap gap-2" aria-label="Examples of topics to discuss">
                 {prompts.map((topic) => (
-                  <li key={topic} className="border border-border-subtle bg-surface px-3 py-1.5 text-sm text-muted">
+                  <li key={topic} className="border border-border-subtle bg-surface px-3 py-1.5 text-sm text-muted-foreground">
                     {topic}
                   </li>
                 ))}

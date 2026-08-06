@@ -78,7 +78,7 @@ export function About() {
                       <h3 className="mt-2 text-base font-medium text-foreground">
                         {value.title}
                       </h3>
-                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
+                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
                         {value.description}
                       </p>
                     </div>

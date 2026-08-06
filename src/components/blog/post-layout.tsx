@@ -33,7 +33,7 @@ export function PostLayout({ post, children }: PostLayoutProps) {
           <div className="reading-shell">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-foreground"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
               All posts
@@ -43,7 +43,7 @@ export function PostLayout({ post, children }: PostLayoutProps) {
               <Badge variant="tag">{post.tag}</Badge>
               <h1 className="page-title">{post.title}</h1>
               <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-subtle">
-                <span className="text-muted">Ajay Darisi</span>
+                <span className="text-muted-foreground">Ajay Darisi</span>
                 <span aria-hidden="true">·</span>
                 <time dateTime={post.datePublished}>
                   {formatPostDate(post.datePublished)}
@@ -73,7 +73,7 @@ export function PostLayout({ post, children }: PostLayoutProps) {
                   <h2 className="text-xl font-medium tracking-[-0.025em] text-foreground">
                     Have a question or an interesting problem?
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     Feel free to send a note. Email is the fastest way to
                     reach me.
                   </p>
@@ -86,7 +86,7 @@ export function PostLayout({ post, children }: PostLayoutProps) {
                     </Button>
                     <a
                       href={`mailto:${CONTACT_EMAIL}`}
-                      className="text-sm text-muted transition-colors duration-200 hover:text-foreground"
+                      className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
                     >
                       or email {CONTACT_EMAIL}
                     </a>

@@ -70,7 +70,7 @@ export function Hero() {
         <div className="flex items-center gap-4">
           <span className="h-px w-10 bg-primary-text" aria-hidden="true" />
           {shouldReduceMotion ? (
-            <span className={`${SUPPORTING_PHRASE_CLASS} text-muted`}>
+            <span className={`${SUPPORTING_PHRASE_CLASS} text-muted-foreground`}>
               {SUPPORTING_PHRASE}
             </span>
           ) : (
@@ -133,7 +133,7 @@ export function Hero() {
           </div>
 
           <div className="flex flex-col justify-between gap-8 lg:border-l lg:border-border-subtle lg:pl-10">
-            <p className="max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Most of my time goes into CRM and admin workflows, registration
               systems, payments, auth, and multi-language flows — the parts of a
               product that have to be both clear and dependable.
