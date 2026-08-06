@@ -38,7 +38,7 @@ export function Work() {
                     sizes="(min-width: 1024px) 50vw, 100vw"
                     className="object-cover object-top transition-transform duration-[var(--motion-enter)] group-hover:scale-[1.02]"
                   />
-                  <figcaption className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#0D1215]/75 px-4 py-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.14em] text-[#E7EBE5] backdrop-blur-sm">
+                  <figcaption className="absolute inset-x-0 bottom-0 border-t border-[#2A4A47] bg-[#0F2724]/75 px-4 py-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.14em] text-[#F6F2EA] backdrop-blur-sm">
                     {project.category}
                   </figcaption>
                 </figure>
@@ -87,7 +87,7 @@ export function Work() {
                         <ArrowUpRight className="h-4 w-4" />
                       </a>
                     ) : project.note ? (
-                      <p className="border-l-2 border-primary-text pl-3 text-sm leading-relaxed text-muted">
+                      <p className="border-l-2 border-primary-text pl-3 text-sm leading-relaxed text-muted-foreground">
                         {project.note}
                       </p>
                     ) : null}

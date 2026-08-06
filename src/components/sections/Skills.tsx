@@ -8,7 +8,7 @@ export function Skills() {
     <section
       id="skills"
       aria-labelledby="skills-heading"
-      className="section-space bg-[#0D1215] text-[#E7EBE5]"
+      className="section-space bg-[#0F2724] text-[#F6F2EA]"
     >
       <div className="site-shell">
         <AnimateOnScroll variant="fade-up">
@@ -21,13 +21,13 @@ export function Skills() {
           >
             The work behind a dependable product.
           </h2>
-          <p className="mt-5 max-w-2xl leading-relaxed text-[#C7CEC8]">
+          <p className="mt-5 max-w-2xl leading-relaxed text-[#EDE9E0]">
             The areas I return to when a customer-facing product, operational
             workflow, or launch-critical platform layer needs to feel clear.
           </p>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid divide-y divide-[#56655F] border-y border-[#56655F] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+        <div className="mt-12 grid divide-y divide-[#2A4A47] border-y border-[#2A4A47] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
           {skillAreas.map((skill, index) => (
             <AnimateOnScroll
               key={skill.title}
@@ -39,13 +39,13 @@ export function Skills() {
                 <p className="font-utility text-[0.6875rem] font-semibold tracking-[0.14em] text-[#7DD3C7]">
                   0{index + 1}
                 </p>
-                <h3 className="mt-5 text-xl font-medium tracking-[-0.025em] text-[#E7EBE5]">
+                <h3 className="mt-5 text-xl font-medium tracking-[-0.025em] text-[#F6F2EA]">
                   {skill.title}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-[#C7CEC8]">
+                <p className="mt-4 text-sm leading-relaxed text-[#EDE9E0]">
                   {skill.description}
                 </p>
-                <p className="mt-6 border-t border-[#56655F] pt-4 text-sm leading-relaxed text-[#ABB7B0]">
+                <p className="mt-6 border-t border-[#2A4A47] pt-4 text-sm leading-relaxed text-[#8AA8A3]">
                   <span className="mb-2 block font-utility text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-[#7DD3C7]">
                     Tools
                   </span>

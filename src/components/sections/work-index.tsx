@@ -57,7 +57,7 @@ export function WorkIndex() {
 
         <div className="grid border-b border-border-subtle md:grid-cols-[minmax(15rem,19.375rem)_minmax(0,1fr)]">
           <aside className="min-w-0 border-b border-border-subtle py-7 md:border-r md:border-b-0 md:pr-8">
-            <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+            <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Catalogue
             </p>
             <div className="mt-4 flex gap-2 overflow-x-auto pb-1 md:flex-col md:overflow-visible" aria-label="Filter work by category">
@@ -73,7 +73,7 @@ export function WorkIndex() {
                     className={`min-h-10 shrink-0 rounded-[var(--radius-control)] border px-3 py-2 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-outline)] md:w-full ${
                       isActive
                         ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border-subtle text-muted hover:border-border hover:text-foreground"
+                        : "border-border-subtle text-muted-foreground hover:border-border hover:text-foreground"
                     }`}
                   >
                     {item}
@@ -83,7 +83,7 @@ export function WorkIndex() {
             </div>
 
             <div className="mt-7 border-t border-border-subtle pt-5">
-              <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+              <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Projects
               </p>
               <div className="mt-3 flex gap-2 overflow-x-auto pb-1 md:flex-col md:overflow-visible">
@@ -99,7 +99,7 @@ export function WorkIndex() {
                       className={`min-w-[13rem] border-l-2 px-3 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-outline)] md:min-w-0 ${
                         isSelected
                           ? "border-primary-text bg-elevated text-foreground"
-                          : "border-transparent text-muted hover:border-border hover:text-foreground"
+                          : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                       }`}
                     >
                       <span className="block font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-primary-text">
@@ -140,7 +140,7 @@ export function WorkIndex() {
                       <dt className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary-text">
                         {label}
                       </dt>
-                      <dd className="m-0 text-sm leading-relaxed text-muted">
+                      <dd className="m-0 text-sm leading-relaxed text-muted-foreground">
                         <span className="mr-2 font-utility text-[0.625rem] font-medium uppercase tracking-[0.1em] text-muted-subtle">
                           {detail}
                         </span>
@@ -175,7 +175,7 @@ export function WorkIndex() {
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   ) : selectedProject.note ? (
-                    <p className="border-l-2 border-primary-text pl-3 text-sm leading-relaxed text-muted">
+                    <p className="border-l-2 border-primary-text pl-3 text-sm leading-relaxed text-muted-foreground">
                       {selectedProject.note}
                     </p>
                   ) : null}
@@ -190,7 +190,7 @@ export function WorkIndex() {
                   sizes="(min-width: 1024px) 24rem, (min-width: 768px) 30vw, 100vw"
                   className="object-cover object-top"
                 />
-                <figcaption className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#0D1215]/75 px-3 py-2 font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-[#E7EBE5] backdrop-blur-sm">
+                <figcaption className="absolute inset-x-0 bottom-0 border-t border-[#2A4A47] bg-[#0F2724]/75 px-3 py-2 font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-[#F6F2EA] backdrop-blur-sm">
                   Source screenshot / {selectedProject.category}
                 </figcaption>
               </figure>
