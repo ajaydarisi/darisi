@@ -100,7 +100,7 @@ Expected: exit code 0.
 - Consumes: `BrandMark`, `ThemeToggle`, existing analytics events, and shared theme tokens.
 - Produces: responsive homepage navigation and hero using `#work`, `#skills`, `#about`, and `#contact` anchors.
 
-- [ ] **Step 1: Install the two requested free React Bits components from the official registry**
+- [x] **Step 1: Install the two requested free React Bits components from the official registry**
 
 ```bash
 npx shadcn@latest add @react-bits/Aurora-TS-TW @react-bits/ShinyText-TS-TW --yes
@@ -108,7 +108,7 @@ npx shadcn@latest add @react-bits/Aurora-TS-TW @react-bits/ShinyText-TS-TW --yes
 
 Keep only files and direct dependencies emitted by this command. If the registry cannot provide ShinyText, retain Aurora and record the exact registry limitation; do not substitute a license-only React Bits Pro block.
 
-- [ ] **Step 2: Update the primary navigation around the supplied information architecture**
+- [x] **Step 2: Update the primary navigation around the supplied information architecture**
 
 ```tsx
 const links = [
@@ -121,7 +121,7 @@ const links = [
 
 Use the current mobile sheet and theme toggle. `Work` opens the dedicated index; the hero action remains anchored to the homepage evidence section. Preserve the existing contact analytics event.
 
-- [ ] **Step 3: Render the reference hero with the unchanged brand asset and restrained React Bits detail**
+- [x] **Step 3: Render the reference hero with the unchanged brand asset and restrained React Bits detail**
 
 ```tsx
 <h1 className="portfolio-hero__name">
@@ -133,7 +133,7 @@ Use the existing intro and capability strings, a paired `#work` / `#contact` act
 
 Render Aurora behind the hero copy with token-driven colors and `aria-hidden`; use ShinyText for one short supporting phrase only. The hero must remain fully intelligible with JavaScript disabled and with reduced motion enabled.
 
-- [ ] **Step 4: Exercise navigation structure with lint**
+- [x] **Step 4: Exercise navigation structure with lint**
 
 Run: `npm run lint`
 
