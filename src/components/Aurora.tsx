@@ -115,8 +115,18 @@ interface AuroraProps {
   speed?: number;
 }
 
+const DEFAULT_COLOR_STOPS = ['#5227FF', '#7cff67', '#5227FF'];
+const CSS_VARIABLE = /^var\((--[^)]+)\)$/;
+
+function resolveColor(color: string) {
+  const variable = color.match(CSS_VARIABLE)?.[1];
+  return variable
+    ? getComputedStyle(document.documentElement).getPropertyValue(variable).trim()
+    : color;
+}
+
 export default function Aurora(props: AuroraProps) {
-  const { colorStops = ['#5227FF', '#7cff67', '#5227FF'], amplitude = 1.0, blend = 0.5 } = props;
+  const { colorStops = DEFAULT_COLOR_STOPS, amplitude = 1.0, blend = 0.5 } = props;
   const propsRef = useRef<AuroraProps>(props);
   propsRef.current = props;
 
@@ -151,8 +161,8 @@ export default function Aurora(props: AuroraProps) {
       delete geometry.attributes.uv;
     }
 
-    const colorStopsArray = colorStops.map(hex => {
-      const c = new Color(hex);
+    const toColorStops = (stops: string[]) => stops.map(color => {
+      const c = new Color(resolveColor(color));
       return [c.r, c.g, c.b];
     });
 
@@ -162,7 +172,7 @@ export default function Aurora(props: AuroraProps) {
       uniforms: {
         uTime: { value: 0 },
         uAmplitude: { value: amplitude },
-        uColorStops: { value: colorStopsArray },
+        uColorStops: { value: toColorStops(colorStops) },
         uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
         uBlend: { value: blend }
       }
@@ -171,6 +181,14 @@ export default function Aurora(props: AuroraProps) {
     const mesh = new Mesh(gl, { geometry, program });
     ctn.appendChild(gl.canvas);
 
+    const themeObserver = new MutationObserver(() => {
+      program.uniforms.uColorStops.value = toColorStops(colorStops);
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+
     let animateId = 0;
     const update = (t: number) => {
       animateId = requestAnimationFrame(update);
@@ -178,11 +196,6 @@ export default function Aurora(props: AuroraProps) {
       program.uniforms.uTime.value = time * speed * 0.1;
       program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
       program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
-      const stops = propsRef.current.colorStops ?? colorStops;
-      program.uniforms.uColorStops.value = stops.map((hex: string) => {
-        const c = new Color(hex);
-        return [c.r, c.g, c.b];
-      });
       renderer.render({ scene: mesh });
     };
     animateId = requestAnimationFrame(update);
@@ -192,6 +205,7 @@ export default function Aurora(props: AuroraProps) {
     return () => {
       cancelAnimationFrame(animateId);
       window.removeEventListener('resize', resize);
+      themeObserver.disconnect();
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas);
       }

@@ -1,33 +1,61 @@
 "use client";
 
 import { ArrowDown, ArrowRight } from "lucide-react";
-import { useReducedMotion } from "motion/react";
+import { useSyncExternalStore } from "react";
 import Aurora from "@/components/Aurora";
 import ShinyText from "@/components/ShinyText";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button } from "@/components/ui/button";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
-const AURORA_COLOR_STOPS = ["#0F2724", "#7DD3C7", "#A0E4DB"];
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const SUPPORTING_PHRASE = "Software Engineer · Bengaluru, India";
+const SUPPORTING_PHRASE_CLASS =
+  "font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em]";
+const AURORA_COLOR_STOPS = [
+  "var(--primary)",
+  "var(--primary-text)",
+  "var(--focus-outline)",
+];
+
+function subscribeToReducedMotion(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+  mediaQuery.addEventListener("change", onStoreChange);
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
+}
+
+function getReducedMotionPreference() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+function getServerReducedMotionPreference() {
+  return true;
+}
 
 export function Hero() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionPreference,
+    getServerReducedMotionPreference
+  );
 
   return (
     <section
       aria-label="Introduction"
-      className="relative isolate flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden border-b border-border-subtle"
+      className="hero-field relative isolate flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden border-b border-border-subtle"
     >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 -z-20 h-[70%] opacity-55 [mask-image:linear-gradient(to_bottom,black,transparent)]"
         aria-hidden="true"
       >
-        <Aurora
-          colorStops={AURORA_COLOR_STOPS}
-          amplitude={0.65}
-          blend={0.7}
-          speed={shouldReduceMotion ? 0 : 0.35}
-        />
+        {!shouldReduceMotion && (
+          <Aurora
+            colorStops={AURORA_COLOR_STOPS}
+            amplitude={0.65}
+            blend={0.7}
+            speed={0.35}
+          />
+        )}
       </div>
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,var(--background)_0%,transparent_24%,var(--background)_82%),linear-gradient(to_right,var(--background)_0%,transparent_48%,var(--background)_100%)] opacity-80"
@@ -41,15 +69,20 @@ export function Hero() {
       <div className="site-shell py-20 sm:py-24 lg:py-28">
         <div className="flex items-center gap-4">
           <span className="h-px w-10 bg-primary-text" aria-hidden="true" />
-          <ShinyText
-            text="Software Engineer · Bengaluru, India"
-            disabled={Boolean(shouldReduceMotion)}
-            speed={3.5}
-            delay={1.5}
-            color="var(--muted)"
-            shineColor="var(--primary-text)"
-            className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em]"
-          />
+          {shouldReduceMotion ? (
+            <span className={`${SUPPORTING_PHRASE_CLASS} text-muted`}>
+              {SUPPORTING_PHRASE}
+            </span>
+          ) : (
+            <ShinyText
+              text={SUPPORTING_PHRASE}
+              speed={3.5}
+              delay={1.5}
+              color="var(--muted)"
+              shineColor="var(--primary-text)"
+              className={SUPPORTING_PHRASE_CLASS}
+            />
+          )}
         </div>
 
         <h1 className="portfolio-hero__name mt-8 max-w-[64rem]">
