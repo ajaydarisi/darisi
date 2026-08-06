@@ -9,7 +9,7 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "darisi-theme";
 const THEME_CHANGE_EVENT = "darisi-theme-change";
 const THEME_COLORS: Record<Theme, string> = {
-  dark: "#0D1215",
+  dark: "#0F2724",
   light: "#F6F2EA",
 };
 
