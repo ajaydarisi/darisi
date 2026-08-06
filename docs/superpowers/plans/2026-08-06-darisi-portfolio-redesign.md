@@ -189,7 +189,7 @@ Expected: exit code 0.
 - Consumes: `projects: ProjectEntry[]`, project image/action data, `Link`, `Image`, and built-in React state.
 - Produces: a static `/work` route with a locally selectable, filterable case file.
 
-- [ ] **Step 1: Define static route metadata and render the client boundary**
+- [x] **Step 1: Define static route metadata and render the client boundary**
 
 ```tsx
 export const metadata: Metadata = {
@@ -203,7 +203,7 @@ export default function WorkPage() {
 }
 ```
 
-- [ ] **Step 2: Implement the smallest local selection model**
+- [x] **Step 2: Implement the smallest local selection model**
 
 ```tsx
 const [category, setCategory] = useState("All work");
@@ -214,13 +214,13 @@ const selectedProject = filteredProjects.find((project) => project.title === sel
 
 When a category changes, set `selectedTitle` to the first visible project. Category buttons use `aria-pressed`; selected project buttons use `aria-current="true"`. The selected card contains title, summary, brief/part/result columns, technology tags, source image, and the existing public action when present.
 
-- [ ] **Step 3: Add the route to the sitemap**
+- [x] **Step 3: Add the route to the sitemap**
 
 ```ts
 { url: `${seoConfig.siteUrl}/work`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 }
 ```
 
-- [ ] **Step 4: Build and rerun the static-export contract**
+- [x] **Step 4: Build and rerun the static-export contract**
 
 Run: `npm run build && node --test tests/work-index.static.test.mjs`
 
