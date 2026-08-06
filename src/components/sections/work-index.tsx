@@ -56,7 +56,7 @@ export function WorkIndex() {
         </div>
 
         <div className="grid border-b border-border-subtle md:grid-cols-[minmax(15rem,19.375rem)_minmax(0,1fr)]">
-          <aside className="border-b border-border-subtle py-7 md:border-r md:border-b-0 md:pr-8">
+          <aside className="min-w-0 border-b border-border-subtle py-7 md:border-r md:border-b-0 md:pr-8">
             <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
               Catalogue
             </p>
