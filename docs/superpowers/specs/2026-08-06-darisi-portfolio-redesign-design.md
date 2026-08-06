@@ -26,6 +26,8 @@ The new system is warm-precision editorial rather than the current rounded-card 
 
 Typography uses Source Serif 4 for editorial display, DM Sans for body copy, and DM Mono for labels. CSS fallbacks keep the exported site readable if the font request is unavailable. The page uses a 32px desktop / 20px mobile gutter, hairline rules, restrained rounded controls, and a single reveal family that respects reduced motion.
 
+The hero also uses two free, source-owned React Bits components installed through the official shadcn registry: Aurora provides the otherwise CSS-only ambient field, while ShinyText is reserved for one brief supporting emphasis. Both are background/detail treatments, never the primary means of communicating content, and reduced-motion users receive the still visual result.
+
 ## Homepage behavior
 
 The homepage keeps the existing content and public URLs but changes its hierarchy to match the supplied screens:
@@ -51,6 +53,7 @@ Desktop project rows alternate media placement; mobile uses one readable vertica
 
 - Preserve static export (`output: "export"`), all existing project data, the logo source files, and public contact/social URLs.
 - Do not add dependencies, a CMS, a backend, mock project content, or a theme provider.
+- Add only the two requested free React Bits component sources through their official registry; do not use license-only React Bits Pro blocks or add unrelated animation packages.
 - Synchronize theme colors across CSS, pre-paint theme initialization, viewport metadata, and the web manifest.
 - Keep the blog route and structured data; update the sitemap with `/work`.
 - Validate at 390px, 768px, and desktop in both themes, then run lint, static build, and a post-build work-index contract test.

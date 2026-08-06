@@ -13,7 +13,7 @@
 - Preserve `output: "export"`, the logo and wordmark SVG source files, public project URLs, contact address, and social URLs.
 - Use the supplied light/dark/index/design-system references as the visual authority.
 - Retain `/blog`; do not include it in the primary portfolio navigation.
-- Do not add dependencies, a theme provider, remote image hosts, mock data, or duplicated project data.
+- Do not add a theme provider, remote image hosts, mock data, duplicated project data, or arbitrary animation packages. Install only the requested free React Bits Aurora and ShinyText source components through the official shadcn registry if their component source requires it.
 - Use `projects` and `skillAreas` from `src/lib/site-content.ts` as the only public portfolio data sources.
 - Keep keyboard focus, skip navigation, reduced-motion behavior, readable image alt text, and `aria-pressed`/`aria-current` state for the work index.
 - Verify 390px, 768px, and desktop layouts in light and dark themes.
@@ -46,7 +46,7 @@
 - Consumes: current static-export output and existing `darisi-theme` handling.
 - Produces: semantic light/dark CSS tokens and a runnable static-export work-index contract.
 
-- [ ] **Step 1: Write the failing static-export contract**
+- [x] **Step 1: Write the failing static-export contract**
 
 ```js
 import assert from "node:assert/strict";
@@ -63,13 +63,13 @@ test("static build emits an accessible selected-work index", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test against the current export and confirm it fails because `/work` is absent**
+- [x] **Step 2: Run the test against the current export and confirm it fails because `/work` is absent**
 
 Run: `npm run build && node --test tests/work-index.static.test.mjs`
 
 Expected: the assertion reports `expected a static /work page`.
 
-- [ ] **Step 3: Replace theme foundations with the reference-derived semantic palette**
+- [x] **Step 3: Replace theme foundations with the reference-derived semantic palette**
 
 ```css
 :root { --background: #0D1215; --foreground: #E7EBE5; --primary: #7DD3C7; }
@@ -78,11 +78,11 @@ html[data-theme="light"] { --background: #F6F2EA; --foreground: #1A2421; --prima
 
 Add Source Serif 4, DM Sans, and DM Mono imports with readable system fallbacks. Keep existing semantic token names so shared blog/UI code continues to resolve correctly. Add only shared editorial classes needed by more than one section.
 
-- [ ] **Step 4: Synchronize pre-paint and metadata colors**
+- [x] **Step 4: Synchronize pre-paint and metadata colors**
 
 Set the light/dark values in `themeInitScript`, `siteViewport`, and `manifest.json` to the new light canvas and dark canvas values so the browser chrome never flashes the old burgundy palette.
 
-- [ ] **Step 5: Run lint after foundation changes**
+- [x] **Step 5: Run lint after foundation changes**
 
 Run: `npm run lint`
 
@@ -91,14 +91,24 @@ Expected: exit code 0.
 ### Task 2: Rebuild the homepage shell and editorial hero
 
 **Files:**
+- Create: React Bits source files emitted by `npx shadcn@latest add @react-bits/Aurora-TS-TW @react-bits/ShinyText-TS-TW --yes`
 - Modify: `src/components/sections/Navbar.tsx`
 - Modify: `src/components/sections/Hero.tsx`
+- Modify: `components.json`, `package.json`, and `package-lock.json` only if the official component installer changes them
 
 **Interfaces:**
 - Consumes: `BrandMark`, `ThemeToggle`, existing analytics events, and shared theme tokens.
 - Produces: responsive homepage navigation and hero using `#work`, `#skills`, `#about`, and `#contact` anchors.
 
-- [ ] **Step 1: Update the primary navigation around the supplied information architecture**
+- [ ] **Step 1: Install the two requested free React Bits components from the official registry**
+
+```bash
+npx shadcn@latest add @react-bits/Aurora-TS-TW @react-bits/ShinyText-TS-TW --yes
+```
+
+Keep only files and direct dependencies emitted by this command. If the registry cannot provide ShinyText, retain Aurora and record the exact registry limitation; do not substitute a license-only React Bits Pro block.
+
+- [ ] **Step 2: Update the primary navigation around the supplied information architecture**
 
 ```tsx
 const links = [
@@ -111,7 +121,7 @@ const links = [
 
 Use the current mobile sheet and theme toggle. `Work` opens the dedicated index; the hero action remains anchored to the homepage evidence section. Preserve the existing contact analytics event.
 
-- [ ] **Step 2: Render the reference hero with the unchanged brand asset**
+- [ ] **Step 3: Render the reference hero with the unchanged brand asset and restrained React Bits detail**
 
 ```tsx
 <h1 className="portfolio-hero__name">
@@ -121,7 +131,9 @@ Use the current mobile sheet and theme toggle. `Work` opens the dedicated index;
 
 Use the existing intro and capability strings, a paired `#work` / `#contact` action group, and an anchor-based scroll cue. Do not hide initial hero copy behind client-side animation.
 
-- [ ] **Step 3: Exercise navigation structure with lint**
+Render Aurora behind the hero copy with token-driven colors and `aria-hidden`; use ShinyText for one short supporting phrase only. The hero must remain fully intelligible with JavaScript disabled and with reduced motion enabled.
+
+- [ ] **Step 4: Exercise navigation structure with lint**
 
 Run: `npm run lint`
 
