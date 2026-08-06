@@ -111,7 +111,7 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --background: #F6F2EA;
   --foreground: #1A2421;
-  --text-body: var(--muted-foreground);
+  --text-body: var(--secondary-foreground);
   --surface: var(--card);
   --elevated: var(--secondary);
   --primary: #0F2724;
@@ -119,8 +119,8 @@ html[data-theme="light"] {
   --primary-foreground: #F6F2EA;
   --primary-text: var(--primary);
   --muted: #E8E4DB;
-  --muted-foreground: #647972;
-  --muted-subtle: var(--muted-foreground);
+  --muted-foreground: var(--secondary-foreground);
+  --muted-subtle: var(--secondary-foreground);
   --border: #D5D0C5;
   --border-subtle: var(--border);
   --input: #D5D0C5;
