@@ -9,8 +9,8 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "darisi-theme";
 const THEME_CHANGE_EVENT = "darisi-theme-change";
 const THEME_COLORS: Record<Theme, string> = {
-  dark: "#0B0F0E",
-  light: "#F7FAF9",
+  dark: "#0D1215",
+  light: "#F6F2EA",
 };
 
 function isTheme(value: string | null): value is Theme {
@@ -56,9 +56,10 @@ function getActiveTheme(): Theme {
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
-  document
-    .querySelector('meta[name="theme-color"]')
-    ?.setAttribute("content", THEME_COLORS[theme]);
+  document.querySelectorAll('meta[name="theme-color"]').forEach((themeColorMeta) => {
+    themeColorMeta.setAttribute("content", THEME_COLORS[theme]);
+    themeColorMeta.removeAttribute("media");
+  });
   window.dispatchEvent(new CustomEvent<Theme>(THEME_CHANGE_EVENT, { detail: theme }));
 }
 
