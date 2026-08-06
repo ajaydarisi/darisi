@@ -1031,3 +1031,39 @@ blog pages; Blog link added with pathname-based active state. Desktop nav moved 
 `md:` to `lg:` breakpoint — 7 links overflowed the logo at ~800px. Sitemap emits blog
 URLs; posts carry BlogPosting JSON-LD + article OG metadata. Verified: lint clean,
 build 10/10 static, browser pass at 375/800/1280 in both themes.
+
+---
+
+## Design-system rebuild (2026-08-06)
+
+- [x] Audit the current UI, tokens, components, responsive behavior, portfolio audience needs, and palette contrast in both themes.
+- [x] Define the Darisi foundations, component contracts, and content patterns in system documentation.
+- [x] Apply the system to the shared primitives and portfolio sections.
+- [x] Correct the featured project grid so its animation wrapper, rather than its nested card, spans the full desktop row.
+- [x] Render the original burgundy brand assets without a dark-theme brightness treatment.
+- [x] Verify both themes, responsive layouts, accessibility basics, lint, and the static build.
+
+### Design-system review (done)
+
+Documented the Measured Signal system and audience hypotheses, split the brand
+source colour from dark-theme action/focus roles, and applied shared heading,
+brand, card, badge, and evidence-ledger patterns. Verified with exact contrast
+checks, lint, production build, theme/mobile interaction checks, and a fresh
+browser load with no warnings or errors. The existing D source assets remain
+unchanged; the featured work card now spans the desktop grid from its wrapper.
+
+---
+
+## Production release preparation (2026-08-06)
+
+- [x] Audit the complete diff, release configuration, and documentation for production blockers.
+- [x] Resolve confirmed production-readiness issues with the smallest safe changes.
+- [x] Run the full available verification suite, accessibility checks, and dependency audit.
+- [x] Commit the verified release and push `main` to `origin`.
+
+### Production release review (done)
+
+Reinstated the shared Sheet close control and made it a 44px keyboard-accessible
+target, so the mobile navigation no longer depends on the inert header trigger.
+Verified lint, an optimized Next 16.3.0 build (12 static routes), static-export
+artifacts, production dependency audit, and mobile-browser dismissal behavior.

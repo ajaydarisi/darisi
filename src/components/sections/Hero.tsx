@@ -1,68 +1,38 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { Button } from "@/components/ui/button";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 
 export function Hero() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-
   return (
     <section
       aria-label="Introduction"
-      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden"
+      className="hero-field relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px] animate-pulse-glow" />
-        <div className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[100px] animate-float" />
-        <div className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.03] blur-[80px]" />
-        <div className="absolute inset-0 bg-dot-pattern opacity-50" />
+        <div className="absolute -right-48 -top-48 h-[34rem] w-[34rem] rounded-full bg-primary/10 blur-[9rem]" />
+        <div className="absolute inset-0 bg-dot-pattern opacity-30" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 py-20 lg:px-8">
+      <div className="site-shell section-space relative z-10">
         <div className="max-w-3xl">
-          <Badge
-            variant="outline"
-            className={`border-primary/30 bg-primary/5 px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] text-primary-text transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
+          <Badge variant="eyebrow">
             Software Engineer | Bengaluru, India
           </Badge>
 
-          <h1
-            className={`mt-6 transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{ transitionDelay: "150ms" }}
-          >
-            <Image
-              src="/darisi-wordmark.svg"
-              alt="DARISI"
+          <h1 className="mt-6">
+            <BrandMark
+              variant="wordmark"
               className="h-16 w-auto sm:h-20 lg:h-24"
-              width={828}
-              height={256}
               priority
             />
           </h1>
 
           <p
-            className={`mt-6 max-w-2xl text-lg leading-relaxed text-foreground md:text-xl ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{
-              transitionDelay: "300ms",
-              transitionDuration: "700ms",
-              transitionTimingFunction: "ease-out",
-            }}
+            className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground md:text-xl"
             role="doc-subtitle"
           >
             I&apos;m Ajay Darisi, a software engineer who builds product web
@@ -70,30 +40,20 @@ export function Hero() {
           </p>
 
           <p
-            className={`mt-5 max-w-2xl text-base leading-relaxed text-muted ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{
-              transitionDelay: "360ms",
-              transitionDuration: "700ms",
-              transitionTimingFunction: "ease-out",
-            }}
+            className="mt-5 max-w-2xl text-base leading-relaxed text-muted"
           >
             Most of my time goes into CRM and admin workflows, registration
             systems, payments, auth, and multi-language flows — the parts of a
             product that have to be both clear and dependable.
           </p>
 
-          <div
-            className={`mt-10 flex flex-col gap-4 sm:flex-row ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{
-              transitionDelay: "450ms",
-              transitionDuration: "700ms",
-              transitionTimingFunction: "ease-out",
-            }}
-          >
+          <ul className="mt-7 flex flex-wrap gap-x-4 gap-y-2 font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary-text">
+            <li>Product web apps</li>
+            <li>Internal systems</li>
+            <li>Platform layers</li>
+          </ul>
+
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Button asChild size="lg">
               <a
                 href="#work"
@@ -133,10 +93,10 @@ export function Hero() {
         style={{ animationDelay: "800ms" }}
         aria-label="Scroll down to my work"
       >
-        <span className="text-[11px] uppercase tracking-[0.2em] text-muted-subtle transition-colors duration-300 group-hover:text-primary-text">
+        <span className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-subtle transition-colors duration-[var(--motion-base)] group-hover:text-primary-text">
           Scroll to see work
         </span>
-        <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-300 group-hover:border-primary/40">
+        <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-[var(--motion-base)] group-hover:border-primary/40">
           <div className="mx-auto block h-2.5 w-1 rounded-full bg-primary animate-scroll-dot" />
         </div>
       </a>

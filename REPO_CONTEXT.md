@@ -17,7 +17,7 @@ This file is the source of truth for high-level repo context in new chats. Read 
   - Blog index and five posts; post metadata/JSON-LD come from the registry in `src/lib/blog.ts`, article shell is `src/components/blog/post-layout.tsx`, article typography is the `.blog-prose` block in `globals.css`
   - To add a post: add its entry to `blogPosts` in `src/lib/blog.ts`, then create `src/app/blog/<slug>/page.tsx` using `PostLayout` (sitemap and index pick it up automatically)
 - `src/app/layout.tsx`
-  - Owns root layout, `next/font/google` font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
+  - Owns root layout, local Inter font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
 - `src/app/page.tsx`
   - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
@@ -40,18 +40,28 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 - `src/components/ui/button.tsx`
   - Shared CVA-based button variants
+- `src/components/ui/brand-mark.tsx`
+  - Owns the compact D mark and full wordmark placements without changing source assets or their colours
+- `src/components/ui/section-heading.tsx`
+  - Shared eyebrow, heading, and description pattern for homepage sections
+- `src/components/ui/evidence-ledger.tsx`
+  - Shared labelled evidence pattern for project problem/role/outcome and blog briefs
 - `src/components/ui/animate-on-scroll.tsx`
   - Shared reveal wrapper for scroll-triggered transitions
 - `src/hooks/use-in-view.ts`
   - `IntersectionObserver` hook used by `AnimateOnScroll`
 - `src/components/sections/Hero.tsx`
-  - Uses its own mount animation instead of `AnimateOnScroll`
+  - Renders the full wordmark and primary portfolio introduction without client-only content gating
 - `src/app/globals.css`
-  - Tailwind v4 imports, theme tokens, custom background patterns, keyframes, reduced-motion handling, and select styling
+  - Tailwind v4 imports, semantic dark/light theme tokens, layout/type/motion scales, shared system patterns, reduced-motion handling, and select styling
 - `src/lib/utils.ts`
   - `cn()` helper for class merging
 - `src/lib/analytics.ts`
   - Plausible script config and custom event helper
+- `DESIGN_SYSTEM.md`
+  - The documented Measured Signal design system, token roles, component contracts, palette approval, and QA checklist
+- `USER_RESEARCH.md`
+  - Content-led audience synthesis and a lean validation study for the portfolio
 
 ## Build And Deploy
 

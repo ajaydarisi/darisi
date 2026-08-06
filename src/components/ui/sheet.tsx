@@ -45,16 +45,15 @@ const sheetVariants = cva(
   }
 )
 
-interface SheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {
-  hideClose?: boolean
-}
+type SheetContentProps = React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Content
+> &
+  VariantProps<typeof sheetVariants>
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, hideClose = false, ...props }, ref) => (
+>(({ side = "right", className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <DialogPrimitive.Content
@@ -64,12 +63,10 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      {!hideClose ? (
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:pointer-events-none">
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </DialogPrimitive.Close>
-      ) : null}
+      <DialogPrimitive.Close className="absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-muted transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text disabled:pointer-events-none">
+        <X className="h-4 w-4" />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </SheetPortal>
 ))

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -62,47 +62,46 @@ function applyTheme(theme: Theme) {
   window.dispatchEvent(new CustomEvent<Theme>(THEME_CHANGE_EVENT, { detail: theme }));
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof document !== "undefined" ? getActiveTheme() : "dark"
-  );
-
-  useEffect(() => {
-    // Initial theme is already read from dataset.theme in the useState
-    // initializer; here we only subscribe to later theme/preference changes.
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleThemeChange = () => {
-      setTheme(getActiveTheme());
-    };
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY && isTheme(event.newValue)) {
-        applyTheme(event.newValue);
-      }
-    };
-
-    const handlePreferenceChange = () => {
-      try {
-        if (isTheme(window.localStorage.getItem(STORAGE_KEY))) {
-          return;
-        }
-      } catch {
+function subscribeToTheme(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const handleStorageChange = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY && isTheme(event.newValue)) {
+      applyTheme(event.newValue);
+    }
+  };
+  const handlePreferenceChange = () => {
+    try {
+      if (isTheme(window.localStorage.getItem(STORAGE_KEY))) {
         return;
       }
+    } catch {
+      return;
+    }
 
-      const nextTheme = mediaQuery.matches ? "dark" : "light";
-      applyTheme(nextTheme);
-    };
+    applyTheme(mediaQuery.matches ? "dark" : "light");
+  };
 
-    window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
-    window.addEventListener("storage", handleStorageChange);
-    mediaQuery.addEventListener("change", handlePreferenceChange);
+  window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
+  window.addEventListener("storage", handleStorageChange);
+  mediaQuery.addEventListener("change", handlePreferenceChange);
 
-    return () => {
-      window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
-      window.removeEventListener("storage", handleStorageChange);
-      mediaQuery.removeEventListener("change", handlePreferenceChange);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
+    window.removeEventListener("storage", handleStorageChange);
+    mediaQuery.removeEventListener("change", handlePreferenceChange);
+  };
+}
+
+function getServerTheme(): Theme {
+  return "dark";
+}
+
+export function ThemeToggle({ className }: { className?: string }) {
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getActiveTheme,
+    getServerTheme
+  );
 
   function toggleTheme() {
     const nextTheme: Theme = theme === "dark" ? "light" : "dark";
@@ -120,12 +119,11 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       type="button"
-      suppressHydrationWarning
       aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
       aria-pressed={isLight}
       onClick={toggleTheme}
       className={cn(
-        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted transition-all duration-300 ease-out hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className
       )}
     >
@@ -134,17 +132,16 @@ export function ThemeToggle({ className }: { className?: string }) {
       </span>
       <Moon
         aria-hidden="true"
-        className="absolute left-2 h-4 w-4 transition-colors duration-300"
+        className="absolute left-2 h-4 w-4 transition-colors duration-[var(--motion-base)]"
       />
       <Sun
         aria-hidden="true"
-        className="absolute right-2 h-4 w-4 transition-colors duration-300"
+        className="absolute right-2 h-4 w-4 transition-colors duration-[var(--motion-base)]"
       />
       <span
         aria-hidden="true"
-        suppressHydrationWarning
         className={cn(
-          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary-text shadow-[var(--shadow-floating)] transition-transform duration-300 ease-out",
+          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary-text shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
           isLight ? "translate-x-8" : "translate-x-0"
         )}
       >

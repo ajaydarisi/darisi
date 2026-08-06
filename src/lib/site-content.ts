@@ -16,7 +16,6 @@ export interface ProjectEntry {
   action?: ProjectAction;
   note?: string;
   image: string;
-  gradient: string;
 }
 
 export interface SkillArea {
@@ -72,7 +71,6 @@ export const projects: ProjectEntry[] = [
       label: "View live site",
     },
     image: "/screenshots/bfg.webp",
-    gradient: "from-amber-500/20 via-primary/10 to-amber-900/20",
   },
   {
     title: "DevMarket",
@@ -91,7 +89,6 @@ export const projects: ProjectEntry[] = [
       label: "View live product",
     },
     image: "/screenshots/devmarket.webp",
-    gradient: "from-blue-500/20 via-primary/10 to-indigo-900/20",
   },
   {
     title: "TexLedger",
@@ -107,7 +104,6 @@ export const projects: ProjectEntry[] = [
     tech: ["Next.js", "Supabase", "PostgreSQL", "shadcn/ui"],
     note: "Internal tool for a textile wholesaler — not publicly accessible.",
     image: "/screenshots/textile.webp",
-    gradient: "from-emerald-500/20 via-primary/10 to-teal-900/20",
   },
 ];
 

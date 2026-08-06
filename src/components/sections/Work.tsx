@@ -5,61 +5,63 @@ import { ArrowUpRight } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { EvidenceLedger } from "@/components/ui/evidence-ledger";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
 
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-heading" className="py-24">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="work" aria-labelledby="work-heading" className="section-space">
+      <div className="site-shell">
         <AnimateOnScroll variant="fade-up">
-          <div className="max-w-2xl">
-            <Badge
-              variant="default"
-              className="text-[11px] uppercase tracking-[0.2em]"
-            >
-              Selected Work
-            </Badge>
-            <h2
-              id="work-heading"
-              className="mt-4 text-2xl md:text-3xl font-medium text-foreground"
-            >
-              Projects I&apos;ve designed and built, end to end.
-            </h2>
-            <p className="mt-4 text-foreground/90 leading-relaxed">
-              Each one lays out the problem, what I owned, and what actually
-              shipped.
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow="Selected Work"
+            titleId="work-heading"
+            title="Projects I’ve designed and built, end to end."
+            description="Each case is organised around the problem, my ownership, and the practical outcome."
+          />
         </AnimateOnScroll>
 
-        <div className="mt-14 grid grid-cols-1 gap-8 xl:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 xl:grid-cols-2">
           {projects.map((project, index) => {
+            const isFeatured = index === 0;
+
             return (
               <AnimateOnScroll
                 key={project.title}
                 variant="fade-up"
                 delay={index * 150}
+                className={isFeatured ? "xl:col-span-2" : undefined}
               >
                 <Card
                   asChild
-                  className="group relative flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                  variant="interactive"
+                  className="group relative flex h-full flex-col overflow-hidden"
                 >
-                  <article>
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <div
-                        className={`absolute inset-0 bg-linear-to-br ${project.gradient}`}
-                      />
+                  <article
+                    className={`flex h-full flex-col ${
+                      isFeatured
+                        ? "xl:grid xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
+                        : ""
+                    }`}
+                  >
+                    <div
+                      className={`relative aspect-[16/10] overflow-hidden ${
+                        isFeatured ? "xl:aspect-auto" : ""
+                      }`}
+                    >
+                      <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-primary/10 to-transparent" />
                       <div className="absolute inset-0 bg-grid-pattern opacity-30" />
                       <Image
                         src={project.image}
                         alt={`Screenshot of ${project.title}`}
                         fill
                         sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[var(--motion-enter)] group-hover:scale-[1.03]"
                       />
                       <Badge
-                        variant="outline"
+                        variant="media"
                         className="absolute left-4 top-4 z-20"
                       >
                         {project.category}
@@ -67,37 +69,20 @@ export function Work() {
                     </div>
 
                     <CardContent className="flex flex-1 flex-col px-6 pb-6 pt-6">
-                      <h3 className="text-xl font-medium text-foreground">
+                      <h3 className="text-[1.375rem] font-medium tracking-[-0.025em] text-foreground">
                         {project.title}
                       </h3>
                       <p className="mt-3 text-sm leading-relaxed text-muted">
                         {project.summary}
                       </p>
 
-                      <dl className="mt-6 space-y-4 text-sm">
-                        <div>
-                          <dt className="font-medium text-foreground">
-                            Problem
-                          </dt>
-                          <dd className="mt-1 leading-relaxed text-muted">
-                            {project.problem}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium text-foreground">Role</dt>
-                          <dd className="mt-1 leading-relaxed text-muted">
-                            {project.role}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium text-foreground">
-                            Outcome
-                          </dt>
-                          <dd className="mt-1 leading-relaxed text-muted">
-                            {project.outcome}
-                          </dd>
-                        </div>
-                      </dl>
+                      <EvidenceLedger
+                        items={[
+                          { label: "Problem", content: project.problem },
+                          { label: "Role", content: project.role },
+                          { label: "Outcome", content: project.outcome },
+                        ]}
+                      />
 
                       <ul
                         className="mt-6 flex flex-wrap gap-2"
@@ -105,7 +90,7 @@ export function Work() {
                       >
                         {project.tech.map((tech) => (
                           <li key={tech}>
-                            <Badge>{tech}</Badge>
+                            <Badge variant="tag">{tech}</Badge>
                           </li>
                         ))}
                       </ul>

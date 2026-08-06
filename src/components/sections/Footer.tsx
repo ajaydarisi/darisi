@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
 import { socialUrls } from "@/lib/seo";
@@ -41,18 +41,16 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer aria-label="Site footer" className="py-16 border-t border-border">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <footer aria-label="Site footer" className="section-space--compact border-t border-border">
+      <div className="site-shell">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand column */}
           <div>
             <Link href="/" className="inline-flex items-center">
-              <Image
-                src="/darisi-wordmark.svg"
+              <BrandMark
+                variant="wordmark"
                 alt="Darisi"
                 className="h-9 w-auto"
-                width={117}
-                height={36}
               />
             </Link>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
@@ -105,7 +103,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="me noopener noreferrer"
-                  className="w-9 h-9 rounded-lg hover:text-primary bg-surface border border-border flex items-center justify-center text-muted hover:text-foreground hover:border-primary/30 transition-all duration-200"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-muted transition-all duration-[var(--motion-base)] hover:border-primary/30 hover:text-foreground"
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />

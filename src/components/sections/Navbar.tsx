@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
@@ -81,7 +81,7 @@ export function Navbar() {
   return (
     <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
       <header
-        className={`sticky top-0 z-[60] border-b transition-all duration-300 ${
+        className={`sticky top-0 z-[60] border-b transition-all duration-[var(--motion-base)] ${
           scrolled
             ? "border-border bg-background/90 shadow-[var(--shadow-floating)] backdrop-blur-xl"
             : "border-transparent bg-background/80 backdrop-blur-md"
@@ -89,19 +89,16 @@ export function Navbar() {
       >
         <nav
           aria-label="Main navigation"
-          className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8"
+          className="site-shell flex h-16 items-center justify-between"
         >
           <Link
             href="/"
             className="flex items-center"
             aria-label="Darisi home"
           >
-            <Image
-              src="/logo.svg"
-              alt="Darisi logo"
+            <BrandMark
+              variant="mark"
               className="h-7 w-7"
-              width={28}
-              height={28}
             />
           </Link>
 
@@ -114,7 +111,7 @@ export function Navbar() {
                   key={link.label}
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`relative text-sm transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary-text after:transition-all after:duration-300 after:content-[''] ${
+                  className={`relative text-sm transition-colors duration-[var(--motion-fast)] after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary-text after:transition-all after:duration-[var(--motion-base)] after:content-[''] ${
                     isActive
                       ? "text-foreground after:w-full"
                       : "text-muted hover:text-foreground after:w-0"
@@ -161,8 +158,7 @@ export function Navbar() {
 
       <SheetContent
         side="top"
-        hideClose
-        className="top-16 rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
+        className="top-16 min-h-[calc(100svh-4rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
@@ -178,7 +174,7 @@ export function Navbar() {
                 <a
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`flex items-center rounded-xl px-4 py-3 text-base transition-colors duration-300 hover:bg-surface hover:text-foreground ${
+                  className={`flex items-center rounded-[var(--radius-control)] px-4 py-3 text-base transition-colors duration-[var(--motion-base)] hover:bg-surface hover:text-foreground ${
                     isActive
                       ? "bg-surface text-foreground"
                       : "text-muted"

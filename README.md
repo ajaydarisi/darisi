@@ -72,10 +72,16 @@ If you update public-facing copy in the sections, also check whether the shared 
 ## Shared Patterns
 
 - `src/components/ui/button.tsx` provides the shared button variants
+- `src/components/ui/brand-mark.tsx` owns compact and full brand-mark placements
+- `src/components/ui/section-heading.tsx` and `evidence-ledger.tsx` provide the core section and proof patterns
 - `src/components/ui/animate-on-scroll.tsx` and `src/hooks/use-in-view.ts` power the scroll-based reveal animations
-- `src/components/sections/Hero.tsx` uses its own mount animation instead of `AnimateOnScroll`
+- `src/components/sections/Hero.tsx` renders the full wordmark and primary portfolio introduction without client-only content gating
 - `src/app/globals.css` defines the color system, patterns, keyframes, and reduced-motion handling
 - `src/lib/analytics.ts` provides Plausible script config and event helpers
+
+The implemented visual foundations and component contracts are documented in
+[`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md). The audience synthesis and validation
+study are in [`USER_RESEARCH.md`](./USER_RESEARCH.md).
 
 ## Environment Variables
 

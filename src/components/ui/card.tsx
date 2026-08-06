@@ -1,24 +1,41 @@
 import * as React from "react"
 import { Slot } from "radix-ui"
+import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+
+const cardVariants = cva(
+  "rounded-[var(--radius-panel)] border border-border bg-card text-card-foreground",
+  {
+    variants: {
+      variant: {
+        default: "shadow-[var(--shadow-card)]",
+        interactive:
+          "shadow-[var(--shadow-card)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card-hover)]",
+        inset: "bg-background/60 shadow-none",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
 function Card({
   className,
   asChild = false,
+  variant = "default",
   ...props
 }: React.ComponentProps<"div"> & {
   asChild?: boolean
-}) {
+} & VariantProps<typeof cardVariants>) {
   const Comp = asChild ? Slot.Root : "div"
 
   return (
     <Comp
       data-slot="card"
-      className={cn(
-        "rounded-2xl border border-border bg-surface text-card-foreground shadow-sm",
-        className
-      )}
+      data-variant={variant}
+      className={cn(cardVariants({ variant }), className)}
       {...props}
     />
   )
@@ -79,6 +96,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
   Card,
+  cardVariants,
   CardHeader,
   CardTitle,
   CardDescription,

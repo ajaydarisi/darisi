@@ -60,8 +60,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className="bg-dot-pattern">
+    <html
+      lang="en"
+      className={inter.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      <body>
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}

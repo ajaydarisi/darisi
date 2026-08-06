@@ -49,7 +49,7 @@ export function AnimateOnScroll({
   className,
   variant = "fade-up",
   delay = 0,
-  duration = 700,
+  duration = 600,
 }: AnimateOnScrollProps) {
   const { ref, hasEnteredView, hasMeasured, isInView } = useInView();
   const styles = variantStyles[variant];
@@ -59,7 +59,7 @@ export function AnimateOnScroll({
     <div
       ref={ref}
       className={cn(
-        "transition-all ease-out will-change-transform",
+        "transition-all ease-[var(--ease-standard)] will-change-transform",
         shouldHide ? styles.initial : styles.animate,
         className
       )}
