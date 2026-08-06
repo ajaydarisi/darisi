@@ -7,117 +7,61 @@ import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
 import { socialUrls } from "@/lib/seo";
 
-const quickLinks = [
+const links = [
   { label: "Work", href: "/#work" },
   { label: "Skills", href: "/#skills" },
   { label: "About", href: "/#about" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
-];
-
-function GitHubIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
-  );
-}
-
-function LinkedInIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-
-const socialLinks = [
-  { icon: GitHubIcon, href: socialUrls.github, label: "GitHub" },
-  { icon: LinkedInIcon, href: socialUrls.linkedin, label: "LinkedIn" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export function Footer() {
   return (
-    <footer aria-label="Site footer" className="section-space--compact border-t border-border">
+    <footer aria-label="Site footer" className="border-t border-border-subtle py-10">
       <div className="site-shell">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Brand column */}
+        <div className="flex flex-col gap-8 border-b border-border-subtle pb-8 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <Link href="/" className="inline-flex items-center">
-              <BrandMark
-                variant="wordmark"
-                alt="Darisi"
-                className="h-9 w-auto"
-              />
+              <BrandMark variant="wordmark" alt="Darisi" className="h-8 w-auto" />
             </Link>
-            <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
-              Personal site of Ajay Darisi, a software engineer in Bengaluru,
-              India, building product web apps, internal tools, and platform
-              features.
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
+              Product web apps, internal tools, and platform work by Ajay Darisi.
             </p>
           </div>
 
-          {/* Quick Links column */}
-          <div>
-            <h3 className="text-sm font-medium text-foreground mb-4">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
+          <nav aria-label="Footer navigation">
+            <ul className="flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted">
+              {links.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted hover:text-foreground transition-colors duration-200"
-                  >
+                  <Link href={link.href} className="transition-colors hover:text-foreground">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Contact column */}
-          <div>
-            <h3 className="text-sm font-medium text-foreground mb-4">
-              Get in Touch
-            </h3>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors duration-200"
-              onClick={() =>
-                trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, {
-                  location: "footer",
-                })
-              }
-            >
-              <Mail className="w-4 h-4" />
-              {CONTACT_EMAIL}
-            </a>
-            <div className="flex items-center gap-4 mt-6">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="me noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-muted transition-all duration-[var(--motion-base)] hover:border-primary/30 hover:text-foreground"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
-          </div>
+          </nav>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Ajay Darisi.
-          </p>
+        <div className="flex flex-col gap-5 pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+            onClick={() =>
+              trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, { location: "footer" })
+            }
+          >
+            <Mail className="h-4 w-4" />
+            {CONTACT_EMAIL}
+          </a>
+          <div className="flex items-center gap-5">
+            <a href={socialUrls.github} target="_blank" rel="me noopener noreferrer" className="transition-colors hover:text-foreground">
+              GitHub
+            </a>
+            <a href={socialUrls.linkedin} target="_blank" rel="me noopener noreferrer" className="transition-colors hover:text-foreground">
+              LinkedIn
+            </a>
+            <p className="text-xs">© {new Date().getFullYear()} Ajay Darisi.</p>
+          </div>
         </div>
       </div>
     </footer>
