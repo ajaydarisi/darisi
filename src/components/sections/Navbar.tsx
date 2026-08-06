@@ -18,10 +18,9 @@ import {
 } from "@/components/ui/sheet";
 
 const links = [
-  { label: "Work", href: "/#work" },
+  { label: "Work", href: "/work" },
   { label: "Skills", href: "/#skills" },
   { label: "About", href: "/#about" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -83,47 +82,50 @@ export function Navbar() {
       <header
         className={`sticky top-0 z-[60] border-b transition-all duration-[var(--motion-base)] ${
           scrolled
-            ? "border-border bg-background/90 shadow-[var(--shadow-floating)] backdrop-blur-xl"
-            : "border-transparent bg-background/80 backdrop-blur-md"
+            ? "border-border-subtle bg-background/95 shadow-[var(--shadow-floating)] backdrop-blur-xl"
+            : "border-border-subtle/70 bg-background/85 backdrop-blur-md"
         }`}
       >
         <nav
           aria-label="Main navigation"
-          className="site-shell flex h-16 items-center justify-between"
+          className="site-shell flex h-[4.5rem] items-center justify-between"
         >
           <Link
             href="/"
-            className="flex items-center"
+            className="group flex items-center gap-3"
             aria-label="Darisi home"
           >
             <BrandMark
               variant="mark"
-              className="h-7 w-7"
+              className="h-8 w-8"
             />
+            <span className="hidden font-utility text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-foreground sm:inline">
+              Ajay Darisi
+            </span>
           </Link>
 
-          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
+          <div className="hidden items-center gap-7 lg:flex xl:gap-9">
             {links.map((link) => {
               const isActive = isLinkActive(link.href);
 
               return (
-                <a
+                <Link
                   key={link.label}
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`relative text-sm transition-colors duration-[var(--motion-fast)] after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary-text after:transition-all after:duration-[var(--motion-base)] after:content-[''] ${
+                  className={`relative py-2 font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] transition-colors duration-[var(--motion-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-primary-text after:transition-transform after:duration-[var(--motion-base)] after:content-[''] ${
                     isActive
-                      ? "text-foreground after:w-full"
-                      : "text-muted hover:text-foreground after:w-0"
+                      ? "text-foreground after:scale-x-100"
+                      : "text-muted hover:text-foreground after:scale-x-0"
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               );
             })}
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              <Button asChild size="sm" variant="outline">
+              <Button asChild size="sm">
                 <Link
                   href="/#contact"
                   onClick={() =>
@@ -158,35 +160,38 @@ export function Navbar() {
 
       <SheetContent
         side="top"
-        className="top-16 min-h-[calc(100svh-4rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
+        className="top-[4.5rem] min-h-[calc(100svh-4.5rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
           Navigate to the main sections of Ajay Darisi&apos;s site.
         </SheetDescription>
 
-        <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
+        <nav className="site-shell flex flex-col gap-1 py-8">
           {links.map((link) => {
             const isActive = isLinkActive(link.href);
 
             return (
               <SheetClose key={link.label} asChild>
-                <a
+                <Link
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`flex items-center rounded-[var(--radius-control)] px-4 py-3 text-base transition-colors duration-[var(--motion-base)] hover:bg-surface hover:text-foreground ${
+                  className={`flex items-center border-b border-border-subtle px-1 py-4 font-display text-2xl transition-colors duration-[var(--motion-base)] hover:text-primary-text ${
                     isActive
-                      ? "bg-surface text-foreground"
+                      ? "text-primary-text"
                       : "text-muted"
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               </SheetClose>
             );
           })}
-          <div className="mt-3 border-t border-border pt-3">
-            <div className="mb-3 flex justify-end px-4">
+          <div className="mt-6">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted">
+                Theme
+              </span>
               <ThemeToggle />
             </div>
             <Button asChild className="w-full" size="default">
