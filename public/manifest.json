@@ -4,8 +4,8 @@
   "description": "Personal portfolio of Ajay Darisi, a software engineer in Bengaluru, India.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B0F0E",
-  "theme_color": "#8B1E2D",
+  "background_color": "#F6F2EA",
+  "theme_color": "#0D1215",
   "icons": [
     {
       "src": "/favicon-48x48.png",

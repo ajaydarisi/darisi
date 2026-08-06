@@ -46,11 +46,11 @@ const themeInitScript = `
       : "light";
   }
   document.documentElement.dataset.theme = theme;
-  var themeColor = theme === "light" ? "#F7FAF9" : "#0B0F0E";
-  var themeColorMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeColorMeta) {
+  var themeColor = theme === "light" ? "#F6F2EA" : "#0D1215";
+  document.querySelectorAll('meta[name="theme-color"]').forEach(function (themeColorMeta) {
     themeColorMeta.setAttribute("content", themeColor);
-  }
+    themeColorMeta.removeAttribute("media");
+  });
 })();
 `;
 
