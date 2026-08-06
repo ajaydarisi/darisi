@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,16 +18,27 @@ import {
 } from "@/components/ui/sheet";
 
 const links = [
-  { label: "Work", href: "#work" },
-  { label: "Skills", href: "#skills" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/#work" },
+  { label: "Skills", href: "/#skills" },
+  { label: "About", href: "/#about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ];
 
+function sectionId(href: string): string | null {
+  return href.includes("#") ? href.split("#")[1] : null;
+}
+
 export function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+
+  const isLinkActive = (href: string) => {
+    const id = sectionId(href);
+    return id ? activeSection === id : pathname.startsWith(href);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +51,10 @@ export function Navbar() {
 
   useEffect(() => {
     const sections = links
-      .map((link) => document.getElementById(link.href.replace("#", "")))
+      .map((link) => {
+        const id = sectionId(link.href);
+        return id ? document.getElementById(id) : null;
+      })
       .filter((el): el is HTMLElement => el !== null);
 
     if (sections.length === 0) {
@@ -78,24 +93,21 @@ export function Navbar() {
         >
           <Link
             href="/"
-            className="flex items-center gap-2.5"
+            className="flex items-center"
             aria-label="Darisi home"
           >
             <Image
               src="/logo.svg"
               alt="Darisi logo"
-              className="h-6 w-6"
-              width={24}
-              height={24}
+              className="h-7 w-7"
+              width={28}
+              height={28}
             />
-            <span className="text-lg font-bold tracking-widest text-foreground">
-              DARISI
-            </span>
           </Link>
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
             {links.map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
+              const isActive = isLinkActive(link.href);
 
               return (
                 <a
@@ -115,8 +127,8 @@ export function Navbar() {
             <div className="flex items-center gap-3">
               <ThemeToggle />
               <Button asChild size="sm" variant="outline">
-                <a
-                  href="#contact"
+                <Link
+                  href="/#contact"
                   onClick={() =>
                     trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
                       location: "desktop_nav",
@@ -124,7 +136,7 @@ export function Navbar() {
                   }
                 >
                   Get in Touch
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -134,7 +146,7 @@ export function Navbar() {
               type="button"
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
               {mobileOpen ? (
@@ -150,7 +162,7 @@ export function Navbar() {
       <SheetContent
         side="top"
         hideClose
-        className="top-16 rounded-none border-x-0 border-t-0 bg-background p-0 md:hidden"
+        className="top-16 rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
@@ -159,7 +171,7 @@ export function Navbar() {
 
         <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
           {links.map((link) => {
-            const isActive = activeSection === link.href.replace("#", "");
+            const isActive = isLinkActive(link.href);
 
             return (
               <SheetClose key={link.label} asChild>
@@ -182,8 +194,8 @@ export function Navbar() {
               <ThemeToggle />
             </div>
             <Button asChild className="w-full" size="default">
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 onClick={() => {
                   trackEvent(ANALYTICS_EVENTS.navMobileCtaClick, {
                     location: "mobile_nav",
@@ -192,7 +204,7 @@ export function Navbar() {
                 }}
               >
                 Get in Touch
-              </a>
+              </Link>
             </Button>
           </div>
         </nav>

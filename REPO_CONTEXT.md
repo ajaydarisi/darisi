@@ -13,6 +13,9 @@ This file is the source of truth for high-level repo context in new chats. Read 
 
 ## Entrypoints And Render Tree
 
+- `src/app/blog/page.tsx` and `src/app/blog/<slug>/page.tsx`
+  - Blog index and five posts; post metadata/JSON-LD come from the registry in `src/lib/blog.ts`, article shell is `src/components/blog/post-layout.tsx`, article typography is the `.blog-prose` block in `globals.css`
+  - To add a post: add its entry to `blogPosts` in `src/lib/blog.ts`, then create `src/app/blog/<slug>/page.tsx` using `PostLayout` (sitemap and index pick it up automatically)
 - `src/app/layout.tsx`
   - Owns root layout, `next/font/google` font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
 - `src/app/page.tsx`

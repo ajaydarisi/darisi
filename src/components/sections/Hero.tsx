@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -38,12 +39,19 @@ export function Hero() {
           </Badge>
 
           <h1
-            className={`mt-6 max-w-4xl text-4xl font-semibold leading-tight tracking-tight text-gradient-primary transition-all duration-700 ease-out md:text-5xl lg:text-6xl ${
+            className={`mt-6 transition-all duration-700 ease-out ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
             style={{ transitionDelay: "150ms" }}
           >
-            DARISI
+            <Image
+              src="/darisi-wordmark.svg"
+              alt="DARISI"
+              className="h-16 w-auto sm:h-20 lg:h-24"
+              width={828}
+              height={256}
+              priority
+            />
           </h1>
 
           <p
@@ -121,12 +129,12 @@ export function Hero() {
 
       <a
         href="#work"
-        className="animate-hero-rise absolute bottom-0 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group [@media(max-height:740px)]:hidden"
+        className="animate-hero-rise absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group [@media(max-height:740px)]:hidden"
         style={{ animationDelay: "800ms" }}
         aria-label="Scroll down to my work"
       >
         <span className="text-[11px] uppercase tracking-[0.2em] text-muted-subtle transition-colors duration-300 group-hover:text-primary-text">
-          Scroll to work
+          Scroll to see work
         </span>
         <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-300 group-hover:border-primary/40">
           <div className="mx-auto block h-2.5 w-1 rounded-full bg-primary animate-scroll-dot" />

@@ -8,10 +8,11 @@ import { CONTACT_EMAIL } from "@/lib/site-content";
 import { socialUrls } from "@/lib/seo";
 
 const quickLinks = [
-  { label: "Work", href: "#work" },
-  { label: "Skills", href: "#skills" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/#work" },
+  { label: "Skills", href: "/#skills" },
+  { label: "About", href: "/#about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -45,17 +46,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand column */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-2.5">
+            <Link href="/" className="inline-flex items-center">
               <Image
-                src="/logo.svg"
-                alt="Darisi logo"
-                className="h-6 w-6"
-                width={24}
-                height={24}
+                src="/darisi-wordmark.svg"
+                alt="Darisi"
+                className="h-9 w-auto"
+                width={117}
+                height={36}
               />
-              <span className="text-lg font-bold tracking-widest text-foreground">
-                DARISI
-              </span>
             </Link>
             <p className="mt-3 text-sm text-muted leading-relaxed max-w-xs">
               Personal site of Ajay Darisi, a software engineer in Bengaluru,

@@ -2,6 +2,24 @@
 
 Status: **implemented, verified, committed** — see `## Review` at the end of this file.
 
+## Current task: DARISI full-name wordmark
+
+- [x] Define a vector wordmark that extends the existing golden-ratio D mark.
+- [x] Use the D mark in the navigation and the full wordmark in the hero and footer.
+- [x] Align the full lockup to an explicit golden-ratio grid and validate the dimensions.
+- [x] Verify the wordmark at desktop and mobile header sizes.
+
+### Current task review
+
+- Added `public/darisi-wordmark.svg`: the complete lockup measures `2φ × 1`.
+- Standardised the standalone D across the logo and icon SVGs: its outer rectangle is `φ:1`, and its counter is `φ:1`.
+- Verified the 36px header lockup (116.5px wide) in the mobile header with no horizontal overflow; the desktop header retains the same fixed lockup size.
+- `npm run lint` and `npm run build` pass. A standalone numeric geometry check confirms the declared φ ratios, maroon theme color, and path-only wordmark.
+- Refined the S within its existing `H/φ² × H/φ` cell, using a smoother pair of bowls and quieter terminals for better small-size legibility.
+- Restored the compact D mark to the navbar; the full wordmark now anchors the hero and footer.
+- Restored the original D SVG geometry across favicon and app-icon variants; only `darisi-wordmark.svg` is new.
+- Replaced the wordmark D with the original D path at a uniform scale, so the standalone mark and wordmark are identical in shape.
+
 ## Context and confirmed decisions
 
 Verified by reading every file in `src/components/sections/`, `src/components/ui/`,
@@ -769,3 +787,247 @@ with no vouchers entered. No redaction needed.
   zero hits in source.
 
 Not done: item 5.11 (manual browser walkthrough) — left for Ajay, per the plan.
+---
+
+## Historical reference: pre-reposition UI/UX audit (superseded)
+
+# Darisi — UI/UX Audit Implementation Plan
+
+Phase-wise plan derived from the UI/UX audit. Phases are ordered by dependency and risk:
+tokens first (they unblock everything), then accessibility, then content/structure, then
+section fixes, then polish, then docs. Each phase is independently shippable.
+
+Effort key: XS (<15m) · S (~30m) · M (~1–2h) · L (half day+)
+
+---
+
+## Phase 0 — Design Tokens & Color Foundation: DEEP PINE (unblocks Phases 1–5)
+
+DECISION: rebrand from maroon to a "Deep Pine" palette (calm / steady / dependable — the
+strongest DNA match). Fill green is too dark for body text on dark, so we split brand into
+fill vs. text roles, same as the maroon would have needed.
+
+Token values (dark / light):
+- `--primary` (fill)        #1F6F5C / #1B6351   — white text ≥6:1 (dark), ≥7:1 (light)
+- `--primary-hover`         #237A65 / #15503F
+- `--primary-foreground`    #F2F5F3 / #FFFFFF
+- `--primary-text` (NEW)    #4FB89A / #15604F   — accent text/icons; 7.9:1 dark, 7.6:1 light
+- `--background`            #0B0F0E / #F7FAF9
+- `--surface`               #121917 / #FFFFFF
+- `--elevated`              #18211E / #ECF3F0
+- `--foreground`            #F2F5F3 / #0F1A16
+- `--muted`/`-foreground`   #A9B5AF / #3F4A46
+- `--border`/`--input`      #233029 / #D8E2DE
+- semantic destructive kept red (unchanged)
+
+- [x] Swap dark + light token blocks in `globals.css` to Deep Pine.
+- [x] Add `--primary-text` token (both themes) + register `--color-primary-text` in `@theme inline`.
+- [x] Update `--ring`, `--focus-outline`, scrollbar, gradient, skip-link tints to pine.
+- [x] Update hardcoded theme colors in `layout.tsx` init script + `theme-toggle.tsx` THEME_COLORS.
+- [ ] (Deferred) Dimmer text token to replace `text-muted/60`-style opacity — Phase 1.
+- [x] Verify: contrast of new tokens vs `--background`/`--surface` ≥ 4.5:1 (text) / 3:1 (UI).
+
+Findings covered: #1, #2, #3 (partial)
+
+---
+
+## Phase 1 — Critical Accessibility (depends on Phase 0)
+
+Goal: bring all dark-mode text and interactive feedback to WCAG AA.
+
+- [x] Swap eyebrow `Badge` default variant to accent-text token. `badge.tsx` (done in Phase 0)
+- [x] Update Hero badge `text-primary/80` → accent-text token. `Hero.tsx` (done in Phase 0)
+- [x] Replace `text-muted/60` · `/80` and `placeholder:text-muted/50` with `--muted-subtle` token.
+- [x] Bump tiny labels `text-[10px]` → `text-[11px]` across all eyebrows + hero scroll hint.
+- [x] Add `role="status" aria-live="polite"` + focus management to contact success region;
+      error `Alert` already ships `role="alert"`. `Contact.tsx`
+- [x] Verify: `npm run lint` + `npm run build` clean; computed contrast all ≥ AA; grep leftover-free.
+
+Findings covered: #1, #2, #5, #18
+
+### Phase 1 review (done)
+
+- Added `--muted-subtle` token (`#7C8A84` dark / `#5E6B66` light) + `--color-muted-subtle`
+  mapping. Replaces opacity-based faded text so it's deterministically legible:
+  - `input.tsx`, `textarea.tsx`, `select.tsx` placeholders (`placeholder:text-muted/50`)
+  - `Hero` scroll hint (`text-muted/60`, also recolored hover → `primary-text`)
+  - `Work` action helper (`text-muted/80`)
+  - Contrast: `#7C8A84` ≈ 4.6:1 on inputs / 5.3:1 on bg (dark); `#5E6B66` ≈ 5.6:1 on white.
+- Eyebrow labels + hero scroll hint bumped `10px → 11px` (7 files).
+- `Contact` success state: `role="status" aria-live="polite"`, `tabIndex={-1}`, and a
+  `useEffect` that moves focus to it on success (focus was previously lost when the form
+  unmounted). Error path unchanged — `Alert` already announces via `role="alert"`.
+- Not automated here: an axe/Lighthouse run needs the dev server up — offer to run it.
+
+### Phases 2–6 review (done)
+
+Phase 2 — Hero & hierarchy:
+- `<h1>` now the value prop ("Web apps, internal systems, and platform features, shipped
+  with calm ownership.") instead of "DARISI"; brand name now appears once above the fold
+  (eyebrow). Lead subtitle promoted to `text-foreground`; section intros → `text-foreground/90`.
+- Gradient audit resolved by Phase 0 retint (stops `#f2f5f3`/`#4fb89a` dark, `#0f1a16`/`#1b6351`
+  light — all AA at every frame). Hero `min-h` 6rem→4rem to match `h-16` navbar. Scroll cue
+  hidden under `max-height:740px` so it can't overlap the proof stats.
+
+Phase 3 — Social proof (mechanism only, no fabricated content):
+- Added `Testimonial` type + empty `testimonials` array in `site-content.ts`, and
+  `Testimonials.tsx` (renders null while empty). Wired into `page.tsx` after Trust.
+  ACTION FOR OWNER: supply 1–3 real client quotes to switch the section on.
+
+Phase 4 — Behavior:
+- Work cards fully clickable via stretched link (`after:absolute after:inset-0`); images
+  `h-52` → `aspect-[16/10]`. Process dead `group-hover` fixed (added `group`). Contact form
+  inline validation (name/email/message, email regex, `noValidate`, `aria-invalid`,
+  per-field error text, focus first invalid) + submit `Loader2` spinner. Navbar scroll-spy
+  via IntersectionObserver with animated underline + `aria-current`. Chat FAB relabelled and
+  auto-hides while `#contact` is in view (removes overlap + CTA redundancy).
+
+Phase 5 — Polish:
+- Services card padding `p-8` → `p-6` (matches Work/Trust). Alternating section bands:
+  Trust/Process/FAQ → `bg-surface` (Process icon tiles bumped to `bg-elevated` to stay
+  legible on the band). Theme toggle initial state read from `dataset.theme` (+
+  `suppressHydrationWarning`) to kill the knob flash. Primary button gains `shadow-sm` →
+  `hover:shadow-md hover:shadow-primary/20`.
+
+Phase 6 — Docs:
+- `REPO_CONTEXT.md` render order + content ownership corrected (no BestFit; Testimonials +
+  ChatAgent documented).
+
+Verification: `npm run lint` clean, `npm run build` passes (6/6 static). Live DOM checks
+(dev server) confirmed pine tokens in both themes, section banding, testimonials gating,
+stretched link, accent-text badges, and scroll-spy underline.
+
+---
+
+## Phase 2 — Hero & Content Hierarchy
+
+Goal: fix SEO/heading semantics and reduce brand repetition above the fold.
+
+- [ ] Rewrite `<h1>` to carry the value proposition; demote "DARISI" to eyebrow/visual. `Hero.tsx` (S)
+- [ ] Remove redundant brand mentions so name appears once above the fold. (XS)
+- [ ] Audit `text-gradient-primary` so no animation frame drops below AA; scope to one
+      word if needed. `globals.css` + `Hero.tsx` (S)
+- [ ] Promote lead paragraphs (hero sub, section intros) from `text-muted` → `text-foreground`. (S)
+- [ ] Reconcile hero `min-h-[calc(100svh-6rem)]` with the actual `h-16` navbar. (XS)
+- [ ] Move/guard the scroll cue so it can't overlap the proof stats on short viewports. (S)
+- [ ] Verify: check h1 in DOM outline; test 1280/768/375 widths + landscape. (S)
+
+Findings covered: #4, #6, #7, #8, #9, #10
+
+---
+
+## Phase 3 — Conversion & Social Proof (highest business impact)
+
+Goal: add the missing third-party proof — the top conversion lever. Mostly content.
+
+- [ ] Gather 1–3 real client testimonials/logos or a concrete outcome metric. (M — content)
+- [ ] Add a testimonial element to Trust or Contact (or restore a dedicated section). (M)
+- [ ] Strengthen TexLedger card: static screenshot gallery or a headline metric. (S)
+- [ ] Verify: cross-check any new copy into `site-content.ts` so UI + JSON-LD stay aligned. (XS)
+
+Findings covered: #11, #12
+
+---
+
+## Phase 4 — Section & Component Behavior Fixes
+
+Goal: correctness bugs and false affordances.
+
+- [ ] Make Work cards fully clickable (wrap article in link / nested CTA). `Work.tsx` (S)
+- [ ] Use aspect-ratio container for Work images instead of fixed `h-52`. `Work.tsx` (XS)
+- [ ] Fix dead `group-hover` in Process (add `group` to wrapper or remove). `Process.tsx` (XS)
+- [ ] Make Process connecting-line layout robust to step count. `Process.tsx` (S)
+- [ ] Add inline email/field validation to contact form. `Contact.tsx` (M)
+- [ ] Add spinner to submit button during `submitting`. `Contact.tsx` (XS)
+- [ ] Ensure chat FAB never overlaps form submit / content on mobile. `chat-agent.tsx` (S)
+- [ ] Add scroll-spy active-section state to navbar. `Navbar.tsx` (M)
+- [ ] Clarify/label chat FAB role vs primary "Start a Project" funnel. (XS)
+- [ ] Verify: manual click-through of each card, form, nav at desktop + mobile. (S)
+
+Findings covered: #13, #14, #16, #17, #19, #20, #21, #22, #23
+
+---
+
+## Phase 5 — Design-System Consistency & Polish
+
+Goal: rhythm, spacing, and CTA presence.
+
+- [ ] Standardize card padding (stop ad-hoc `px-6`/`px-8` overrides). `card.tsx` + consumers (S)
+- [ ] Alternate section backgrounds (`background`/`surface`) or add dividers for delineation. (M)
+- [ ] Theme toggle: read initial state from `documentElement.dataset.theme` to kill knob flash.
+      `theme-toggle.tsx` (S)
+- [ ] Add subtle elevation/hover shadow to primary CTA buttons. `button.tsx` (XS)
+- [ ] Verify: visual pass in both themes; confirm no layout shift on load. (S)
+
+Findings covered: #24, #25, #26, #27, #3 (finish)
+
+---
+
+## Phase 6 — Housekeeping & Docs
+
+- [ ] Decide on BestFit section: restore it (lead-qualifying content) or fix `REPO_CONTEXT.md`. (S)
+- [ ] Update `REPO_CONTEXT.md` render order + content ownership to match reality. (XS)
+- [ ] Run `npm run lint` and `npm run build` clean. (S)
+
+Findings covered: #28
+
+---
+
+## Suggested sequencing
+
+1. **Ship 0 + 1 together** (one PR): the accessibility win, lowest risk, unblocks the rest.
+2. **Ship 2** (hero/SEO) next — small, high visibility.
+3. **Start 3 in parallel** (content gathering has lead time, not code-blocked).
+4. **Ship 4**, then **5**, then **6**.
+
+## Review
+
+### Phase 0 — Deep Pine palette (done)
+
+Applied the Deep Pine palette repo-wide and fixed the accent-as-text accessibility issue.
+
+Files changed:
+- `src/app/globals.css` — dark + light token blocks → pine; added `--primary-text` +
+  `--color-primary-text` mapping; retinted ring, focus-outline, scrollbar, gradient, skip-link.
+- `src/app/layout.tsx`, `src/components/ui/theme-toggle.tsx` — theme-color init values.
+- `src/lib/seo.ts`, `public/manifest.json` — themeColor / theme_color / background_color.
+- `public/logo.svg`, `public/icon.svg`, `src/app/icon.svg` — brand mark fill → `#1F6F5C`.
+- Accent-as-text → `text-primary-text`: `badge.tsx` (all eyebrows), `Hero` badge,
+  `Trust`/`Services`/`About`/`Process` icons, `Process` step number, `Contact` icons,
+  `Work` link hover, `accordion` trigger hover.
+
+Verification:
+- `npm run lint` clean · `npm run build` succeeds (static export, 6/6 pages).
+- grep confirms zero old maroon/neutral hex remain in `src/` or `public/`.
+- Contrast: fill `#1F6F5C` + white ≥6:1 (dark) / 7:1 (light); `--primary-text` `#4FB89A`
+  7.9:1 on dark, `#15604F` 7.6:1 on light — all AA, most AAA.
+
+Not done (deferred to later phases): dimmer text token for `text-muted/60` opacity usages
+(Phase 1), and the non-color audit items (Phases 2–6).
+
+---
+
+# Blog Section — Implementation Plan (2026-07-12)
+
+Add a lead-gen blog: `/blog` index + 3 posts, zero new dependencies (typed TSX posts,
+shared PostLayout, registry in `src/lib/blog.ts` mirroring the `site-content.ts` idiom).
+
+- [x] `src/lib/blog.ts` — post registry (slug/title/description/tag/date/readingTime/brief) + per-post Metadata + BlogPosting JSON-LD builders
+- [x] `src/components/blog/post-layout.tsx` — shared article shell: Navbar, back link, eyebrow tag, h1, brief block (signature element), `.blog-prose` body, contact CTA, Footer
+- [x] `src/app/blog/page.tsx` — index page with Blog JSON-LD
+- [x] Post: `bilingual-jewelry-storefront-razorpay` (case study — BFG)
+- [x] Post: `custom-internal-tools-vs-off-the-shelf` (guide — TexLedger tie-in)
+- [x] Post: `async-freelance-projects-global-teams` (process/trust)
+- [x] `globals.css` — `.blog-prose` article typography from existing tokens
+- [x] `Navbar.tsx` / `Footer.tsx` — hash links → `/#...` so they work from blog pages; add Blog link
+- [x] `src/app/sitemap.ts` — add /blog + post URLs
+- [x] Verify: lint + build + browser pass (both themes, mobile)
+
+### Blog review (done)
+
+Shipped `/blog` + 3 posts with zero new dependencies (typed TSX posts + PostLayout +
+registry in `src/lib/blog.ts`). Navbar/Footer hash links now `/#...` so they work from
+blog pages; Blog link added with pathname-based active state. Desktop nav moved from
+`md:` to `lg:` breakpoint — 7 links overflowed the logo at ~800px. Sitemap emits blog
+URLs; posts carry BlogPosting JSON-LD + article OG metadata. Verified: lint clean,
+build 10/10 static, browser pass at 375/800/1280 in both themes.

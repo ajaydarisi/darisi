@@ -304,6 +304,78 @@ html[data-theme="light"] {
   animation: pulse-glow 4s ease-in-out infinite;
 }
 
+/* Long-form article typography (blog posts) */
+.blog-prose {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+
+.blog-prose > * + * {
+  margin-top: 1.25rem;
+}
+
+.blog-prose h2 {
+  margin-top: 3rem;
+  font-size: 1.4375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.blog-prose h3 {
+  margin-top: 2.25rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.blog-prose strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.blog-prose a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 200ms ease;
+}
+
+.blog-prose a:hover {
+  text-decoration-color: var(--primary-hover);
+}
+
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.5rem;
+}
+
+.blog-prose ul {
+  list-style-type: disc;
+}
+
+.blog-prose ol {
+  list-style-type: decimal;
+}
+
+.blog-prose li {
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.blog-prose li::marker {
+  color: var(--muted-subtle);
+}
+
+.blog-prose blockquote {
+  border-left: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
+  padding-left: 1.25rem;
+  color: var(--muted);
+}
+
 .skip-link {
   position: fixed;
   left: 1rem;
