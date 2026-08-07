@@ -1,9 +1,12 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="-38.5 -30 572 572" xmlns="http://www.w3.org/2000/svg">
   <!--
     Golden Ratio "D" Favicon — Darisi (filled for small-size legibility)
-    Outer D: height=400, width=400/φ ≈ 247  →  ratio ≈ φ
-    Inner counter offset by stem width (72px) and padding (64px)
+    Glyph path is byte-identical to /logo.svg; only the frame differs.
+    Glyph ink box is x 120..375, y 56..456 — the outer curve peaks at 375,
+    not at its 460 control point — so the viewBox is offset to centre it in
+    a 572 tile. Glyph height is 70% of the tile, corner radius is 22%.
   -->
+  <rect x="-38.5" y="-30" width="572" height="572" rx="126" fill="#F6F2EA" />
   <path
     fill-rule="evenodd"
     clip-rule="evenodd"
