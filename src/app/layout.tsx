@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import {
   PLAUSIBLE_API_HOST,
@@ -9,19 +9,14 @@ import {
 } from "@/lib/analytics";
 import { siteMetadata, siteViewport } from "@/lib/seo";
 
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/InterVariable.woff2",
-      style: "normal",
-      weight: "100 900",
-    },
-    {
-      path: "./fonts/InterVariable-Italic.woff2",
-      style: "italic",
-      weight: "100 900",
-    },
-  ],
+// Subset to latin at build time and self-hosted in the output. The previous
+// next/font/local setup shipped the *unsubsetted* InterVariable files — 352 KB
+// upright + 388 KB italic, both `rel=preload` at high priority, which saturates
+// a slow connection before anything can paint.
+const inter = Inter({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: "variable",
   variable: "--font-inter",
   display: "swap",
 });

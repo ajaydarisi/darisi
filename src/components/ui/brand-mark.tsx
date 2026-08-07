@@ -21,15 +21,14 @@ interface BrandMarkProps {
   variant: BrandMarkVariant;
   className?: string;
   alt?: string;
-  priority?: boolean;
 }
 
-export function BrandMark({
-  variant,
-  className,
-  alt,
-  priority = false,
-}: BrandMarkProps) {
+// No preload: `as="image"` never matches how the browser fetches a CSS
+// mask-image, so the hint was discarded ("credentials mode does not match")
+// and the SVG was fetched twice. The mask is same-origin and ~1 KB, and the
+// stylesheet referencing it is render-blocking, so the fetch already starts as
+// early as it usefully can.
+export function BrandMark({ variant, className, alt }: BrandMarkProps) {
   const asset = assets[variant];
   const label = alt ?? asset.alt;
   const style = {
@@ -45,15 +44,12 @@ export function BrandMark({
   } satisfies CSSProperties;
 
   return (
-    <>
-      {priority && <link rel="preload" as="image" href={asset.src} fetchPriority="high" />}
-      <span
-        role={label ? "img" : undefined}
-        aria-label={label || undefined}
-        aria-hidden={label ? undefined : true}
-        className={`block bg-primary ${className ?? ""}`}
-        style={style}
-      />
-    </>
+    <span
+      role={label ? "img" : undefined}
+      aria-label={label || undefined}
+      aria-hidden={label ? undefined : true}
+      className={`block bg-primary ${className ?? ""}`}
+      style={style}
+    />
   );
 }

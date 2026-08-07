@@ -1,3 +1,41 @@
+# Mobile performance (PSI 73)
+
+Status: **partially implemented** — font/dead-code fixes landed and verified locally;
+image resizing deferred, see below.
+
+Baseline (PSI mobile, Aug 7 2026, Lighthouse 13.4.1, Moto G Power, Slow 4G):
+Performance **73** · A11y 100 · Best Practices 100 · SEO 100.
+FCP 1.6s · **LCP 6.5s** · TBT 60ms · CLS 0 · SI 5.2s. LCP contributed +2 of a possible 25.
+
+LCP element is the hero subtitle `<p role="doc-subtitle">`; PSI's breakdown showed 0ms TTFB
+and **2,520ms element render delay** — no resource load, so the cause is upstream contention.
+
+Measured on live darisi.in: `InterVariable.woff2` (352,540 B) and `InterVariable_Italic.woff2`
+(388,276 B) both fetched at `rel=preload` high priority starting at 436ms. 740 KB of font on a
+Slow-4G pipe ahead of everything else. `next/font/local` does not subset.
+
+- [x] `layout.tsx` — `next/font/local` → `next/font/google` Inter, `subsets: ["latin"]`.
+      Critical-path font bytes 740,816 → 100,668 (-86%). Still self-hosted in the output.
+- [x] `brand-mark.tsx` — drop the `as="image"` preload for the wordmark. It never matched how
+      a CSS `mask-image` is fetched ("credentials mode does not match"), so it was discarded
+      and the SVG fetched twice. Verified: 2 fetches → 1. Removed the now-dead `priority` prop.
+- [x] Delete `Aurora.tsx` / `ShinyText.tsx` (zero importers) and drop their `ogl` + `motion` deps.
+- [x] `browserslist` aligned to Tailwind v4's own baseline (Chrome 111 / Safari 16.4 / FF 128).
+- [ ] **Not fixed — images, 86 KiB.** Screenshots are 997x748 for a 472x261 box. `next/image`
+      cannot resize because `output: "export"` forces `images.unoptimized: true`, so the source
+      files must be resized. `object-cover object-top` means a naive crop changes what is visible
+      at other breakpoints; needs a real image pipeline, not a one-off resize.
+- [ ] **Not fixable from userland — "Legacy JavaScript" 14 KiB.** Those polyfills live in Next's
+      own precompiled chunks, not in code SWC transpiles from `src/`. Confirmed: setting
+      `browserslist` and refreshing `caniuse-lite` left them in place.
+
+Open finding: `globals.css:1` `@import`s DM Sans / Source Serif 4 / DM Mono from Google Fonts,
+but the import is **stripped at build** (0 occurrences in the built CSS). The site actually
+renders Inter / Georgia / system-mono. Design intent and shipped output disagree — and
+"fixing" the import would add a render-blocking third-party chain plus three font families.
+
+---
+
 # Sitemap + SEO hardening
 
 Status: **implemented, verified** — see `## Review` at the end of this section.

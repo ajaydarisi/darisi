@@ -31,7 +31,6 @@ export function Hero() {
           <BrandMark
             variant="wordmark"
             alt="Darisi"
-            priority
             className="w-[clamp(16rem,48vw,54rem)]"
           />
           {/* Wordmark viewBox carries baseline padding below the letters (~21.9% of its height); lift the dot by that amount so it sits on the letters' baseline, not the box edge. */}
