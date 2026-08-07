@@ -114,6 +114,81 @@ export const ogImage = {
   type: "image/png",
 } as const;
 
+/**
+ * Canonical `@id`s for the site's structured-data entities. Shared so a post's
+ * author resolves to the *same* Person node the homepage defines rather than a
+ * detached duplicate — one entity in the graph, not one per page.
+ */
+export const entityIds = {
+  person: `${seoConfig.siteUrl}/#person`,
+  website: `${seoConfig.siteUrl}/#website`,
+  blog: `${seoConfig.siteUrl}/blog/#blog`,
+} as const;
+
+/**
+ * The Person entity, emitted in full on every page that references it.
+ *
+ * A bare `{"@id": ...}` reference is only resolvable when the target node is in
+ * the same document, and Google requires `author.name` to be present for
+ * Article rich results. Repeating the node under one stable `@id` gives both:
+ * the required properties locally, and a single consolidated entity globally.
+ */
+export function buildPersonNode() {
+  return {
+    "@type": "Person",
+    "@id": entityIds.person,
+    name: seoConfig.personName,
+    alternateName: seoConfig.personAlternateName,
+    url: seoConfig.siteUrl,
+    image: `${seoConfig.siteUrl}${seoConfig.ogImagePath}`,
+    description: seoConfig.description,
+    email: `mailto:${seoConfig.contactEmail}`,
+    jobTitle: seoConfig.jobTitle,
+    sameAs: seoConfig.sameAs,
+    knowsAbout: seoConfig.knowsAbout,
+    homeLocation: {
+      "@type": "Place",
+      name: seoConfig.location.label,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: seoConfig.location.city,
+        addressRegion: seoConfig.location.region,
+        addressCountry: seoConfig.location.countryCode,
+      },
+    },
+  };
+}
+
+/** Emitted alongside anything that points at `#website`, for the same reason. */
+export function buildWebSiteNode() {
+  return {
+    "@type": "WebSite",
+    "@id": entityIds.website,
+    name: seoConfig.siteName,
+    url: seoConfig.siteUrl,
+    description: seoConfig.shortDescription,
+    inLanguage: seoConfig.language,
+    publisher: { "@id": entityIds.person },
+  };
+}
+
+/** Home › … trail, rendered by Google directly in the result snippet. */
+export function buildBreadcrumbJsonLd(
+  trail: ReadonlyArray<{ name: string; path: string }>,
+) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: "Home", path: "/" }, ...trail].map(
+      (crumb, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: crumb.name,
+        item: `${seoConfig.siteUrl}${crumb.path === "/" ? "" : crumb.path}`,
+      }),
+    ),
+  };
+}
+
 const verification: Metadata["verification"] = {};
 
 if (googleSiteVerification) {
@@ -143,6 +218,9 @@ export const siteMetadata: Metadata = {
   publisher: seoConfig.personName,
   alternates: {
     canonical: seoConfig.siteUrl,
+    types: {
+      "application/rss+xml": `${seoConfig.siteUrl}/feed.xml`,
+    },
   },
   openGraph: {
     type: "website",

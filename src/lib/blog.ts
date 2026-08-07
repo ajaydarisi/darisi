@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { ogImage, seoConfig } from "@/lib/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildPersonNode,
+  buildWebSiteNode,
+  entityIds,
+  ogImage,
+  seoConfig,
+} from "@/lib/seo";
 
 export interface BlogBriefItem {
   label: string;
@@ -176,6 +183,7 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
     description: post.description,
     alternates: {
       canonical: url,
+      types: { "application/rss+xml": `${SITE_URL}/feed.xml` },
     },
     openGraph: {
       type: "article",
@@ -185,6 +193,7 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
       description: post.description,
       publishedTime: post.datePublished,
       modifiedTime: postLastModified(post),
+      section: post.tag,
       authors: [seoConfig.personName],
       images: [ogImage],
     },
@@ -202,49 +211,66 @@ export function buildPostJsonLd(post: BlogPostMeta) {
 
   return {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "@id": `${url}/#article`,
-    headline: post.title,
-    description: post.description,
-    url,
-    mainEntityOfPage: url,
-    datePublished: post.datePublished,
-    dateModified: postLastModified(post),
-    inLanguage: "en-US",
-    image: `${SITE_URL}${seoConfig.ogImagePath}`,
-    author: {
-      "@type": "Person",
-      name: seoConfig.personName,
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Person",
-      name: seoConfig.personName,
-      url: SITE_URL,
-    },
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${url}/#article`,
+        headline: post.title,
+        description: post.description,
+        url,
+        mainEntityOfPage: url,
+        datePublished: post.datePublished,
+        dateModified: postLastModified(post),
+        articleSection: post.tag,
+        inLanguage: "en-US",
+        image: ogImage.url,
+        // `@id` references, not inline copies: this is the same Person the
+        // homepage defines, and the same Blog the index defines.
+        author: { "@id": entityIds.person },
+        publisher: { "@id": entityIds.person },
+        isPartOf: { "@id": entityIds.blog },
+      },
+      // Minimal Blog node so the post's `isPartOf` resolves in-document.
+      {
+        "@type": "Blog",
+        "@id": entityIds.blog,
+        name: blogIndexTitle,
+        url: `${SITE_URL}/blog`,
+      },
+      buildPersonNode(),
+      buildBreadcrumbJsonLd([
+        { name: "Blog", path: "/blog" },
+        { name: post.title, path: `/blog/${post.slug}` },
+      ]),
+    ],
   };
 }
 
 export function buildBlogIndexJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Blog",
-    "@id": `${SITE_URL}/blog/#blog`,
-    name: blogIndexTitle,
-    description: blogIndexDescription,
-    url: `${SITE_URL}/blog`,
-    inLanguage: "en-US",
-    author: {
-      "@type": "Person",
-      name: seoConfig.personName,
-      url: SITE_URL,
-    },
-    blogPost: blogPosts.map((post) => ({
-      "@type": "BlogPosting",
-      "@id": `${SITE_URL}/blog/${post.slug}/#article`,
-      headline: post.title,
-      url: `${SITE_URL}/blog/${post.slug}`,
-      datePublished: post.datePublished,
-    })),
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": entityIds.blog,
+        name: blogIndexTitle,
+        description: blogIndexDescription,
+        url: `${SITE_URL}/blog`,
+        inLanguage: "en-US",
+        isPartOf: { "@id": entityIds.website },
+        author: { "@id": entityIds.person },
+        blogPost: blogPosts.map((post) => ({
+          "@type": "BlogPosting",
+          "@id": `${SITE_URL}/blog/${post.slug}/#article`,
+          headline: post.title,
+          url: `${SITE_URL}/blog/${post.slug}`,
+          datePublished: post.datePublished,
+          dateModified: postLastModified(post),
+        })),
+      },
+      buildWebSiteNode(),
+      buildPersonNode(),
+      buildBreadcrumbJsonLd([{ name: "Blog", path: "/blog" }]),
+    ],
   };
 }

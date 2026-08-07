@@ -1,4 +1,10 @@
-import { seoConfig } from "@/lib/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildPersonNode,
+  buildWebSiteNode,
+  entityIds,
+  seoConfig,
+} from "@/lib/seo";
 
 export interface ProjectAction {
   href: string;
@@ -25,8 +31,8 @@ export interface SkillArea {
 }
 
 const SITE_URL = seoConfig.siteUrl;
-const PERSON_ID = `${SITE_URL}/#person`;
-const WEBSITE_ID = `${SITE_URL}/#website`;
+const PERSON_ID = entityIds.person;
+const WEBSITE_ID = entityIds.website;
 const WEBPAGE_ID = `${SITE_URL}/#webpage`;
 const WORK_ID = `${SITE_URL}/#selected-work`;
 
@@ -152,6 +158,9 @@ export function buildWorkPageJsonLd() {
         mainEntity: { "@id": `${url}/#selected-work` },
       },
       buildWorkItemList(`${url}/#selected-work`),
+      buildWebSiteNode(),
+      buildPersonNode(),
+      buildBreadcrumbJsonLd([{ name: "Selected Work", path: "/work" }]),
     ],
   };
 }
@@ -162,40 +171,8 @@ export function buildJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Person",
-        "@id": PERSON_ID,
-        name: seoConfig.personName,
-        alternateName: seoConfig.personAlternateName,
-        url: SITE_URL,
-        image: ogImageUrl,
-        description: seoConfig.description,
-        email: `mailto:${CONTACT_EMAIL}`,
-        jobTitle: seoConfig.jobTitle,
-        sameAs: seoConfig.sameAs,
-        knowsAbout: seoConfig.knowsAbout,
-        homeLocation: {
-          "@type": "Place",
-          name: seoConfig.location.label,
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: seoConfig.location.city,
-            addressRegion: seoConfig.location.region,
-            addressCountry: seoConfig.location.countryCode,
-          },
-        },
-      },
-      {
-        "@type": "WebSite",
-        "@id": WEBSITE_ID,
-        name: seoConfig.siteName,
-        url: SITE_URL,
-        description: seoConfig.shortDescription,
-        inLanguage: seoConfig.language,
-        publisher: {
-          "@id": PERSON_ID,
-        },
-      },
+      buildPersonNode(),
+      buildWebSiteNode(),
       {
         "@type": "ProfilePage",
         "@id": WEBPAGE_ID,

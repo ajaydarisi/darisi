@@ -7,7 +7,10 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      // `/llms.txt` is listed explicitly because the `.txt` disallow below
+      // would otherwise swallow it. Google resolves conflicts by longest
+      // literal match, so the specific Allow wins.
+      allow: ["/", "/llms.txt"],
       // The static export writes an RSC payload beside every route
       // (`index.txt`, `blog.txt`, per-post, plus `__next.*`). A static host
       // serves those as text/plain, making them crawlable near-duplicates of

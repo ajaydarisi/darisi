@@ -1,3 +1,75 @@
+# Full SEO pass — remaining gaps
+
+Status: **implemented, verified** — see `## Review` below.
+
+Audited the built output rather than listing best practices. Already in place and not
+re-done: canonicals, sitemap with content-derived `lastmod`, robots, OG/Twitter on every
+page, Person/WebSite/ProfilePage/ItemList/Blog/BlogPosting/CollectionPage JSON-LD,
+Lighthouse SEO 100, Core Web Vitals ~96.
+
+## Gaps found
+
+1. **Fragmented entity graph.** `BlogPosting.author` and `.publisher` are standalone Person
+   objects with no `@id`, so Google sees a different person on every post instead of the
+   `#person` entity the homepage defines. Nothing links a post back to the `#blog` node either.
+2. **No `BreadcrumbList` anywhere** (0 occurrences). `/work` and the five posts are nested
+   pages; breadcrumbs are rendered directly in search results.
+3. **No feed.** A five-post blog with no RSS/Atom — nothing to subscribe to or syndicate.
+4. **`tag` is dead data.** Each post carries `tag` ("Guide" / "Case Study" / "Process") and it
+   reaches neither `article:section` nor JSON-LD `articleSection`.
+5. **No `llms.txt`** — Lighthouse's Agentic Browsing category reports it Not Applicable.
+
+## Changes
+
+- [x] `seo.ts` — shared `entityIds`, plus `buildPersonNode()` / `buildWebSiteNode()` /
+      `buildBreadcrumbJsonLd()` so one definition serves every page
+- [x] `blog.ts` — author/publisher as `@id` refs, `isPartOf` → `#blog`, `articleSection`,
+      `BreadcrumbList` (Home › Blog › Post)
+- [x] `site-content.ts` — `BreadcrumbList` on `/work`; homepage now reuses the shared nodes
+- [x] `blog/page.tsx` — `BreadcrumbList` on the index
+- [x] `openGraph.section` per post from the existing `tag`
+- [x] `src/app/feed.xml/route.ts` — RSS from `blogPosts`, advertised via `alternates.types`
+- [x] `src/app/llms.txt/route.ts` — generated from `seoConfig`
+- [x] Verified (below)
+
+Deliberately skipped: per-post `meta keywords` (Google ignores it entirely — adding a dead
+signal is not optimisation).
+
+## Review
+
+### Two bugs caught by verification, both self-inflicted
+
+- **`Disallow: /*.txt$` blocked the new `/llms.txt`.** The rule added earlier to hide the RSC
+  payloads swallowed it. Added an explicit `Allow: /llms.txt`; Google resolves conflicts by
+  longest literal match, so the specific Allow wins.
+- **Collapsing `author`/`publisher` to bare `@id` refs produced dangling pointers.** A
+  `{"@id": …}` only resolves inside the same document, and Google requires `author.name`
+  present for Article rich results — so the "consolidation" would have *removed* a required
+  field. Wrote a checker that walks every graph and asserts each referenced `@id` exists
+  locally; it found `#person` missing on 3 page types, then `#website` on 2 more and `#blog`
+  on all 5 posts. Fixed by emitting full shared nodes under stable `@id`s. Final run:
+  **8/8 pages, zero dangling references.**
+
+### Verified
+
+- Entity graph: home 4 nodes, `/work` 5, `/blog` 4, each post 4 — all references resolve.
+- All 5 `BlogPosting` nodes retain every Google-required and recommended field, now plus
+  `articleSection` and `isPartOf`.
+- Breadcrumbs: Home › Blog › Post, Home › Blog, Home › Selected Work.
+- `feed.xml` parses as XML: 5 items, RFC-822 dates (not ISO — RSS 2.0 requires it),
+  self-referencing `atom:link`; advertised via `<link rel="alternate">` on home, index, posts.
+- `llms.txt` generated from config; robots allows it.
+- Homepage Person/WebSite nodes unchanged after the refactor to shared builders.
+- Sitemap still byte-identical across rebuilds; 8 urls, 6 images. Lint and build clean.
+
+### Note
+
+`alternates` has the same "child replaces parent" behaviour as `openGraph` — `/blog` and the
+posts repeat the feed link explicitly. `/work` overrides `alternates` for its canonical and so
+does not advertise the feed; harmless, since the feed is blog content.
+
+---
+
 # Generated OG image
 
 Status: **implemented, verified** — see `## Review` below.

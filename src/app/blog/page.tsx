@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   description: blogIndexDescription,
   alternates: {
     canonical: `${seoConfig.siteUrl}/blog`,
+    // A child route's `alternates` replaces the parent's, so the feed link
+    // has to be repeated here or /blog silently loses it.
+    types: { "application/rss+xml": `${seoConfig.siteUrl}/feed.xml` },
   },
   openGraph: {
     type: "website",
