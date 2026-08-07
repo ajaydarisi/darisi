@@ -142,7 +142,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <span
         aria-hidden="true"
         className={cn(
-          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary-text shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
+          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
           isLight ? "translate-x-8" : "translate-x-0"
         )}
       >

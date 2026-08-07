@@ -21,6 +21,7 @@ const links = [
   { label: "Work", href: "/work" },
   { label: "Skills", href: "/#skills" },
   { label: "About", href: "/#about" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -40,9 +41,7 @@ export function Navbar() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -56,9 +55,7 @@ export function Navbar() {
       })
       .filter((el): el is HTMLElement => el !== null);
 
-    if (sections.length === 0) {
-      return;
-    }
+    if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -66,9 +63,7 @@ export function Navbar() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-        if (visible[0]) {
-          setActiveSection(visible[0].target.id);
-        }
+        if (visible[0]) setActiveSection(visible[0].target.id);
       },
       { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 1] }
     );
@@ -80,64 +75,54 @@ export function Navbar() {
   return (
     <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
       <header
-        className={`sticky top-0 z-[60] border-b transition-all duration-[var(--motion-base)] ${
+        className={`fixed inset-x-0 top-0 z-[60] w-screen border-b transition-all duration-[var(--motion-base)] ${
           scrolled
-            ? "border-border-subtle bg-background/95 shadow-[var(--shadow-floating)] backdrop-blur-xl"
-            : "border-border-subtle/70 bg-background/85 backdrop-blur-md"
+            ? "border-border bg-background/95 backdrop-blur-xl"
+            : "border-transparent bg-transparent"
         }`}
       >
         <nav
           aria-label="Main navigation"
-          className="site-shell flex h-[4.5rem] items-center justify-between"
+          className="site-shell flex h-[4.25rem] items-center justify-between"
         >
-          <Link
-            href="/"
-            className="group flex items-center gap-3"
-            aria-label="Darisi home"
-          >
-            <BrandMark
-              variant="mark"
-              className="h-8 w-8"
-            />
-            <span className="hidden font-utility text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-foreground sm:inline">
-              Ajay Darisi
-            </span>
+          <Link href="/" className="flex items-center" aria-label="Darisi home">
+            <BrandMark variant="mark" alt="" className="h-9 w-9" />
           </Link>
 
-          <div className="hidden items-center gap-7 lg:flex xl:gap-9">
-            {links.map((link) => {
-              const isActive = isLinkActive(link.href);
+          <div className="hidden items-center lg:flex">
+            <div className="flex items-center gap-2">
+              {links.map((link) => {
+                const isActive = isLinkActive(link.href);
 
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`relative py-2 font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] transition-colors duration-[var(--motion-fast)] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-primary-text after:transition-transform after:duration-[var(--motion-base)] after:content-[''] ${
-                    isActive
-                      ? "text-foreground after:scale-x-100"
-                      : "text-muted-foreground hover:text-foreground after:scale-x-0"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Button asChild size="sm">
-                <Link
-                  href="/#contact"
-                  onClick={() =>
-                    trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
-                      location: "desktop_nav",
-                    })
-                  }
-                >
-                  Get in Touch
-                </Link>
-              </Button>
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    aria-current={isActive ? "true" : undefined}
+                    className={`px-3.5 py-2 text-sm transition-colors duration-[var(--motion-fast)] ${
+                      isActive
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
+            <ThemeToggle className="ml-3" />
+            <Button asChild className="ml-3 h-10 rounded-none px-6 text-[0.8125rem] shadow-none hover:translate-y-0 hover:shadow-none">
+              <Link
+                href="/#contact"
+                onClick={() =>
+                  trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
+                    location: "desktop_nav",
+                  })
+                }
+              >
+                Get in Touch
+              </Link>
+            </Button>
           </div>
 
           <SheetTrigger asChild>
@@ -145,14 +130,10 @@ export function Navbar() {
               type="button"
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="size-[1.875rem] p-0 lg:hidden"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
-              {mobileOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </SheetTrigger>
         </nav>
@@ -160,7 +141,7 @@ export function Navbar() {
 
       <SheetContent
         side="top"
-        className="top-[4.5rem] min-h-[calc(100svh-4.5rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
+        className="top-[4.25rem] min-h-[calc(100svh-4.25rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
@@ -177,9 +158,7 @@ export function Navbar() {
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
                   className={`flex items-center border-b border-border-subtle px-1 py-4 font-display text-2xl transition-colors duration-[var(--motion-base)] hover:text-primary-text ${
-                    isActive
-                      ? "text-primary-text"
-                      : "text-muted-foreground"
+                    isActive ? "text-primary-text" : "text-muted-foreground"
                   }`}
                 >
                   {link.label}

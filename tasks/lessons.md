@@ -7,3 +7,4 @@
 - When a wordmark incorporates an existing brand mark, reuse the exact original path with a uniform scale rather than recreating its geometry.
 - Treat a palette as semantic roles, not a set of attractive swatches: validate each text, focus, action, and control pairing against its real surface in both themes.
 - Keep established brand artwork visually unchanged unless a new treatment is explicitly approved; UI contrast fixes should not silently brighten the logo.
+- When a supplied visual mockup is called "exact," validate the rendered layout against it at a matching viewport before declaring a redesign complete; a thematic interpretation is not sufficient.

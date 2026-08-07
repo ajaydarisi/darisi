@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Footer } from "@/components/sections/Footer";
-import { Navbar } from "@/components/sections/Navbar";
 import { WorkIndex } from "@/components/sections/work-index";
 
 const title = "Selected Work | Darisi";
@@ -16,13 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
-  return (
-    <>
-      <Navbar />
-      <main id="main-content" tabIndex={-1}>
-        <WorkIndex />
-      </main>
-      <Footer />
-    </>
-  );
+  return <WorkIndex />;
 }

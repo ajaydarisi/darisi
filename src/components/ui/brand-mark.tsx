@@ -51,7 +51,7 @@ export function BrandMark({
         role={label ? "img" : undefined}
         aria-label={label || undefined}
         aria-hidden={label ? undefined : true}
-        className={`block bg-[#7DD3C7] ${className ?? ""}`}
+        className={`block bg-primary ${className ?? ""}`}
         style={style}
       />
     </>

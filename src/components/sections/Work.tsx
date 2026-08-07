@@ -3,74 +3,99 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
-import { Badge } from "@/components/ui/badge";
-import { EvidenceLedger } from "@/components/ui/evidence-ledger";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
 
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-heading" className="section-space">
+    <section
+      id="work"
+      aria-labelledby="work-heading"
+      className="border-b border-border-subtle pt-[4.5rem] pb-[5.3125rem]"
+    >
       <div className="site-shell">
         <AnimateOnScroll variant="fade-up">
-          <SectionHeading
-            eyebrow="Selected work"
-            titleId="work-heading"
-            title="Projects I’ve designed and built, end to end."
-            description="Each case is organised around the problem, my ownership, and the practical outcome."
-          />
+          <div className="relative">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-6 bg-accent" aria-hidden="true" />
+              <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
+                Selected work · {String(projects.length).padStart(2, "0")}
+              </p>
+            </div>
+            <h2
+              id="work-heading"
+              className="mt-12 max-w-[40rem] font-display text-[clamp(3.25rem,6vw,4.8rem)] font-medium leading-[0.96] tracking-[-0.055em] text-foreground lg:ml-[22.4%]"
+            >
+              Systems that make{" "}
+              <span className="italic text-accent">complexity usable.</span>
+            </h2>
+          </div>
         </AnimateOnScroll>
 
-        <div className="mt-14 divide-y divide-border-subtle border-y border-border-subtle">
+        <div className="mt-11 space-y-32">
           {projects.map((project, index) => (
             <AnimateOnScroll key={project.title} variant="fade-up" delay={index * 100}>
               <article
-                className={`portfolio-case grid gap-8 py-10 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-16 ${
-                  index % 2 ? "portfolio-case--reverse lg:[&>figure]:order-2" : ""
+                className={`grid gap-8 lg:grid-cols-[minmax(0,46.8%)_minmax(0,1fr)] lg:items-start lg:gap-[4.1%] ${
+                  index % 2 ? "lg:[&>figure]:order-2" : ""
                 }`}
               >
-                <figure className="group relative aspect-[16/10] overflow-hidden border border-border-subtle bg-elevated">
+                <figure className="group relative aspect-[4/3] overflow-hidden bg-elevated">
                   <Image
                     src={project.image}
                     alt={`Screenshot of ${project.title}`}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    sizes="(min-width: 1024px) 47vw, 100vw"
                     className="object-cover object-top transition-transform duration-[var(--motion-enter)] group-hover:scale-[1.02]"
                   />
-                  <figcaption className="absolute inset-x-0 bottom-0 border-t border-[#2A4A47] bg-[#0F2724]/75 px-4 py-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.14em] text-[#F6F2EA] backdrop-blur-sm">
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-[#0F2724]/78 px-4 py-2.5 font-utility text-[0.625rem] font-medium uppercase tracking-[0.14em] text-[#F6F2EA] backdrop-blur-sm">
                     {project.category}
                   </figcaption>
                 </figure>
 
-                <div className="min-w-0">
-                  <p className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-primary-text">
-                    {String(index + 1).padStart(2, "0")} / {project.category}
+                <div className="min-w-0 lg:pt-1">
+                  <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
+                    {String(index + 1).padStart(2, "0")} · {project.category}
                   </p>
-                  <h3 className="mt-4 font-display text-3xl font-medium leading-tight tracking-[-0.035em] text-foreground sm:text-4xl">
+                  <h3 className="mt-4 font-display text-[clamp(2.25rem,4vw,3.2rem)] font-medium leading-[0.98] tracking-[-0.045em] text-foreground">
                     {project.title}
                   </h3>
-                  <p className="mt-4 max-w-xl leading-relaxed text-[var(--text-body)]">
+                  <p className="mt-4 max-w-[38rem] text-[0.9375rem] leading-6 text-[var(--text-body)]">
                     {project.summary}
                   </p>
 
-                  <EvidenceLedger
-                    items={[
+                  <dl className="mt-6 grid gap-4 border-y border-border-subtle py-4 sm:grid-cols-3 sm:gap-5">
+                    {[
                       { label: "Problem", content: project.problem },
                       { label: "Role", content: project.role },
                       { label: "Outcome", content: project.outcome },
-                    ]}
-                  />
+                    ].map((item) => (
+                      <div key={item.label}>
+                        <dt className="font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-primary-text">
+                          {item.label}
+                        </dt>
+                        <dd className="mt-2 text-xs leading-5 text-muted-foreground">
+                          {item.content}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
 
-                  <ul className="mt-6 flex flex-wrap gap-2" aria-label="Technologies used">
+                  <ul
+                    className="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-utility text-[0.625rem] font-medium uppercase tracking-[0.1em] text-muted-foreground"
+                    aria-label="Technologies used"
+                  >
                     {project.tech.map((tech) => (
-                      <li key={tech}>
-                        <Badge variant="tag">{tech}</Badge>
+                      <li
+                        key={tech}
+                        className="after:ml-3 after:text-border after:content-['/'] last:after:hidden"
+                      >
+                        {tech}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-7">
+                  <div className="mt-6">
                     {project.action ? (
                       <a
                         href={project.action.href}
@@ -84,10 +109,10 @@ export function Work() {
                         }
                       >
                         {project.action.label}
-                        <ArrowUpRight className="h-4 w-4" />
+                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                       </a>
                     ) : project.note ? (
-                      <p className="border-l-2 border-primary-text pl-3 text-sm leading-relaxed text-muted-foreground">
+                      <p className="border-l border-primary-text pl-3 text-sm leading-relaxed text-muted-foreground">
                         {project.note}
                       </p>
                     ) : null}
