@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WorkIndex } from "@/components/sections/work-index";
+import { ogImage } from "@/lib/seo";
 import { buildWorkPageJsonLd } from "@/lib/site-content";
 
 const jsonLd = buildWorkPageJsonLd();
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/work" },
-  openGraph: { title, description, url: "/work" },
-  twitter: { title, description },
+  openGraph: { title, description, url: "/work", images: [ogImage] },
+  twitter: { card: "summary_large_image", title, description, images: [ogImage.url] },
 };
 
 export default function WorkPage() {

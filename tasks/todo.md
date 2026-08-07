@@ -1,3 +1,85 @@
+# Generated OG image
+
+Status: **implemented, verified** — see `## Review` below.
+
+## Why
+
+`public/og-image.png` renders "DARISI / Build. Design. Launch. / Creative Technology Studio"
+in the old red. Verified by opening it. That is the card every share of darisi.in produces on
+LinkedIn, WhatsApp, Slack and Twitter — selling a studio identity the site was deliberately
+repositioned away from.
+
+This is the third instance of one failure mode in this session: the red favicon, the red
+wordmark, and now this — static assets that silently outlived the content they describe.
+So the fix is to generate the card from `seoConfig` at build time rather than hand-author
+another PNG that can drift again.
+
+## Constraints to verify before committing to the approach
+
+- Does `opengraph-image.tsx` (`next/og` `ImageResponse`) build under `output: "export"`?
+- What URL does it emit? JSON-LD (`Person.image`, `primaryImageOfPage`) and
+  `buildPostMetadata` all reference a **stable absolute** URL via `seoConfig.ogImagePath`,
+  so a hashed path would force those to change too.
+- Satori does **not** support woff2, and the repo's only font files are woff2 (now orphaned
+  by the switch to `next/font/google`). Confirm whether Next ships a usable default font,
+  otherwise a ttf/woff has to be sourced.
+
+## Plan
+
+- [x] Spike `src/app/opengraph-image.tsx`, build, and record the emitted path + whether fonts work
+- [x] Design the card from existing tokens only — `#0F2724` canvas, `#F6F2EA` text,
+      `#C8DAD6` supporting, `#DDA082` accent. Content from `seoConfig`, nothing hardcoded
+- [x] Reconcile the metadata so exactly one image is referenced site-wide
+- [x] Delete `public/og-image.png` once nothing points at it
+- [x] Verify: built PNG renders correctly, `og:image` present on `/`, `/work`, `/blog` and a
+      post, JSON-LD image URL resolves, lint + build clean
+
+## Review
+
+### What the spike settled (all three unknowns were real)
+
+1. `ImageResponse` **fails** under `output: "export"` without
+   `export const dynamic = "force-static"` — same requirement as `sitemap.ts`/`robots.ts`.
+2. The convention emits `out/opengraph-image` — **no file extension** — and puts a
+   `?<contenthash>` cache-buster on the meta tag. So `/opengraph-image` (bare) is the stable
+   URL for JSON-LD, and the host must be told the content type.
+3. Fonts work: Next's `ImageResponse` ships a usable default, so no ttf/woff had to be
+   sourced. Satori does not read woff2 and the repo's only font files are woff2.
+
+Also rejected along the way: generating the PNG into `public/` from a prebuild script, which
+would have kept `/og-image.png` stable. `next/og` is not importable outside Next's bundler
+(`ERR_MODULE_NOT_FOUND`).
+
+### Two bugs found by verifying rather than assuming
+
+- **First render clipped the D mark.** The glyph's ink box is x 120..375, so the default
+  `0 0 512 512` frame cut the bowl. Reused the centred `-38.5 -30 572 572` viewBox from
+  `icon.svg`. Re-measured the output pixels afterwards: 26px clearance both sides, ink aspect
+  0.647 vs the glyph's true 0.637 — not clipped.
+- **Dropping the explicit `images` broke `/work`, `/blog` and every post.** A child route's
+  `openGraph` block *replaces* the parent's rather than merging, and the file convention did
+  not cascade past the root segment — those pages ended up with **zero** `og:image`, worse
+  than before the change. Fixed with a single exported `ogImage` constant in `seo.ts` that
+  every page spreads in.
+
+### Result
+
+- `src/app/opengraph-image.tsx` renders the card from `seoConfig` + `skillAreas`: role and
+  location eyebrow, name with the accent dot, rule, the three skill areas, brand mark.
+  Nothing in it is hardcoded copy, so it cannot drift from the site's positioning again.
+- Every page carries exactly one `og:image`, one `twitter:image`, one `og:image:alt`.
+- `vercel.json` sets `Content-Type: image/png` on `/opengraph-image`; verified locally that
+  the rule applies to the image and does **not** leak onto HTML routes, which still serve
+  `text/html` plus the security headers.
+- `public/og-image.png` deleted; `/og-image.png` now 404s and nothing references it.
+- Known cosmetic inconsistency, left alone: the homepage emits the hashed URL (the file
+  convention wins on its own segment) while other pages emit the bare one. Both resolve to
+  the same PNG. The hashed variant is arguably better — it cache-busts social previews when
+  the card changes — so if the design is ever revised, expect non-homepage previews to stay
+  cached until their URL changes.
+
+---
+
 # Mobile performance (PSI 73)
 
 Status: **partially implemented** — font/dead-code fixes landed and verified locally;
@@ -55,6 +137,22 @@ they must be set at the host (Vercel, confirmed via `server: Vercel`).
 Remaining perf headroom is ~10 points: LCP element render delay is still **2,210ms** with 0ms
 TTFB, plus 2 points of Speed Index. The 86 KiB of images does *not* sit on that path — those
 three are `loading="lazy"` and offscreen, so fixing them saves bandwidth, not score.
+
+## Round 5 — PSI mobile, Aug 7 2026 3:13 PM
+
+**96** (prev 97). This is run variance, not a regression: max critical path latency measured
+**759ms this run vs 186ms last run on byte-identical assets**. LCP 2.4 → 2.6s and SI 1.6 → 2.0s
+moved with it, while CLS and TBT went the other way.
+
+- CLS **0.012 → 0** — the "Layout shift culprits" insight is gone. Confirms the diagnosis: the
+  font-swap shift is timing-dependent, so it lands inside the measurement window only sometimes.
+  **Not fixed, just not observed this run** — expect it to reappear intermittently.
+- TBT **70 → 20ms**; long main-thread tasks **2 → 1**.
+- Passed audits **17 → 19** (`Layout shift culprits` and `Optimize DOM size` both moved in).
+- `/work` structured data confirmed live: `CollectionPage` + `ItemList` present on production.
+- Best Practices unchanged: CSP `'unsafe-inline'` + Trusted Types, both structural.
+
+---
 
 ## Round 4 — closing the two unverified gaps
 

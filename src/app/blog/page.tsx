@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
-import { seoConfig } from "@/lib/seo";
+import { ogImage, seoConfig } from "@/lib/seo";
 import {
   blogIndexDescription,
   blogIndexTitle,
@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     siteName: seoConfig.siteName,
     title: blogIndexTitle,
     description: blogIndexDescription,
+    images: [ogImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: blogIndexTitle,
+    description: blogIndexDescription,
+    images: [ogImage.url],
   },
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { seoConfig } from "@/lib/seo";
+import { ogImage, seoConfig } from "@/lib/seo";
 
 export interface BlogBriefItem {
   label: string;
@@ -170,7 +170,6 @@ export function formatPostDate(datePublished: string): string {
 
 export function buildPostMetadata(post: BlogPostMeta): Metadata {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  const ogImageUrl = `${SITE_URL}${seoConfig.ogImagePath}`;
 
   return {
     title: `${post.title} | Darisi`,
@@ -187,13 +186,13 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
       publishedTime: post.datePublished,
       modifiedTime: postLastModified(post),
       authors: [seoConfig.personName],
-      images: [{ url: ogImageUrl, width: 1200, height: 630 }],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [ogImageUrl],
+      images: [ogImage.url],
     },
   };
 }

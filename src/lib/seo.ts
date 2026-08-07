@@ -58,7 +58,10 @@ export const seoConfig: SeoConfig = {
   shortDescription:
     "Personal portfolio of Ajay Darisi, a software engineer in Bengaluru, India.",
   jobTitle: "Software Engineer",
-  ogImagePath: "/og-image.png",
+  // Served by src/app/opengraph-image.tsx, generated at build from this config.
+  // Extensionless by Next's file convention; the `?<hash>` Next appends to the
+  // meta tags is only a cache-buster, so this bare path is stable for JSON-LD.
+  ogImagePath: "/opengraph-image",
   ogImageAlt:
     "Ajay Darisi — software engineer portfolio: product web apps, internal tools, and platform work",
   locale: "en_US",
@@ -97,6 +100,20 @@ export const seoConfig: SeoConfig = {
   ],
 };
 
+/**
+ * The one place the social card is described. Every page must spread this into
+ * its own `openGraph`, because a child route's `openGraph` block replaces the
+ * parent's wholesale — relying on inheritance (or on the opengraph-image file
+ * convention cascading) silently leaves child pages with no card at all.
+ */
+export const ogImage = {
+  url: `${seoConfig.siteUrl}${seoConfig.ogImagePath}`,
+  width: 1200,
+  height: 630,
+  alt: seoConfig.ogImageAlt,
+  type: "image/png",
+} as const;
+
 const verification: Metadata["verification"] = {};
 
 if (googleSiteVerification) {
@@ -134,21 +151,13 @@ export const siteMetadata: Metadata = {
     siteName: seoConfig.siteName,
     title: seoConfig.title,
     description: seoConfig.description,
-    images: [
-      {
-        url: `${seoConfig.siteUrl}${seoConfig.ogImagePath}`,
-        width: 1200,
-        height: 630,
-        alt: seoConfig.ogImageAlt,
-        type: "image/png",
-      },
-    ],
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
     title: seoConfig.title,
     description: seoConfig.description,
-    images: [`${seoConfig.siteUrl}${seoConfig.ogImagePath}`],
+    images: [ogImage.url],
   },
   robots: {
     index: true,
