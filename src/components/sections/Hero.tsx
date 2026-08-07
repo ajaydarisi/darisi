@@ -105,7 +105,7 @@ export function Hero() {
 
       <a
         href="#work"
-        className="absolute bottom-8 left-[var(--page-gutter)] hidden items-center gap-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.2em] text-muted-foreground lg:flex"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.2em] text-muted-foreground lg:flex"
         aria-label="Scroll down to my work"
       >
         <span className="h-10 w-px bg-accent animate-scroll-dot" aria-hidden="true" />

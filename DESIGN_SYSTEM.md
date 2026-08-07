@@ -32,7 +32,7 @@ to the brand mark and wordmark; the interface uses a practical 4px/8px rhythm.
 | Body text | `#D5DCD8` | `#28352F` | Long-form and section descriptions |
 | Muted text | `#A9B5AF` | `#3F4A46` | Supporting detail |
 | Subtle text | `#7C8A84` | `#5E6B66` | Metadata only |
-| Ledger Red | `#8B1E2D` | `#8B1E2D` | Immutable brand source assets and restrained decision marks |
+| Brand ink | `#0F2724` | `#0F2724` | Baked-in brand assets: app icon tile and the standalone wordmark files |
 | Action fill | `#B7394F` | `#8B1E2D` | Primary buttons, active controls, and dark-theme scrollbar thumb |
 | Action hover | `#BD3E54` | `#6F1724` | Hovered primary actions |
 | Signal Rose | `#E46A79` | `#8B1E2D` | Dark-theme readable signal text, focus, icon and label states |
@@ -45,14 +45,16 @@ to the brand mark and wordmark; the interface uses a practical 4px/8px rhythm.
 - `--primary-text` is the readable signal role.
 - Use `--border` where a control or panel must be independently discernible;
   use `--border-subtle` for internal ledger rules.
-- The original logo source files stay burgundy and render without a theme-specific
-  colour treatment.
+- Brand assets fall into two kinds. Masked assets (`logo.svg`,
+  `darisi-wordmark.svg` via `BrandMark`) carry no colour of their own and take
+  `--primary` per theme. Baked assets (the app icon family, the standalone
+  wordmark files) carry `#0F2724` and do not respond to the theme.
 
 ### Palette approval
 
 Text, focus, and controls are chosen for WCAG 2.2 AA contrast on their intended
-surfaces. Brand artwork remains the original burgundy in both themes and is not
-used to communicate an interactive state. See the [W3C contrast
+surfaces. Baked brand artwork stays `#0F2724` in both themes and is not used to
+communicate an interactive state. See the [W3C contrast
 criterion](https://www.w3.org/TR/WCAG22/#contrast-minimum) for the standard.
 
 | Pair | Dark ratio | Light ratio | Status |
@@ -108,8 +110,48 @@ criterion](https://www.w3.org/TR/WCAG22/#contrast-minimum) for the standard.
 | `mark` | Compact navigation and small decorative brand moments |
 | `wordmark` | Hero and footer |
 
-Do not alter `public/logo.svg`, `public/icon.svg`, or `src/app/icon.svg` when
-adding a wordmark placement. Render the brand assets unchanged in both themes.
+`BrandMark` paints the asset as a CSS mask over `bg-primary`, so only the alpha
+channel of the source reaches the page and the mark follows the theme token.
+Keep `public/logo.svg` and `public/darisi-wordmark.svg` as bare glyphs — no
+tile, no background, no baked colour — or the mask will pick up the frame. Do
+not alter them when adding a placement.
+
+### App icon
+
+The tile that represents the site *outside* the page: browser tab, bookmark,
+home screen, PWA. Unlike `BrandMark` it cannot follow the theme — it sits on
+browser chrome we do not control — so the frame and colour are baked in.
+
+`src/app/icon.svg` is the single source. Every raster is generated from it;
+none is edited by hand.
+
+| Property | Value | Why |
+| --- | --- | --- |
+| Tile | 572 × 572, `viewBox="-38.5 -30 572 572"` | Offsets the untouched glyph path so its ink box centres |
+| Glyph ink box | x `120`–`375`, y `56`–`456` | The outer curve peaks at `375`; `460` is a control point, not a point on the curve |
+| Glyph height | 70% of tile | Legible at 16px without crowding the corners |
+| Corner radius | 22% of tile (`rx="126"`) | Rounded-square, close to the iOS mask |
+| Ink | `#0F2724` | Brand dark; reads on light and dark chrome |
+| Tile fill | `#F6F2EA` | Matches `manifest.json` `background_color` |
+
+| File | Raster | Corners | Surface |
+| --- | --- | --- | --- |
+| `src/app/icon.svg` | vector | transparent | Source of truth |
+| `public/icon.svg` | vector | transparent | Mirror; served for `icons.icon` |
+| `public/favicon.ico` | 16 / 32 / 48 PNG-in-ICO | transparent | Browser tab — Chrome prefers this over the SVG because the link carries `sizes="any"` |
+| `public/favicon-48x48.png` | 48 | transparent | Metadata and manifest |
+| `public/favicon-192x192.png` | 192 | transparent | Manifest, Android home screen |
+| `public/apple-touch-icon.png` | 180 | **opaque, unrounded** | iOS home screen; iOS applies its own mask and renders transparent corners black |
+
+**Rules:**
+
+- Change the icon in `src/app/icon.svg`, then regenerate every raster and copy
+  it to `public/icon.svg`. A vector-only edit leaves the tab showing the old
+  raster, because `favicon.ico` wins there.
+- Rasterise with something that preserves alpha. macOS `qlmanage` silently
+  flattens transparency onto white, which puts a white square around the tile.
+- `apple-touch-icon.png` is the one deliberate exception to the rounded,
+  transparent tile. Keep it opaque.
 
 ### SectionHeading
 
@@ -201,6 +243,7 @@ point. The primary action is email; social links remain secondary.
 
 - Tokens and global composition live in `src/app/globals.css`.
 - Shared primitives live in `src/components/ui/`.
+- Brand assets live in `public/`, generated from `src/app/icon.svg`.
 - Homepage patterns live in `src/components/sections/`.
 - `src/lib/site-content.ts` remains the source of truth for public work and
   capability content.
