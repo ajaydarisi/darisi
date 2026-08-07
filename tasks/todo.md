@@ -29,6 +29,33 @@ Slow-4G pipe ahead of everything else. `next/font/local` does not subset.
       own precompiled chunks, not in code SWC transpiles from `src/`. Confirmed: setting
       `browserslist` and refreshing `caniuse-lite` left them in place.
 
+## Round 2 — after deploy (PSI mobile, Aug 7 2026 2:40 PM)
+
+**Performance 73 → 90.** LCP 6.5s → 3.3s (+2 → +17), SI 5.2s → 3.9s, FCP 1.6s, CLS 0,
+TBT 60 → 80ms. Critical path latency 675ms → 186ms. Font fix confirmed.
+
+Other categories: Accessibility **100**, Best Practices **100**, SEO **100**, Agentic 2/2.
+The only actionable items left there are Lighthouse's *unscored* Trust & Safety advisories —
+all security headers. `output: "export"` means `next.config.ts` `headers()` does nothing, so
+they must be set at the host (Vercel, confirmed via `server: Vercel`).
+
+- [x] `vercel.json` — HSTS (`includeSubDomains; preload`), `X-Content-Type-Options`,
+      `X-Frame-Options: DENY`, `Referrer-Policy`, `Cross-Origin-Opener-Policy`,
+      `Permissions-Policy`, and a CSP with `frame-ancestors 'none'` / `object-src 'none'` /
+      `base-uri 'self'`.
+      Verified by serving `out/` locally with these exact headers: **zero CSP violations**,
+      theme script ran, hydration and client-side nav worked, mask/fonts/JSON-LD intact.
+      `includeSubDomains` checked safe first — `bfg.`, `chat.`, `www.` all serve HTTPS.
+- [ ] **Trusted Types — deliberately not added.** `require-trusted-types-for 'script'` would
+      break React's `dangerouslySetInnerHTML` (theme-init and JSON-LD). Audit stays flagged.
+- [ ] **CSP still uses `'unsafe-inline'`,** so Lighthouse's "effective against XSS" stays
+      flagged. A static export has no server for nonces, and Next's `__next_f` inline scripts
+      change per build, so hashes are impractical. The CSP is still a real improvement.
+
+Remaining perf headroom is ~10 points: LCP element render delay is still **2,210ms** with 0ms
+TTFB, plus 2 points of Speed Index. The 86 KiB of images does *not* sit on that path — those
+three are `loading="lazy"` and offscreen, so fixing them saves bandwidth, not score.
+
 Open finding: `globals.css:1` `@import`s DM Sans / Source Serif 4 / DM Mono from Google Fonts,
 but the import is **stripped at build** (0 occurrences in the built CSS). The site actually
 renders Inter / Georgia / system-mono. Design intent and shipped output disagree — and
