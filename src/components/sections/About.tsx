@@ -1,110 +1,66 @@
 "use client";
 
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
-import { BrandMark } from "@/components/ui/brand-mark";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Compass, LayoutTemplate, Workflow } from "lucide-react";
 
 const values = [
-  {
-    icon: Compass,
-    title: "Product clarity first",
-    description:
-      "I like untangling messy requirements until the next right product decision is obvious.",
-  },
-  {
-    icon: LayoutTemplate,
-    title: "Design that earns its keep",
-    description:
-      "Interfaces should feel intentional, reduce friction, and make the product easier to trust.",
-  },
-  {
-    icon: Workflow,
-    title: "Systems that survive launch",
-    description:
-      "I build for real usage, operational edge cases, and the people who have to maintain the product later.",
-  },
+  "I like untangling messy requirements until the next right product decision is obvious.",
+  "Interfaces should feel intentional, reduce friction, and make the product easier to trust.",
+  "I build for real usage, operational edge cases, and the people who have to maintain the product later.",
 ];
 
 export function About() {
   return (
-    <section id="about" aria-labelledby="about-heading" className="section-space">
-      <div className="site-shell grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
-        <div className="lg:col-span-3">
-          <AnimateOnScroll variant="fade-up">
-            <SectionHeading
-              eyebrow="How I work"
-              titleId="about-heading"
-              title="Software engineer in Bengaluru, India."
-            />
-          </AnimateOnScroll>
+    <section
+      id="about"
+      aria-labelledby="about-heading"
+      className="min-h-[46.625rem] py-[4.5rem]"
+    >
+      <div className="site-shell grid gap-12 lg:grid-cols-[26rem_minmax(0,1fr)] lg:gap-[5.875rem]">
+        <AnimateOnScroll variant="fade-up">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-6 bg-accent" aria-hidden="true" />
+            <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
+              About · working notes
+            </p>
+          </div>
+          <h2
+            id="about-heading"
+            className="mt-[5.625rem] max-w-sm font-display text-[2.25rem] font-medium leading-[1.02] tracking-[-0.045em] text-foreground lg:text-[2.75rem]"
+          >
+            Software engineer in Bengaluru, India.
+          </h2>
+        </AnimateOnScroll>
 
-          <AnimateOnScroll variant="fade-up" delay={100}>
-            <p className="mt-8 text-lg leading-relaxed text-[var(--text-body)]">
+        <AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[4.0625rem]">
+          <div className="max-w-[43.25rem] space-y-4">
+            <p className="text-[1.2rem] leading-[1.75] text-[var(--text-body)]">
               I&apos;m based in Bengaluru and I work on product web apps and
               internal systems. What I enjoy most is the seam where product
               clarity, interface decisions, and implementation meet — the
               place where a vague requirement turns into something people can
               actually use.
             </p>
-          </AnimateOnScroll>
-
-          <AnimateOnScroll variant="fade-up" delay={200}>
-            <p className="mt-6 text-lg leading-relaxed text-muted">
+            <p className="text-[0.9375rem] leading-[1.75] text-muted-foreground">
               darisi.in is my personal site. It&apos;s where I keep the things
               I&apos;ve designed and built, along with how I think about putting
               software together. Everything here is work I&apos;ve personally
               shaped end to end.
             </p>
-          </AnimateOnScroll>
+          </div>
 
-          <div className="mt-10 border-t border-border">
-            {values.map((value, index) => (
-              <AnimateOnScroll
-                key={value.title}
-                variant="fade-up"
-                delay={300 + index * 100}
-              >
-                <div className="flex items-start gap-4 border-b border-border py-5">
-                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-primary/10">
-                    <value.icon className="h-5 w-5 text-primary-text" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-foreground">
-                      {value.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                      {value.description}
-                    </p>
-                  </div>
-                </div>
-              </AnimateOnScroll>
+          <div className="mt-[7.9375rem] grid gap-6 border-t border-border-subtle pt-8 sm:grid-cols-3 sm:gap-8">
+            {values.map((value) => (
+              <p key={value} className="text-[0.8125rem] leading-[1.6] text-muted-foreground">
+                {value}
+              </p>
             ))}
           </div>
-        </div>
 
-        <div className="lg:col-span-2">
-          <AnimateOnScroll variant="fade-up" delay={200}>
-            <Card
-              variant="inset"
-              className="relative flex h-full min-h-72 items-center justify-center overflow-hidden p-8 lg:p-10"
-            >
-              <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent" />
-              <CardContent className="relative p-0 text-center">
-                <BrandMark
-                  variant="mark"
-                  alt=""
-                  className="mx-auto h-20 w-20 opacity-30"
-                />
-                <blockquote className="mt-6 text-lg font-medium italic leading-relaxed text-foreground/85 md:text-xl">
-                  &ldquo;The best software usually feels calm: fewer handoffs,
-                  clearer decisions, and execution that keeps moving.&rdquo;
-                </blockquote>
-              </CardContent>
-            </Card>
-          </AnimateOnScroll>
-        </div>
+          <blockquote className="mt-10 max-w-[36rem] border-l border-accent pl-5 font-display text-xl italic leading-snug tracking-[-0.02em] text-muted-foreground">
+            &ldquo;The best software usually feels calm: fewer handoffs,
+            clearer decisions, and execution that keeps moving.&rdquo;
+          </blockquote>
+        </AnimateOnScroll>
       </div>
     </section>
   );

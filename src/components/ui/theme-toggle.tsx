@@ -9,8 +9,8 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "darisi-theme";
 const THEME_CHANGE_EVENT = "darisi-theme-change";
 const THEME_COLORS: Record<Theme, string> = {
-  dark: "#0B0F0E",
-  light: "#F7FAF9",
+  dark: "#0F2724",
+  light: "#F6F2EA",
 };
 
 function isTheme(value: string | null): value is Theme {
@@ -56,9 +56,10 @@ function getActiveTheme(): Theme {
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
-  document
-    .querySelector('meta[name="theme-color"]')
-    ?.setAttribute("content", THEME_COLORS[theme]);
+  document.querySelectorAll('meta[name="theme-color"]').forEach((themeColorMeta) => {
+    themeColorMeta.setAttribute("content", THEME_COLORS[theme]);
+    themeColorMeta.removeAttribute("media");
+  });
   window.dispatchEvent(new CustomEvent<Theme>(THEME_CHANGE_EVENT, { detail: theme }));
 }
 
@@ -123,7 +124,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-pressed={isLight}
       onClick={toggleTheme}
       className={cn(
-        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted-foreground transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className
       )}
     >
@@ -141,7 +142,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <span
         aria-hidden="true"
         className={cn(
-          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-surface text-primary-text shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
+          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
           isLight ? "translate-x-8" : "translate-x-0"
         )}
       >

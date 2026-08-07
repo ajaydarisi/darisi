@@ -99,7 +99,10 @@ if (bingSiteVerification) {
 }
 
 export const siteViewport: Viewport = {
-  themeColor: "#0B0F0E",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F6F2EA" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F2724" },
+  ],
 };
 
 export const siteMetadata: Metadata = {

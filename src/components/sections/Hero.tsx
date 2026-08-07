@@ -1,78 +1,94 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowDown } from "lucide-react";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button } from "@/components/ui/button";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+
+const capabilities = [
+  "Product web apps",
+  "Internal systems",
+  "Platform layers",
+];
 
 export function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="hero-field relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden"
+      className="portfolio-hero relative isolate min-h-[calc(100svh-1px)] overflow-hidden border-b border-border"
     >
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -right-48 -top-48 h-[34rem] w-[34rem] rounded-full bg-primary/10 blur-[9rem]" />
-        <div className="absolute inset-0 bg-dot-pattern opacity-30" />
-      </div>
+      <div className="portfolio-hero__orb" aria-hidden="true" />
 
-      <div className="site-shell section-space relative z-10">
-        <div className="max-w-3xl">
-          <Badge variant="eyebrow">
-            Software Engineer | Bengaluru, India
-          </Badge>
+      <div className="site-shell relative flex min-h-[calc(100svh-1px)] flex-col justify-center pb-20 pt-[7.5rem]">
+        <div className="flex items-center gap-3">
+          <span className="h-px w-6 bg-accent" aria-hidden="true" />
+          <p className="font-utility text-[0.65625rem] font-medium uppercase tracking-[0.2em] text-primary-text">
+            Software Engineer · Bengaluru, India
+          </p>
+        </div>
 
-          <h1 className="mt-6">
-            <BrandMark
-              variant="wordmark"
-              className="h-16 w-auto sm:h-20 lg:h-24"
-              priority
-            />
-          </h1>
+        <h1 className="mt-7 flex items-end gap-1">
+          <BrandMark
+            variant="wordmark"
+            alt="Darisi"
+            priority
+            className="w-[clamp(16rem,48vw,54rem)]"
+          />
+          {/* Wordmark viewBox carries baseline padding below the letters (~21.9% of its height); lift the dot by that amount so it sits on the letters' baseline, not the box edge. */}
+          <span
+            className="mb-[clamp(1.08rem,3.25vw,3.66rem)] h-[clamp(1rem,2.8vw,3.1rem)] ml-4 w-[clamp(1rem,2.8vw,3.1rem)] shrink-0 rounded-full bg-accent"
+            aria-hidden="true"
+          />
+        </h1>
 
+        <div className="portfolio-hero__rule mt-8 h-px w-full max-w-[43.75rem]" />
+
+        <div className="mt-10 grid max-w-[68.75rem] gap-9 lg:h-[14.625rem] lg:grid-cols-2 lg:items-end lg:gap-16">
           <p
-            className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground md:text-xl"
+            className="max-w-[32.375rem] self-end font-display text-[1.65rem] font-normal leading-[1.25] tracking-[-0.02em] text-foreground max-lg:order-2"
             role="doc-subtitle"
           >
-            I&apos;m Ajay Darisi, a software engineer who builds product web
+            I&apos;m Ajay Darisi — a software engineer who builds product web
             apps, internal tools, and the platform layers behind them.
           </p>
 
-          <p
-            className="mt-5 max-w-2xl text-base leading-relaxed text-muted"
-          >
-            Most of my time goes into CRM and admin workflows, registration
-            systems, payments, auth, and multi-language flows — the parts of a
-            product that have to be both clear and dependable.
-          </p>
+          <div className="max-lg:order-1">
+            <p className="mb-6 max-w-[27.5rem] text-[0.9375rem] leading-[1.75] text-muted-foreground">
+              Most of my time goes into CRM and admin workflows, registration
+              systems, payments, auth, and multi-language flows — the parts of a
+              product that have to be both clear and dependable.
+            </p>
 
-          <ul className="mt-7 flex flex-wrap gap-x-4 gap-y-2 font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary-text">
-            <li>Product web apps</li>
-            <li>Internal systems</li>
-            <li>Platform layers</li>
-          </ul>
+            <ul className="mb-7 flex flex-wrap gap-2" aria-label="Areas of focus">
+              {capabilities.map((capability) => (
+                <li
+                  key={capability}
+                  className="border border-border bg-[color-mix(in_srgb,var(--ring)_4%,transparent)] px-3 py-1.5 font-utility text-[0.65625rem] font-medium uppercase tracking-[0.12em] text-secondary-foreground"
+                >
+                  {capability}
+                </li>
+              ))}
+            </ul>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button asChild size="lg">
-              <a
-                href="#work"
-                aria-label="View Ajay Darisi's selected work"
-                onClick={() =>
-                  trackEvent(ANALYTICS_EVENTS.heroPrimaryCtaClick, {
-                    location: "hero",
-                    target: "work",
-                  })
-                }
-              >
-                View My Work
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline">
+            <div className="flex items-center gap-4">
+              <Button asChild className="h-[2.875rem] rounded-none px-6 text-sm shadow-none hover:translate-y-0 hover:shadow-none">
+                <a
+                  href="#work"
+                  aria-label="View Ajay Darisi's selected work"
+                  onClick={() =>
+                    trackEvent(ANALYTICS_EVENTS.heroPrimaryCtaClick, {
+                      location: "hero",
+                      target: "work",
+                    })
+                  }
+                >
+                  View My Work
+                  <ArrowDown className="h-[0.9375rem] w-[0.9375rem]" aria-hidden="true" />
+                </a>
+              </Button>
               <a
                 href="#contact"
-                aria-label="Get in touch with Ajay Darisi"
+                className="border-b border-accent pb-1 text-sm font-medium text-foreground transition-colors hover:text-primary-text"
                 onClick={() =>
                   trackEvent(ANALYTICS_EVENTS.heroSecondaryCtaClick, {
                     location: "hero",
@@ -82,23 +98,18 @@ export function Hero() {
               >
                 Get in Touch
               </a>
-            </Button>
+            </div>
           </div>
         </div>
       </div>
 
       <a
         href="#work"
-        className="animate-hero-rise absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 group [@media(max-height:740px)]:hidden"
-        style={{ animationDelay: "800ms" }}
+        className="absolute bottom-8 left-[var(--page-gutter)] hidden items-center gap-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.2em] text-muted-foreground lg:flex"
         aria-label="Scroll down to my work"
       >
-        <span className="font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-subtle transition-colors duration-[var(--motion-base)] group-hover:text-primary-text">
-          Scroll to see work
-        </span>
-        <div className="h-10 w-6 rounded-full border-2 border-muted/30 pt-2 transition-colors duration-[var(--motion-base)] group-hover:border-primary/40">
-          <div className="mx-auto block h-2.5 w-1 rounded-full bg-primary animate-scroll-dot" />
-        </div>
+        <span className="h-10 w-px bg-accent animate-scroll-dot" aria-hidden="true" />
+        Scroll to explore
       </a>
     </section>
   );

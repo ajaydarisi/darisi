@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${seoConfig.siteUrl}/work`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     ...blogPosts.map((post) => ({
       url: `${seoConfig.siteUrl}/blog/${post.slug}`,
       lastModified: new Date(`${post.datePublished}T00:00:00Z`),

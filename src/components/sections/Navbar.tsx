@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sheet";
 
 const links = [
-  { label: "Work", href: "/#work" },
+  { label: "Work", href: "/work" },
   { label: "Skills", href: "/#skills" },
   { label: "About", href: "/#about" },
   { label: "Blog", href: "/blog" },
@@ -41,9 +41,7 @@ export function Navbar() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -57,9 +55,7 @@ export function Navbar() {
       })
       .filter((el): el is HTMLElement => el !== null);
 
-    if (sections.length === 0) {
-      return;
-    }
+    if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -67,9 +63,7 @@ export function Navbar() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-        if (visible[0]) {
-          setActiveSection(visible[0].target.id);
-        }
+        if (visible[0]) setActiveSection(visible[0].target.id);
       },
       { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 1] }
     );
@@ -81,61 +75,54 @@ export function Navbar() {
   return (
     <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
       <header
-        className={`sticky top-0 z-[60] border-b transition-all duration-[var(--motion-base)] ${
+        className={`fixed inset-x-0 top-0 z-[60] w-screen border-b transition-all duration-[var(--motion-base)] ${
           scrolled
-            ? "border-border bg-background/90 shadow-[var(--shadow-floating)] backdrop-blur-xl"
-            : "border-transparent bg-background/80 backdrop-blur-md"
+            ? "border-border bg-background/95 backdrop-blur-xl"
+            : "border-transparent bg-transparent"
         }`}
       >
         <nav
           aria-label="Main navigation"
-          className="site-shell flex h-16 items-center justify-between"
+          className="site-shell flex h-[4.25rem] items-center justify-between"
         >
-          <Link
-            href="/"
-            className="flex items-center"
-            aria-label="Darisi home"
-          >
-            <BrandMark
-              variant="mark"
-              className="h-7 w-7"
-            />
+          <Link href="/" className="flex items-center" aria-label="Darisi home">
+            <BrandMark variant="mark" alt="" className="h-9 w-9" />
           </Link>
 
-          <div className="hidden items-center gap-6 lg:flex xl:gap-8">
-            {links.map((link) => {
-              const isActive = isLinkActive(link.href);
+          <div className="hidden items-center lg:flex">
+            <div className="flex items-center gap-2">
+              {links.map((link) => {
+                const isActive = isLinkActive(link.href);
 
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`relative text-sm transition-colors duration-[var(--motion-fast)] after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary-text after:transition-all after:duration-[var(--motion-base)] after:content-[''] ${
-                    isActive
-                      ? "text-foreground after:w-full"
-                      : "text-muted hover:text-foreground after:w-0"
-                  }`}
-                >
-                  {link.label}
-                </a>
-              );
-            })}
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Button asChild size="sm" variant="outline">
-                <Link
-                  href="/#contact"
-                  onClick={() =>
-                    trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
-                      location: "desktop_nav",
-                    })
-                  }
-                >
-                  Get in Touch
-                </Link>
-              </Button>
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    aria-current={isActive ? "true" : undefined}
+                    className={`px-3.5 py-2 text-sm transition-colors duration-[var(--motion-fast)] ${
+                      isActive
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
+            <ThemeToggle className="ml-3" />
+            <Button asChild className="ml-3 h-10 rounded-none px-6 text-[0.8125rem] shadow-none hover:translate-y-0 hover:shadow-none">
+              <Link
+                href="/#contact"
+                onClick={() =>
+                  trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
+                    location: "desktop_nav",
+                  })
+                }
+              >
+                Get in Touch
+              </Link>
+            </Button>
           </div>
 
           <SheetTrigger asChild>
@@ -143,14 +130,10 @@ export function Navbar() {
               type="button"
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="size-[1.875rem] p-0 lg:hidden"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
-              {mobileOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </SheetTrigger>
         </nav>
@@ -158,35 +141,36 @@ export function Navbar() {
 
       <SheetContent
         side="top"
-        className="top-16 min-h-[calc(100svh-4rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
+        className="top-[4.25rem] min-h-[calc(100svh-4.25rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
           Navigate to the main sections of Ajay Darisi&apos;s site.
         </SheetDescription>
 
-        <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-6">
+        <nav className="site-shell flex flex-col gap-1 py-8">
           {links.map((link) => {
             const isActive = isLinkActive(link.href);
 
             return (
               <SheetClose key={link.label} asChild>
-                <a
+                <Link
                   href={link.href}
                   aria-current={isActive ? "true" : undefined}
-                  className={`flex items-center rounded-[var(--radius-control)] px-4 py-3 text-base transition-colors duration-[var(--motion-base)] hover:bg-surface hover:text-foreground ${
-                    isActive
-                      ? "bg-surface text-foreground"
-                      : "text-muted"
+                  className={`flex items-center border-b border-border-subtle px-1 py-4 font-display text-2xl transition-colors duration-[var(--motion-base)] hover:text-primary-text ${
+                    isActive ? "text-primary-text" : "text-muted-foreground"
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               </SheetClose>
             );
           })}
-          <div className="mt-3 border-t border-border pt-3">
-            <div className="mb-3 flex justify-end px-4">
+          <div className="mt-6">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Theme
+              </span>
               <ThemeToggle />
             </div>
             <Button asChild className="w-full" size="default">

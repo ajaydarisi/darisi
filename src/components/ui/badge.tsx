@@ -10,12 +10,12 @@ const badgeVariants = cva(
       variant: {
         eyebrow:
           "rounded-[var(--radius-tag)] border-primary/30 bg-primary/10 px-3 py-1 font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-primary-text",
-        tag: "rounded-full border-border bg-background/70 px-2.5 py-1 text-xs font-medium text-muted",
+        tag: "rounded-full border-border bg-background/70 px-2.5 py-1 text-xs font-medium text-muted-foreground",
         media:
           "rounded-full border-border/80 bg-background/95 px-2.5 py-1 text-xs font-medium text-foreground shadow-sm backdrop-blur-sm",
-        secondary: "rounded-full border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted",
+        secondary: "rounded-full border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground",
         outline:
-          "rounded-[var(--radius-tag)] border-border bg-background/85 px-3 py-1 font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted backdrop-blur-sm",
+          "rounded-[var(--radius-tag)] border-border bg-background/85 px-3 py-1 font-utility text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground backdrop-blur-sm",
       },
     },
     defaultVariants: {

@@ -1,65 +1,59 @@
 "use client";
 
-import { LayoutPanelTop, ShieldCheck, Workflow } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { skillAreas } from "@/lib/site-content";
-
-const icons = [LayoutPanelTop, Workflow, ShieldCheck];
 
 export function Skills() {
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="section-space bg-surface">
+    <section
+      id="skills"
+      aria-labelledby="skills-heading"
+      className="min-h-[52.5625rem] bg-[#0F2724] py-[4.5rem] text-[#F6F2EA]"
+    >
       <div className="site-shell">
         <AnimateOnScroll variant="fade-up">
-          <SectionHeading
-            eyebrow="Capabilities"
-            titleId="skills-heading"
-            title="The work behind a dependable product."
-            description="The areas I return to when a customer-facing product, operational workflow, or launch-critical platform layer needs to feel clear."
-            align="center"
-          />
+          <div className="flex items-center gap-3">
+            <span className="h-px w-6 bg-[#DDA082]" aria-hidden="true" />
+            <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-[#C8DAD6]">
+              Capabilities · the throughline
+            </p>
+          </div>
+          <h2
+            id="skills-heading"
+            className="mt-[6.0625rem] max-w-[40rem] font-display text-[clamp(3.25rem,6vw,4.8rem)] font-medium leading-[0.96] tracking-[-0.055em]"
+          >
+            From first sketch to{" "}
+            <span className="italic text-[#DDA082]">dependable system.</span>
+          </h2>
         </AnimateOnScroll>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {skillAreas.map((skill, index) => {
-            const Icon = icons[index] ?? LayoutPanelTop;
-
-            return (
-              <AnimateOnScroll
-                key={skill.title}
-                variant="fade-up"
-                delay={index * 100}
-              >
-                <Card
-                  asChild
-                  variant="interactive"
-                  className="group h-full"
-                >
-                  <article>
-                    <CardContent className="px-6 pb-6 pt-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-control)] bg-primary/10">
-                        <Icon className="h-6 w-6 text-primary-text" />
-                      </div>
-                      <h3 className="mt-5 text-[1.375rem] font-medium tracking-[-0.025em] text-foreground">
-                        {skill.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-relaxed text-muted">
-                        {skill.description}
-                      </p>
-                      <p className="mt-5 rounded-[var(--radius-control)] border border-border bg-background/60 px-4 py-3 text-sm leading-relaxed text-muted">
-                        <span className="mb-1.5 block font-utility text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-primary-text">
-                          Tools
-                        </span>
-                        {skill.tools}
-                      </p>
-                    </CardContent>
-                  </article>
-                </Card>
-              </AnimateOnScroll>
-            );
-          })}
+        <div className="mt-[8.875rem] grid border-y border-[#2A4A47] lg:grid-cols-3 lg:divide-x lg:divide-[#2A4A47]">
+          {skillAreas.map((skill, index) => (
+            <AnimateOnScroll
+              key={skill.title}
+              variant="fade-up"
+              delay={index * 100}
+              className="border-b border-[#2A4A47] py-8 last:border-b-0 lg:border-b-0 lg:py-3 lg:px-9 lg:first:pl-0"
+            >
+              <article className="flex h-full flex-col">
+                <p className="font-utility text-[0.6875rem] font-medium tracking-[0.14em] text-[#C8DAD6]">
+                  0{index + 1}
+                </p>
+                <h3 className="mt-5 font-display text-[1.75rem] font-medium leading-tight tracking-[-0.03em] text-[#F6F2EA]">
+                  {skill.title}
+                </h3>
+                <p className="mt-3 text-sm leading-5 text-[#C8DAD6]">
+                  {skill.description}
+                </p>
+                <p className="mt-auto border-t border-[#2A4A47] pt-3 text-sm leading-5 text-[#8AA8A3]">
+                  <span className="mr-2 font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-[#C8DAD6]">
+                    Tools
+                  </span>
+                  {skill.tools}
+                </p>
+              </article>
+            </AnimateOnScroll>
+          ))}
         </div>
       </div>
     </section>

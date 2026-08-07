@@ -1,4 +1,4 @@
-import Image from "next/image";
+import type { CSSProperties } from "react";
 
 type BrandMarkVariant = "mark" | "wordmark";
 
@@ -31,15 +31,29 @@ export function BrandMark({
   priority = false,
 }: BrandMarkProps) {
   const asset = assets[variant];
+  const label = alt ?? asset.alt;
+  const style = {
+    aspectRatio: `${asset.width} / ${asset.height}`,
+    maskImage: `url(${asset.src})`,
+    maskPosition: "center",
+    maskRepeat: "no-repeat",
+    maskSize: "contain",
+    WebkitMaskImage: `url(${asset.src})`,
+    WebkitMaskPosition: "center",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskSize: "contain",
+  } satisfies CSSProperties;
 
   return (
-    <Image
-      src={asset.src}
-      alt={alt ?? asset.alt}
-      width={asset.width}
-      height={asset.height}
-      priority={priority}
-      className={className}
-    />
+    <>
+      {priority && <link rel="preload" as="image" href={asset.src} fetchPriority="high" />}
+      <span
+        role={label ? "img" : undefined}
+        aria-label={label || undefined}
+        aria-hidden={label ? undefined : true}
+        className={`block bg-primary ${className ?? ""}`}
+        style={style}
+      />
+    </>
   );
 }

@@ -1,3 +1,39 @@
+# Website redesign from supplied portfolio mockups
+
+Status: **planned — implementation in progress**
+
+- [x] Inspect the supplied light, dark, work-index, and design-system references alongside the current portfolio.
+- [x] Confirm the route and theme behavior implied by the redesign brief, then record the approved implementation spec.
+- [ ] Rebuild the responsive homepage, shared theme treatment, and work-index page while retaining the existing logo asset.
+- [ ] Verify the light and dark variants at mobile and desktop sizes, then run lint and production build.
+- [ ] Add a short review with implementation and verification evidence.
+
+---
+
+# Follow-up: exact light mockup fidelity
+
+Status: **planned — implementation in progress**
+
+- [x] Capture the supplied light mockup's desktop geometry, typography, copy, and color roles at 1280×720.
+- [ ] Recompose the shared navigation and hero to match that baseline while retaining the fixed mint logo treatment and accessible theme control.
+- [ ] Align the work, capabilities, about, contact, and footer layouts to the supplied editorial system without changing project content or routes.
+- [ ] Rebuild `/work` around the supplied PortfolioIndex split-pane case-file composition.
+- [ ] Compare the resulting light desktop and mobile layouts against the supplied mockup; verify dark mode, keyboard behavior, lint, build, and static tests.
+- [ ] Add fidelity and verification evidence below.
+
+---
+
+# Follow-up: Darisi design-system color roles
+
+Status: **planned — implementation in progress**
+
+- [x] Inspect the supplied Color Roles page and record the light/dark role values.
+- [ ] Map the shared theme tokens and browser chrome to the design-system roles.
+- [ ] Replace remaining presentation-level hard-coded legacy colors with the mapped roles.
+- [ ] Re-verify light/dark rendering, fixed mint logo treatment, accessibility, lint, and static production build.
+
+---
+
 # Reposition darisi.in: freelance lead-gen site → personal portfolio
 
 Status: **implemented, verified, committed** — see `## Review` at the end of this file.
