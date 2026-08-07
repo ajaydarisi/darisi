@@ -12,6 +12,9 @@ export interface BlogPostMeta {
   description: string;
   tag: string;
   datePublished: string;
+  /** Set only when a published post is materially revised. Drives sitemap
+   *  `lastmod` and the JSON-LD `dateModified`. */
+  dateModified?: string;
   readingTime: string;
   brief: BlogBriefItem[];
 }
@@ -146,6 +149,16 @@ export function getBlogPost(slug: string): BlogPostMeta {
   return post;
 }
 
+/** The date a crawler should treat as this post's last meaningful change. */
+export function postLastModified(post: BlogPostMeta): string {
+  return post.dateModified ?? post.datePublished;
+}
+
+/** Newest post change, used as the blog index's `lastmod`. */
+export const blogLastModified: string = blogPosts
+  .map(postLastModified)
+  .reduce((newest, date) => (date > newest ? date : newest));
+
 export function formatPostDate(datePublished: string): string {
   return new Date(`${datePublished}T00:00:00Z`).toLocaleDateString("en-US", {
     year: "numeric",
@@ -172,6 +185,7 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
       title: post.title,
       description: post.description,
       publishedTime: post.datePublished,
+      modifiedTime: postLastModified(post),
       authors: [seoConfig.personName],
       images: [{ url: ogImageUrl, width: 1200, height: 630 }],
     },
@@ -196,7 +210,7 @@ export function buildPostJsonLd(post: BlogPostMeta) {
     url,
     mainEntityOfPage: url,
     datePublished: post.datePublished,
-    dateModified: post.datePublished,
+    dateModified: postLastModified(post),
     inLanguage: "en-US",
     image: `${SITE_URL}${seoConfig.ogImagePath}`,
     author: {

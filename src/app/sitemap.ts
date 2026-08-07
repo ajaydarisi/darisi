@@ -1,34 +1,42 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blog";
-import { seoConfig } from "@/lib/seo";
+import { blogLastModified, blogPosts, postLastModified } from "@/lib/blog";
+import { seoConfig, siteContentRevised } from "@/lib/seo";
+import { projects } from "@/lib/site-content";
 
 export const dynamic = "force-static";
+
+/**
+ * `changefreq` and `priority` are deliberately absent: Google ignores both, and
+ * `priority` reads as a ranking lever it has never been.
+ *
+ * Every `lastmod` here is derived from content, never from the build clock, so
+ * rebuilding without editing content produces an identical sitemap. A `lastmod`
+ * that moves on every deploy is one Google learns to discard.
+ */
+const absolute = (path: string) => `${seoConfig.siteUrl}${path}`;
+
+// Both the homepage Work section and /work render these.
+const projectImages = projects.map((project) => absolute(project.image));
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: seoConfig.siteUrl,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
+      lastModified: siteContentRevised,
+      images: projectImages,
     },
     {
-      url: `${seoConfig.siteUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
+      url: absolute("/work"),
+      lastModified: siteContentRevised,
+      images: projectImages,
     },
     {
-      url: `${seoConfig.siteUrl}/work`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
+      url: absolute("/blog"),
+      lastModified: blogLastModified,
     },
     ...blogPosts.map((post) => ({
-      url: `${seoConfig.siteUrl}/blog/${post.slug}`,
-      lastModified: new Date(`${post.datePublished}T00:00:00Z`),
-      changeFrequency: "yearly" as const,
-      priority: 0.7,
+      url: absolute(`/blog/${post.slug}`),
+      lastModified: postLastModified(post),
     })),
   ];
 }

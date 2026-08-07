@@ -1,3 +1,72 @@
+# Sitemap + SEO hardening
+
+Status: **implemented, verified** — see `## Review` at the end of this section.
+
+## Findings (verified against `out/` from the last build)
+
+1. **`lastModified: new Date()`** on `/`, `/blog`, `/work` stamps *build time*, not
+   content time. Every deploy claims all three changed. Google's documented response to
+   unreliable `lastmod` is to ignore the signal — so the current sitemap is worse than
+   one carrying no `lastmod` at all.
+2. **`changeFrequency` and `priority`** are ignored by Google and effectively by Bing.
+   Noise, and `priority` invites the belief that it influences ranking.
+3. **Posts have no `dateModified`.** `lastModified` uses `datePublished`, and
+   `buildPostJsonLd` hardcodes `dateModified: post.datePublished`. Editing a post cannot
+   be signalled.
+4. **No image entries.** Three project screenshots render on `/` and `/work` and are
+   invisible to Google Images.
+5. **RSC payloads are crawlable.** The export writes a sibling `.txt` for every route
+   (`index.txt`, `blog.txt`, `work.txt`, per-post, plus `__next.*`). A static host serves
+   these as `text/plain` — thin, duplicate copies of every page. Not disallowed today.
+6. **Flag only:** all five posts carry `datePublished: 2026-07-12`. Content decision,
+   not touched here.
+
+## Changes
+
+- [x] `src/lib/blog.ts` — optional `dateModified`; `postLastModified()`; `blogLastModified`
+      from the newest post; use in JSON-LD and add `article:modified_time`
+- [x] `src/lib/seo.ts` — `siteContentRevised` for the two pages with no content-derived date
+- [x] `src/app/sitemap.ts` — content-derived `lastmod`; drop `changefreq`/`priority`;
+      image entries for `/` and `/work`
+- [x] `src/app/robots.ts` — disallow the `.txt` payloads; leave `/_next/` crawlable so
+      Google can still fetch CSS/JS to render
+- [x] Rebuild; verify `out/sitemap.xml` and `out/robots.txt`; confirm a no-op rebuild
+      produces an identical sitemap; lint
+
+## Review
+
+Four source files changed. `npm run lint` clean; verified against real `npm run build`
+output, not by reading the source.
+
+- **Build-stability (the point of the whole change):** two clean builds from scratch
+  produced a byte-identical `out/sitemap.xml`. Under the old code every rebuild rewrote
+  three `lastmod` values.
+- **Coverage:** 8 `<loc>` entries, one per exported route, checked route-by-route. 6
+  `<image:loc>` entries under a correctly declared `xmlns:image`.
+- **Canonical agreement:** each of `/`, `/work`, `/blog` has a `<loc>` exactly matching
+  the `<link rel="canonical">` in its built HTML.
+- **`dateModified` path proven, not assumed:** temporarily set `dateModified: "2026-08-05"`
+  on one post and rebuilt. The post's `lastmod`, its JSON-LD `dateModified`, and its
+  `article:modified_time` all moved to the new date; `datePublished` stayed at
+  `2026-07-12`; the blog index rolled up to the newest date; the untouched sibling post
+  stayed put. Reverted afterwards and confirmed removed.
+- **`robots.txt`** emits `Disallow: /*.txt$`. `/_next/` is deliberately still allowed —
+  blocking it would stop Google fetching the CSS and JS it needs to render the pages,
+  which is a bigger loss than the duplicate `.txt` payloads.
+
+### Deliberately not done
+
+- **Homepage `<loc>` stays `https://darisi.in`** (no trailing slash). It already matches
+  its canonical exactly, and an empty path normalises to `/`, so this is cosmetic.
+  `seoConfig.siteUrl` is string-concatenated everywhere, so adding a slash there would
+  produce `//blog`.
+- **All five posts still share `datePublished: 2026-07-12`.** A real content signal, but
+  changing published dates is a content decision.
+- **`public/og-image.png` still reads "Creative Technology Studio"** — flagged in the
+  previous task's review and still outstanding. It is the OG image for every page.
+
+---
+
 # Website redesign from supplied portfolio mockups
 
 Status: **planned — implementation in progress**
