@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { WorkIndex } from "@/components/sections/work-index";
+import { buildWorkPageJsonLd } from "@/lib/site-content";
+
+const jsonLd = buildWorkPageJsonLd();
 
 const title = "Selected Work | Darisi";
 const description =
@@ -14,5 +17,13 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
-  return <WorkIndex />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <WorkIndex />
+    </>
+  );
 }

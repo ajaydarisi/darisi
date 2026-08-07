@@ -56,6 +56,58 @@ Remaining perf headroom is ~10 points: LCP element render delay is still **2,210
 TTFB, plus 2 points of Speed Index. The 86 KiB of images does *not* sit on that path — those
 three are `loading="lazy"` and offscreen, so fixing them saves bandwidth, not score.
 
+## Round 4 — closing the two unverified gaps
+
+Took the two items hiding behind the green 100s rather than the CLS regression, which costs
+0 points.
+
+**Accessibility — all 10 manual-check items verified by hand, all pass.** Tab order matches
+visual order across 19 focusables; every one has a visible focus indicator; mobile Sheet moves
+focus in, traps it (11 tabs, never escaped, wraps cleanly), hides all 11 outside elements from
+AT via `aria-hidden`, closes on Escape and returns focus to the trigger with `aria-expanded`
+reset and scroll unlocked; skip link reaches `main#main-content`.
+
+Method note worth keeping: three "failures" here were **false positives from programmatic
+`.focus()`**, which does not trigger `:focus-visible`. Re-testing with real `Tab` keypresses
+cleared all three. Never audit focus styling with `el.focus()`.
+
+**Structured data — validated, one real gap found and fixed.** All 5 `BlogPosting` nodes carry
+every Google-required and recommended field; the homepage graph is well-formed. But `/work`
+shipped **no JSON-LD at all**.
+
+- [x] `site-content.ts` — extracted `buildWorkItemList()` so the homepage and `/work` share one
+      source, added `buildWorkPageJsonLd()` (`CollectionPage` + `ItemList`).
+- [x] `work/page.tsx` — injects it. Verified in the build: `/work` now emits CollectionPage +
+      ItemList with all 3 projects; homepage graph unchanged in shape.
+- Side effect: TexLedger's fallback URL moved from `https://darisi.in/#work` to
+  `https://darisi.in/work` on both pages — a real page now exists, so it is a better target.
+
+Still open and unchanged: CLS 0.012 (font swap, 0 points), images ~41 KiB, unused JS 26 KiB,
+legacy JS 14 KiB (Next internals), CSP `'unsafe-inline'`, Trusted Types.
+
+---
+
+## Round 3 — after deploying vercel.json (PSI mobile, Aug 7 2026 2:56 PM)
+
+**Performance 90 → 97.** LCP 3.3 → **2.4s** (render delay 2,210 → **450ms**), SI 3.9 → **1.6s**,
+FCP 1.6s, TBT 70ms. Score parts: FCP 10/10, LCP 23/25, TBT 30/30, CLS 25/25, SI 10/10 — the
+only remaining point loss anywhere is 2 points of LCP.
+
+Headers confirmed live by `curl`: all eight present and byte-identical to `vercel.json`.
+Trust & Safety **5 items → 2**: HSTS, COOP, and clickjacking all cleared. The two left are
+exactly the two predicted as unfixable here — CSP `'unsafe-inline'` and Trusted Types.
+
+**Regression I introduced: CLS 0 → 0.012.** "Layout shift culprits" attributes it to the hero
+subtitle moving, caused by the two Inter woff2 files swapping in. Making the fonts 7× smaller
+means the swap now lands *inside* the measurement window instead of after it. Costs 0 points
+(good threshold is 0.1) but it is a real regression against the earlier perfect 0.
+
+Still open: images 41 KiB (was 86 — run-variable, lazy/offscreen), unused JS 26 KiB, legacy JS
+14 KiB (Next internals), render-blocking CSS, 2 long tasks. Never verified: the 10 accessibility
+manual-check items, and SEO's "Structured data is valid".
+
+---
+
 Open finding: `globals.css:1` `@import`s DM Sans / Source Serif 4 / DM Mono from Google Fonts,
 but the import is **stripped at build** (0 occurrences in the built CSS). The site actually
 renders Inter / Georgia / system-mono. Design intent and shipped output disagree — and

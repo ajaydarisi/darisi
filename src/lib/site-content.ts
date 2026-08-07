@@ -107,6 +107,55 @@ export const projects: ProjectEntry[] = [
   },
 ];
 
+/** Shared by the homepage graph and the /work page so the two never drift. */
+function buildWorkItemList(id: string) {
+  return {
+    "@type": "ItemList",
+    "@id": id,
+    name: `${seoConfig.personName} selected work`,
+    itemListElement: projects.map((project, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: project.title,
+        description: project.summary,
+        image: `${SITE_URL}${project.image}`,
+        url: project.action?.href ?? `${SITE_URL}/work`,
+        creator: {
+          "@id": PERSON_ID,
+        },
+        keywords: project.tech.join(", "),
+      },
+    })),
+  };
+}
+
+/** /work carried no structured data at all; the projects were only ever
+ *  described on the homepage. */
+export function buildWorkPageJsonLd() {
+  const url = `${SITE_URL}/work`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: "Selected Work",
+        description:
+          "A working index of product web apps, internal systems, and platform work by Ajay Darisi.",
+        inLanguage: "en-US",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": PERSON_ID },
+        mainEntity: { "@id": `${url}/#selected-work` },
+      },
+      buildWorkItemList(`${url}/#selected-work`),
+    ],
+  };
+}
+
 export function buildJsonLd() {
   const ogImageUrl = `${SITE_URL}${seoConfig.ogImagePath}`;
 
@@ -165,26 +214,7 @@ export function buildJsonLd() {
           url: ogImageUrl,
         },
       },
-      {
-        "@type": "ItemList",
-        "@id": WORK_ID,
-        name: `${seoConfig.personName} selected work`,
-        itemListElement: projects.map((project, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          item: {
-            "@type": "CreativeWork",
-            name: project.title,
-            description: project.summary,
-            image: `${SITE_URL}${project.image}`,
-            url: project.action?.href ?? `${SITE_URL}/#work`,
-            creator: {
-              "@id": PERSON_ID,
-            },
-            keywords: project.tech.join(", "),
-          },
-        })),
-      },
+      buildWorkItemList(WORK_ID),
     ],
   };
 }
