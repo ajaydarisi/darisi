@@ -165,17 +165,26 @@ test("homepage reveals ship hidden and are revealed by script", () => {
   const html = readFileSync(outputPath, "utf8");
 
   // AnimatedContent renders its wrapper as `class="invisible ..."` and only reveals
-  // it from JS. The homepage has exactly 8 wrappers: Work 2, Skills 2, About 2,
-  // Contact 2. Asserting the exact count is deliberate — a >= threshold would pass
-  // while a whole section was left unmigrated.
+  // it from JS. There are 8 <AnimatedContent> tags in source, but two of them sit
+  // inside .map() calls, so the homepage renders 12 wrappers:
+  //   Work    1 heading + 3 projects   = 4
+  //   Skills  1 heading + 3 skillAreas = 4
+  //   About   1 + 1                    = 2
+  //   Contact 1 + 1                    = 2
+  // Asserting the exact count is deliberate — a >= threshold would pass while a
+  // whole section was left unmigrated.
   const hidden = html.match(/class="invisible/g) ?? [];
   assert.equal(
     hidden.length,
-    8,
-    `expected 8 hidden reveal wrappers on the homepage, found ${hidden.length}`
+    12,
+    `expected 12 hidden reveal wrappers on the homepage, found ${hidden.length}`
   );
 });
 ```
+
+**Count correction (2026-08-09):** an earlier draft of this plan asserted 8 here,
+conflating *source tags* with *rendered wrappers*. `Work.tsx` and `Skills.tsx` wrap
+their `.map()` bodies, so 8 tags render 12 elements. Caught during Task 3.
 
 - [ ] **Step 2: Run it and watch it fail for the right reason**
 
@@ -183,7 +192,7 @@ test("homepage reveals ship hidden and are revealed by script", () => {
 npm run build && node --test tests/reveal-wrapper.static.test.mjs
 ```
 
-Expected: FAIL with `expected 8 hidden reveal wrappers on the homepage, found 0`.
+Expected: FAIL with `expected 12 hidden reveal wrappers on the homepage, found 0`.
 Task 1 vendored the component but nothing imports it yet, so zero wrappers render.
 A failure mentioning "expected a static homepage" instead means the build did not
 emit — fix that first.
