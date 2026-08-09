@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -130,10 +130,10 @@ export function Navbar() {
               type="button"
               variant="ghost"
               size="icon"
-              className="size-[1.875rem] p-0 lg:hidden"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              className="size-11 p-0 lg:hidden"
+              aria-label="Open menu"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
         </nav>

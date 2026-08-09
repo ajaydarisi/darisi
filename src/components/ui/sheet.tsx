@@ -1,4 +1,5 @@
 import * as React from "react"
+import { X } from "lucide-react"
 import { Dialog as DialogPrimitive } from "radix-ui"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -62,6 +63,15 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
+      {/* The sheet's own close control. Radix renders this dialog modally, so the
+          header — including the SheetTrigger that flips to an X — is aria-hidden and
+          pointer-events:none while the sheet is open. That trigger is inert, so this
+          is the only close control assistive tech can reach. Do not remove it to
+          resolve "two visible X" reports; change the trigger's icon instead. */}
+      <DialogPrimitive.Close className="absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-muted-foreground transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text disabled:pointer-events-none">
+        <X className="h-4 w-4" />
+        <span className="sr-only">Close menu</span>
+      </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </SheetPortal>
 ))
