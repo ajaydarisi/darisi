@@ -4,6 +4,8 @@
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task.
 > Steps use checkbox (`- [ ]`) syntax for tracking.
 
+Status: **implemented, verified, reviewed** — see `## Review` below.
+
 Spec: `docs/superpowers/specs/2026-08-09-react-bits-scroll-reveals-design.md`
 
 **Goal:** Replace the hand-rolled scroll-reveal system with the React Bits
@@ -47,7 +49,7 @@ Delete `animate-on-scroll.tsx` and `use-in-view.ts`.
   className?: string }` plus standard `HTMLAttributes<HTMLDivElement>`.
   Task 3 imports it as `import AnimatedContent from "@/components/ui/AnimatedContent"`.
 
-- [ ] **Step 1: Install the component**
+- [x] **Step 1: Install the component**
 
 ```bash
 npx shadcn@latest add @react-bits/AnimatedContent-TS-TW
@@ -57,7 +59,7 @@ Expected: writes `AnimatedContent.tsx` under `src/components/ui/` and adds
 `gsap@^3.13.0` to `package.json`. If the CLI prompts for a target directory, accept
 the `@/components/ui` alias.
 
-- [ ] **Step 2: Confirm what landed**
+- [x] **Step 2: Confirm what landed**
 
 ```bash
 npm ls gsap && ls src/components/ui/AnimatedContent.tsx
@@ -65,7 +67,7 @@ npm ls gsap && ls src/components/ui/AnimatedContent.tsx
 
 Expected: `gsap@3.13.x` resolved, file exists.
 
-- [ ] **Step 3: Apply the three patches**
+- [x] **Step 3: Apply the three patches**
 
 Open `src/components/ui/AnimatedContent.tsx` and make exactly these edits.
 
@@ -111,7 +113,7 @@ Replace with:
     }
 ```
 
-- [ ] **Step 4: Verify the patches are all present**
+- [x] **Step 4: Verify the patches are all present**
 
 ```bash
 head -1 src/components/ui/AnimatedContent.tsx
@@ -121,7 +123,7 @@ grep -c "snap-main-container" src/components/ui/AnimatedContent.tsx
 
 Expected: `"use client";` — then `1` — then `0`.
 
-- [ ] **Step 5: Typecheck and build**
+- [x] **Step 5: Typecheck and build**
 
 ```bash
 npx tsc --noEmit && npm run build
@@ -130,7 +132,7 @@ npx tsc --noEmit && npm run build
 Expected: no type errors; build emits 16 routes. The component is not yet imported
 anywhere, so this only proves it compiles.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add package.json package-lock.json src/components/ui/AnimatedContent.tsx
@@ -152,7 +154,7 @@ This is written before the migration so it genuinely fails first. It mirrors the
 existing `tests/work-index.static.test.mjs` convention: plain `node:test`, no
 framework, asserting against the static export.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 import assert from "node:assert/strict";
@@ -186,7 +188,7 @@ test("homepage reveals ship hidden and are revealed by script", () => {
 conflating *source tags* with *rendered wrappers*. `Work.tsx` and `Skills.tsx` wrap
 their `.map()` bodies, so 8 tags render 12 elements. Caught during Task 3.
 
-- [ ] **Step 2: Run it and watch it fail for the right reason**
+- [x] **Step 2: Run it and watch it fail for the right reason**
 
 ```bash
 npm run build && node --test tests/reveal-wrapper.static.test.mjs
@@ -197,7 +199,7 @@ Task 1 vendored the component but nothing imports it yet, so zero wrappers rende
 A failure mentioning "expected a static homepage" instead means the build did not
 emit — fix that first.
 
-- [ ] **Step 3: Commit the failing test**
+- [x] **Step 3: Commit the failing test**
 
 ```bash
 git add tests/reveal-wrapper.static.test.mjs
@@ -233,7 +235,7 @@ import AnimatedContent from "@/components/ui/AnimatedContent";
 
 Then apply the per-file rewrites below. Closing tags become `</AnimatedContent>`.
 
-- [ ] **Step 1: Work.tsx**
+- [x] **Step 1: Work.tsx**
 
 Line 17 — replace `<AnimateOnScroll variant="fade-up">` with:
 
@@ -257,7 +259,7 @@ Line 37 — replace `<AnimateOnScroll key={project.title} variant="fade-up" dela
 
 Close both at lines 33 and 122 with `</AnimatedContent>`.
 
-- [ ] **Step 2: Skills.tsx**
+- [x] **Step 2: Skills.tsx**
 
 Line 14 — replace `<AnimateOnScroll variant="fade-up">` with:
 
@@ -282,7 +284,7 @@ Line 32 — replace the multi-line opening tag with:
 
 Close both at lines 28 and 55 with `</AnimatedContent>`.
 
-- [ ] **Step 3: About.tsx**
+- [x] **Step 3: About.tsx**
 
 Line 19 — replace `<AnimateOnScroll variant="fade-up">` with:
 
@@ -306,7 +308,7 @@ Line 34 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="l
 
 Close both at lines 32 and 63 with `</AnimatedContent>`.
 
-- [ ] **Step 4: Contact.tsx**
+- [x] **Step 4: Contact.tsx**
 
 Line 23 — replace `<AnimateOnScroll variant="fade-up">` with:
 
@@ -330,7 +332,7 @@ Line 43 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="l
 
 Close both at lines 41 and 99 with `</AnimatedContent>`.
 
-- [ ] **Step 5: Verify no stragglers and no millisecond delays survived**
+- [x] **Step 5: Verify no stragglers and no millisecond delays survived**
 
 ```bash
 grep -rn "AnimateOnScroll" --include="*.tsx" src/components/sections/ || echo "OK: no references left"
@@ -341,7 +343,7 @@ grep -rc "<AnimatedContent" --include="*.tsx" src/components/sections/
 Expected: `OK: no references left` — then `OK: no ms delays left` — then `2` for each
 of the four section files (8 total).
 
-- [ ] **Step 6: Typecheck, lint, build**
+- [x] **Step 6: Typecheck, lint, build**
 
 ```bash
 npx tsc --noEmit && npm run lint && npm run build
@@ -349,7 +351,7 @@ npx tsc --noEmit && npm run lint && npm run build
 
 Expected: clean; 16 routes emitted.
 
-- [ ] **Step 7: Make the Task 2 test pass**
+- [x] **Step 7: Make the Task 2 test pass**
 
 ```bash
 node --test tests/
@@ -358,7 +360,7 @@ node --test tests/
 Expected: `# pass 2`, `# fail 0`. The reveal-wrapper test that failed with `found 0`
 in Task 2 should now report 8 wrappers and pass.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/components/sections/
@@ -377,7 +379,7 @@ git commit -m "refactor(motion): move section reveals to React Bits AnimatedCont
 - Consumes: Task 3 must be complete — these files must have zero importers.
 - Produces: nothing.
 
-- [ ] **Step 1: Prove both files are unreferenced**
+- [x] **Step 1: Prove both files are unreferenced**
 
 ```bash
 grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" \
@@ -401,13 +403,13 @@ After deletion, the unfiltered grep is the real confirmation, and it should be s
 grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" --include="*.tsx" --include="*.ts" src/
 ```
 
-- [ ] **Step 2: Delete**
+- [x] **Step 2: Delete**
 
 ```bash
 git rm src/components/ui/animate-on-scroll.tsx src/hooks/use-in-view.ts
 ```
 
-- [ ] **Step 3: Typecheck, build, and re-run the suite**
+- [x] **Step 3: Typecheck, build, and re-run the suite**
 
 ```bash
 npx tsc --noEmit && npm run build && node --test tests/
@@ -416,7 +418,7 @@ npx tsc --noEmit && npm run build && node --test tests/
 Expected: clean; 16 routes; `# pass 2 # fail 0`. A failure here means a missed
 importer.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git commit -m "chore(motion): drop superseded AnimateOnScroll and useInView"
@@ -435,7 +437,7 @@ git commit -m "chore(motion): drop superseded AnimateOnScroll and useInView"
 
 None of these are optional. If gate 2 or gate 3 fails, the change does not ship.
 
-- [ ] **Step 1: Gate — build and tests**
+- [x] **Step 1: Gate — build and tests**
 
 ```bash
 npm run lint && npm run build && node --test tests/
@@ -443,7 +445,7 @@ npm run lint && npm run build && node --test tests/
 
 Expected: clean lint, 16 routes, `# pass 2 # fail 0`.
 
-- [ ] **Step 2: Gate — bundle delta (record the number)**
+- [x] **Step 2: Gate — bundle delta (record the number)**
 
 ```bash
 du -sh out/_next/static/chunks && npm ls gsap
@@ -453,7 +455,7 @@ Compare against the pre-change baseline. Record the actual delta in the Review
 section. Expected roughly +40 KB gzipped; report what you measure, not what is
 expected here.
 
-- [ ] **Step 3: Gate — no flash on load**
+- [x] **Step 3: Gate — no flash on load**
 
 Start the preview, hard-reload the homepage with cache disabled, and watch the Work
 section. Content must fade in from hidden. It must NOT paint, vanish, then animate.
@@ -462,7 +464,7 @@ section. Content must fade in from hidden. It must NOT paint, vanish, then anima
 npx serve out -p 4173
 ```
 
-- [ ] **Step 4: Gate — reduced motion (the critical one)**
+- [x] **Step 4: Gate — reduced motion (the critical one)**
 
 With `prefers-reduced-motion: reduce` emulated, load the homepage and run this in the
 console:
@@ -476,18 +478,18 @@ Expected: **`0`**. Any other number means reduced-motion users see blank section
 the exact failure the guard exists to prevent. Also confirm all four sections show
 their text, and that no element sits at `opacity: 0`.
 
-- [ ] **Step 5: Gate — accessibility has not regressed**
+- [x] **Step 5: Gate — accessibility has not regressed**
 
 Re-run the sweep from the 2026-08-09 audit on the built output: contrast in both
 themes, 44px touch targets, no label-in-name mismatches, single close control in the
 mobile sheet, no `aria-pressed` on the theme toggle.
 
-- [ ] **Step 6: Write the Review section**
+- [x] **Step 6: Write the Review section**
 
 Append `## Review` to this plan section in `tasks/todo.md` recording: measured bundle
 delta, each gate's pass/fail, and anything deferred.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add tasks/todo.md
