@@ -496,6 +496,96 @@ git commit -m "docs(motion): record React Bits reveal migration review"
 
 ---
 
+## Review
+
+Status: **implemented, verified** — all five gates pass. Branch
+`feat/react-bits-reveals`, 8 commits.
+
+### Gates
+
+| # | Gate | Result |
+| --- | --- | --- |
+| 1 | Build + tests | ✅ lint clean, 16 routes, `# pass 2  # fail 0` |
+| 2 | Bundle delta | ⚠️ **+43.5 KB gzipped** — measured, see below |
+| 3 | No flash / reveals fire | ✅ 12/12 reveal on scroll, none stuck |
+| 4 | Reduced motion | ✅ 0 hidden, 0 dimmed, 0 translated, without scrolling |
+| 5 | Accessibility | ✅ all seven 2026-08-09 fixes intact, both themes |
+
+### Bundle delta (gate 2)
+
+Total JS, gzipped, whole `out/_next/static` tree:
+
+| | gzipped | raw |
+| --- | --- | --- |
+| `main` (no gsap) | 212.8 KB | 1268 KB |
+| this branch | 256.3 KB | 1376 KB |
+| **delta** | **+43.5 KB** | +108 KB |
+
+This is the cost the spec flagged and the user accepted, now a measured number
+rather than an estimate. It lands on a site at PSI mobile 73 / LCP 6.5s with image
+resizing (86 KiB) and legacy JS (14 KiB) still open above. Nothing here reduces
+that debt; it adds to it. Revisit if mobile performance becomes the priority —
+`git revert` of this branch plus `npm install` is a clean rollback.
+
+### Gate 4 detail — the failure mode that did not happen
+
+Under `prefers-reduced-motion: reduce`, with **no scrolling at all**: 12 wrappers,
+`visibility: hidden` on 0, opacity below 0.99 on 0, non-identity transform on 0.
+Content probes in all four migrated sections render with no hidden ancestor.
+
+This is the case the spec called lethal: the `invisible` class is removed only by
+`gsap.set`, so an early `return` in the reduced-motion branch would have left every
+animated section permanently blank. The guard snaps to the final state instead, and
+this measurement is the proof it works.
+
+### Verification method note
+
+The Claude Browser pane could not verify gate 3. Scripted scrolling there mutates
+`scrollTop` without emitting scroll events — measured: `scrollTop` moved 300 → 2200
+with **0** `scroll` events on either `window` or `document`. ScrollTrigger listens
+for those events, so every reveal appeared permanently stuck at `opacity: 0`, which
+looks exactly like a catastrophic regression.
+
+It was not. Re-run under Playwright with real `mouse.wheel` input, all 12 wrappers
+reveal correctly. **Gates 3 and 4 must be verified with real input events**, not
+scripted scroll assignment.
+
+### Known false positives
+
+The contrast sweep reports 3 failures at 1.09:1 on the project figcaptions
+("E-commerce", "Marketplace", "Internal Tool"). These are not real: the caption sits
+on a `bg-[#0F2724]/78` scrim expressed in `oklab()`, which the sweep's colour parser
+skips, so it falls through to the page background. True worst-case ratio over a pure
+white screenshot is 6.9:1. Pre-existing, unrelated to this change.
+
+Two console warnings about unused font preloads are also pre-existing (`next/font`),
+and untouched by this work.
+
+### Plan defects found during execution
+
+Both were errors in the plan, caught by the subagents executing it:
+
+1. **Wrapper count (Task 2/3).** The contract asserted 8 rendered wrappers. The true
+   number is 12 — `Work` and `Skills` wrap their `.map()` bodies over 3 items each,
+   so 8 source tags render 12 elements. The Task 3 implementer hit the red test,
+   root-caused it, and refused to edit the test to match its own output. Fixed in
+   `92d6ff7`.
+2. **Unsatisfiable gate (Task 4).** The pre-deletion grep searched all of `src/` for
+   references to the two files it guarded, without excluding those files. They
+   reference themselves, so it returned 6 hits and could never be silent. Fixed in
+   `d35f9ad`; the deletion itself was correct.
+
+### Deferred
+
+- Mobile hamburger/close button is 30×30. Passes WCAG 2.2's 24×24 minimum, misses
+  the 44×44 guideline. Out of scope for both the accessibility fix set and this
+  migration; `size-[1.875rem]` → `size-11` in `Navbar.tsx` if wanted.
+- The four unused reveal variants (`fade-in`, `fade-left`, `fade-right`, `scale-in`)
+  no longer exist in code. The prop mapping to reproduce them is preserved in the
+  spec's variant table.
+
+---
+
 # Full SEO pass — remaining gaps
 
 Status: **implemented, verified** — see `## Review` below.
