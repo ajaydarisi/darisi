@@ -1,3 +1,477 @@
+# React Bits scroll reveals — Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
+> (recommended) or superpowers:executing-plans to implement this plan task-by-task.
+> Steps use checkbox (`- [ ]`) syntax for tracking.
+
+Spec: `docs/superpowers/specs/2026-08-09-react-bits-scroll-reveals-design.md`
+
+**Goal:** Replace the hand-rolled scroll-reveal system with the React Bits
+`AnimatedContent` component at all 8 call sites, without regressing reduced-motion
+support or the accessibility fixes landed on 2026-08-09.
+
+**Architecture:** Install `AnimatedContent` as vendored source via the shadcn registry
+already configured in `components.json`. Patch it for `"use client"`, reduced motion,
+and a dead demo-site scroller lookup. Rewrite all 8 call sites to use it directly.
+Delete `animate-on-scroll.tsx` and `use-in-view.ts`.
+
+**Tech Stack:** Next.js 16.3 App Router (`output: "export"`), React 19.2, Tailwind v4,
+`gsap@^3.13.0` + ScrollTrigger (new), shadcn CLI, `node --test` for static contracts.
+
+## Global Constraints
+
+- `output: "export"` — static export. No server. Everything ships to the client.
+- `components.json` sets `rsc: true` — client components need an explicit `"use client"`.
+- Reveal timing must match the outgoing system: `distance={32}` (was `translate-y-8`),
+  `duration={0.6}` (was 600ms), `threshold={0.1}`, `ease="power4.out"`.
+- **GSAP takes delay in SECONDS. The outgoing props are MILLISECONDS.** Every delay
+  must be divided by 1000. `delay={100}` in GSAP is a 100-second delay.
+- Do not touch `src/components/sections/Hero.tsx`. It is the LCP element.
+- Do not modify `globals.css` motion tokens.
+- Do not revert any of the seven accessibility fixes from 2026-08-09.
+- No `Co-Authored-By` lines in commit messages.
+
+---
+
+## Task 1: Install and patch AnimatedContent
+
+**Files:**
+- Create: `src/components/ui/AnimatedContent.tsx` (via shadcn CLI, then patched)
+- Modify: `package.json` (adds `gsap`)
+
+**Interfaces:**
+- Consumes: nothing.
+- Produces: default export `AnimatedContent`, a `React.FC` accepting
+  `{ children, distance?: number, direction?: 'vertical'|'horizontal', reverse?: boolean,
+  duration?: number, ease?: string, threshold?: number, delay?: number, scale?: number,
+  className?: string }` plus standard `HTMLAttributes<HTMLDivElement>`.
+  Task 3 imports it as `import AnimatedContent from "@/components/ui/AnimatedContent"`.
+
+- [ ] **Step 1: Install the component**
+
+```bash
+npx shadcn@latest add @react-bits/AnimatedContent-TS-TW
+```
+
+Expected: writes `AnimatedContent.tsx` under `src/components/ui/` and adds
+`gsap@^3.13.0` to `package.json`. If the CLI prompts for a target directory, accept
+the `@/components/ui` alias.
+
+- [ ] **Step 2: Confirm what landed**
+
+```bash
+npm ls gsap && ls src/components/ui/AnimatedContent.tsx
+```
+
+Expected: `gsap@3.13.x` resolved, file exists.
+
+- [ ] **Step 3: Apply the three patches**
+
+Open `src/components/ui/AnimatedContent.tsx` and make exactly these edits.
+
+**Patch 1** — add as the very first line of the file:
+
+```tsx
+"use client";
+```
+
+**Patch 3** — replace the demo-site scroller lookup. Find:
+
+```tsx
+let scrollerTarget: Element | string | null = container || document.getElementById('snap-main-container') || null;
+```
+
+Replace with:
+
+```tsx
+let scrollerTarget: Element | string | null = container || null;
+```
+
+**Patch 2** — the reduced-motion guard. Find the opening of the effect:
+
+```tsx
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+```
+
+Replace with:
+
+```tsx
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // The wrapper ships with Tailwind's `invisible` class and is only ever revealed
+    // by the gsap.set below. A bare `return` here would leave content permanently
+    // hidden, so snap to the final state instead of bailing out.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1, visibility: "visible" });
+      return;
+    }
+```
+
+- [ ] **Step 4: Verify the patches are all present**
+
+```bash
+head -1 src/components/ui/AnimatedContent.tsx
+grep -c "prefers-reduced-motion" src/components/ui/AnimatedContent.tsx
+grep -c "snap-main-container" src/components/ui/AnimatedContent.tsx
+```
+
+Expected: `"use client";` — then `1` — then `0`.
+
+- [ ] **Step 5: Typecheck and build**
+
+```bash
+npx tsc --noEmit && npm run build
+```
+
+Expected: no type errors; build emits 16 routes. The component is not yet imported
+anywhere, so this only proves it compiles.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add package.json package-lock.json src/components/ui/AnimatedContent.tsx
+git commit -m "feat(motion): vendor React Bits AnimatedContent with reduced-motion guard"
+```
+
+---
+
+## Task 2: Static contract for the reveal wrapper (write this BEFORE migrating)
+
+**Files:**
+- Create: `tests/reveal-wrapper.static.test.mjs`
+
+**Interfaces:**
+- Consumes: Task 1's component (not yet imported anywhere — that is the point).
+- Produces: a `node --test` contract runnable via `node --test tests/`.
+
+This is written before the migration so it genuinely fails first. It mirrors the
+existing `tests/work-index.static.test.mjs` convention: plain `node:test`, no
+framework, asserting against the static export.
+
+- [ ] **Step 1: Write the failing test**
+
+```js
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import test from "node:test";
+
+test("homepage reveals ship hidden and are revealed by script", () => {
+  const outputPath = ["out/index.html", "out/index/index.html"].find(existsSync);
+  assert.ok(outputPath, "expected a static homepage");
+  const html = readFileSync(outputPath, "utf8");
+
+  // AnimatedContent renders its wrapper as `class="invisible ..."` and only reveals
+  // it from JS. The homepage has exactly 8 wrappers: Work 2, Skills 2, About 2,
+  // Contact 2. Asserting the exact count is deliberate — a >= threshold would pass
+  // while a whole section was left unmigrated.
+  const hidden = html.match(/class="invisible/g) ?? [];
+  assert.equal(
+    hidden.length,
+    8,
+    `expected 8 hidden reveal wrappers on the homepage, found ${hidden.length}`
+  );
+});
+```
+
+- [ ] **Step 2: Run it and watch it fail for the right reason**
+
+```bash
+npm run build && node --test tests/reveal-wrapper.static.test.mjs
+```
+
+Expected: FAIL with `expected 8 hidden reveal wrappers on the homepage, found 0`.
+Task 1 vendored the component but nothing imports it yet, so zero wrappers render.
+A failure mentioning "expected a static homepage" instead means the build did not
+emit — fix that first.
+
+- [ ] **Step 3: Commit the failing test**
+
+```bash
+git add tests/reveal-wrapper.static.test.mjs
+git commit -m "test(motion): add failing contract for hidden reveal wrappers"
+```
+
+---
+
+## Task 3: Migrate the 8 call sites
+
+**Files:**
+- Modify: `src/components/sections/Work.tsx:5,17,33,37,122`
+- Modify: `src/components/sections/Skills.tsx:3,14,28,32,55`
+- Modify: `src/components/sections/About.tsx:3,19,32,34,63`
+- Modify: `src/components/sections/Contact.tsx:4,23,41,43,99`
+
+**Interfaces:**
+- Consumes: `AnimatedContent` from Task 1.
+- Produces: no exports. Sections render identical DOM inside a wrapper `<div>` that
+  now carries the `invisible` class until GSAP reveals it.
+
+In every file, replace the import:
+
+```tsx
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+```
+
+with:
+
+```tsx
+import AnimatedContent from "@/components/ui/AnimatedContent";
+```
+
+Then apply the per-file rewrites below. Closing tags become `</AnimatedContent>`.
+
+- [ ] **Step 1: Work.tsx**
+
+Line 17 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 37 — replace `<AnimateOnScroll key={project.title} variant="fade-up" delay={index * 100}>` with:
+
+```tsx
+<AnimatedContent
+  key={project.title}
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={index * 0.1}
+>
+```
+
+Close both at lines 33 and 122 with `</AnimatedContent>`.
+
+- [ ] **Step 2: Skills.tsx**
+
+Line 14 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 32 — replace the multi-line opening tag with:
+
+```tsx
+<AnimatedContent
+  key={skill.title}
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={index * 0.1}
+  className="border-b border-[#2A4A47] py-8 last:border-b-0 lg:border-b-0 lg:py-3 lg:px-9 lg:first:pl-0"
+>
+```
+
+Close both at lines 28 and 55 with `</AnimatedContent>`.
+
+- [ ] **Step 3: About.tsx**
+
+Line 19 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 34 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[4.0625rem]">` with:
+
+```tsx
+<AnimatedContent
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={0.1}
+  className="lg:pt-[4.0625rem]"
+>
+```
+
+Close both at lines 32 and 63 with `</AnimatedContent>`.
+
+- [ ] **Step 4: Contact.tsx**
+
+Line 23 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 43 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[7.5625rem]">` with:
+
+```tsx
+<AnimatedContent
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={0.1}
+  className="lg:pt-[7.5625rem]"
+>
+```
+
+Close both at lines 41 and 99 with `</AnimatedContent>`.
+
+- [ ] **Step 5: Verify no stragglers and no millisecond delays survived**
+
+```bash
+grep -rn "AnimateOnScroll" --include="*.tsx" src/components/sections/ || echo "OK: no references left"
+grep -rn "delay={1[0-9][0-9]}\|delay={index \* 100}" --include="*.tsx" src/ || echo "OK: no ms delays left"
+grep -rc "<AnimatedContent" --include="*.tsx" src/components/sections/
+```
+
+Expected: `OK: no references left` — then `OK: no ms delays left` — then `2` for each
+of the four section files (8 total).
+
+- [ ] **Step 6: Typecheck, lint, build**
+
+```bash
+npx tsc --noEmit && npm run lint && npm run build
+```
+
+Expected: clean; 16 routes emitted.
+
+- [ ] **Step 7: Make the Task 2 test pass**
+
+```bash
+node --test tests/
+```
+
+Expected: `# pass 2`, `# fail 0`. The reveal-wrapper test that failed with `found 0`
+in Task 2 should now report 8 wrappers and pass.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add src/components/sections/
+git commit -m "refactor(motion): move section reveals to React Bits AnimatedContent"
+```
+
+---
+
+## Task 4: Delete the superseded reveal system
+
+**Files:**
+- Delete: `src/components/ui/animate-on-scroll.tsx`
+- Delete: `src/hooks/use-in-view.ts`
+
+**Interfaces:**
+- Consumes: Task 3 must be complete — these files must have zero importers.
+- Produces: nothing.
+
+- [ ] **Step 1: Prove both files are unreferenced**
+
+```bash
+grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" --include="*.tsx" --include="*.ts" src/
+```
+
+Expected: **no output at all.** If anything prints, stop — Task 3 is incomplete.
+Do not delete until this command is silent.
+
+- [ ] **Step 2: Delete**
+
+```bash
+git rm src/components/ui/animate-on-scroll.tsx src/hooks/use-in-view.ts
+```
+
+- [ ] **Step 3: Typecheck, build, and re-run the suite**
+
+```bash
+npx tsc --noEmit && npm run build && node --test tests/
+```
+
+Expected: clean; 16 routes; `# pass 2 # fail 0`. A failure here means a missed
+importer.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git commit -m "chore(motion): drop superseded AnimateOnScroll and useInView"
+```
+
+---
+
+## Task 5: Verification gates
+
+**Files:**
+- Modify: `tasks/todo.md` (append a `## Review` section to this plan)
+
+**Interfaces:**
+- Consumes: Tasks 1–4 complete.
+- Produces: recorded measurements. No code.
+
+None of these are optional. If gate 2 or gate 3 fails, the change does not ship.
+
+- [ ] **Step 1: Gate — build and tests**
+
+```bash
+npm run lint && npm run build && node --test tests/
+```
+
+Expected: clean lint, 16 routes, `# pass 2 # fail 0`.
+
+- [ ] **Step 2: Gate — bundle delta (record the number)**
+
+```bash
+du -sh out/_next/static/chunks && npm ls gsap
+```
+
+Compare against the pre-change baseline. Record the actual delta in the Review
+section. Expected roughly +40 KB gzipped; report what you measure, not what is
+expected here.
+
+- [ ] **Step 3: Gate — no flash on load**
+
+Start the preview, hard-reload the homepage with cache disabled, and watch the Work
+section. Content must fade in from hidden. It must NOT paint, vanish, then animate.
+
+```bash
+npx serve out -p 4173
+```
+
+- [ ] **Step 4: Gate — reduced motion (the critical one)**
+
+With `prefers-reduced-motion: reduce` emulated, load the homepage and run this in the
+console:
+
+```js
+[...document.querySelectorAll('.invisible')]
+  .filter(el => getComputedStyle(el).visibility === 'hidden').length
+```
+
+Expected: **`0`**. Any other number means reduced-motion users see blank sections —
+the exact failure the guard exists to prevent. Also confirm all four sections show
+their text, and that no element sits at `opacity: 0`.
+
+- [ ] **Step 5: Gate — accessibility has not regressed**
+
+Re-run the sweep from the 2026-08-09 audit on the built output: contrast in both
+themes, 44px touch targets, no label-in-name mismatches, single close control in the
+mobile sheet, no `aria-pressed` on the theme toggle.
+
+- [ ] **Step 6: Write the Review section**
+
+Append `## Review` to this plan section in `tasks/todo.md` recording: measured bundle
+delta, each gate's pass/fail, and anything deferred.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add tasks/todo.md
+git commit -m "docs(motion): record React Bits reveal migration review"
+```
+
+---
+
 # Full SEO pass — remaining gaps
 
 Status: **implemented, verified** — see `## Review` below.
