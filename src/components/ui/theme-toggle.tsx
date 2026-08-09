@@ -121,16 +121,12 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
-      aria-pressed={isLight}
       onClick={toggleTheme}
       className={cn(
-        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted-foreground transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-[var(--ring)] bg-elevated p-1 text-muted-foreground transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className
       )}
     >
-      <span className="sr-only">
-        {isLight ? "Switch to dark theme" : "Switch to light theme"}
-      </span>
       <Moon
         aria-hidden="true"
         className="absolute left-2 h-4 w-4 transition-colors duration-[var(--motion-base)]"

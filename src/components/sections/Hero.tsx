@@ -73,7 +73,6 @@ export function Hero() {
               <Button asChild className="h-[2.875rem] rounded-none px-6 text-sm shadow-none hover:translate-y-0 hover:shadow-none">
                 <a
                   href="#work"
-                  aria-label="View Ajay Darisi's selected work"
                   onClick={() =>
                     trackEvent(ANALYTICS_EVENTS.heroPrimaryCtaClick, {
                       location: "hero",
@@ -105,7 +104,6 @@ export function Hero() {
       <a
         href="#work"
         className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-3 font-utility text-[0.625rem] font-medium uppercase tracking-[0.2em] text-muted-foreground lg:flex"
-        aria-label="Scroll down to my work"
       >
         <span className="h-10 w-px bg-accent animate-scroll-dot" aria-hidden="true" />
         Scroll to explore

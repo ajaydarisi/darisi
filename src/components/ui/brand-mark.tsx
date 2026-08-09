@@ -48,7 +48,7 @@ export function BrandMark({ variant, className, alt }: BrandMarkProps) {
       role={label ? "img" : undefined}
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}
-      className={`block bg-primary ${className ?? ""}`}
+      className={`block bg-primary forced-colors:bg-[CanvasText] ${className ?? ""}`}
       style={style}
     />
   );

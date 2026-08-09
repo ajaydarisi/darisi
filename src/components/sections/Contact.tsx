@@ -42,7 +42,7 @@ export function Contact() {
 
         <AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[7.5625rem]">
           <div>
-            <p className="font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-[var(--ring)]">
+            <p className="font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
               A useful first note can be as simple as
             </p>
             <ul
@@ -80,7 +80,7 @@ export function Contact() {
               href={socialUrls.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+              className="inline-flex min-h-11 items-center gap-1 transition-colors hover:text-foreground"
             >
               GitHub
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -89,7 +89,7 @@ export function Contact() {
               href={socialUrls.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+              className="inline-flex min-h-11 items-center gap-1 transition-colors hover:text-foreground"
             >
               LinkedIn
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
