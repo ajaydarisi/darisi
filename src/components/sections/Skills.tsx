@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import AnimatedContent from "@/components/ui/AnimatedContent";
 import { skillAreas } from "@/lib/site-content";
 
 export function Skills() {
@@ -11,7 +11,7 @@ export function Skills() {
       className="min-h-[52.5625rem] bg-[#0F2724] py-[4.5rem] text-[#F6F2EA]"
     >
       <div className="site-shell">
-        <AnimateOnScroll variant="fade-up">
+        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
           <div className="flex items-center gap-3">
             <span className="h-px w-6 bg-[#DDA082]" aria-hidden="true" />
             <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-[#C8DAD6]">
@@ -25,14 +25,18 @@ export function Skills() {
             From first sketch to{" "}
             <span className="italic text-[#DDA082]">dependable system.</span>
           </h2>
-        </AnimateOnScroll>
+        </AnimatedContent>
 
         <div className="mt-[8.875rem] grid border-y border-[#2A4A47] lg:grid-cols-3 lg:divide-x lg:divide-[#2A4A47]">
           {skillAreas.map((skill, index) => (
-            <AnimateOnScroll
+            <AnimatedContent
               key={skill.title}
-              variant="fade-up"
-              delay={index * 100}
+              distance={32}
+              direction="vertical"
+              duration={0.6}
+              ease="power4.out"
+              threshold={0.1}
+              delay={index * 0.1}
               className="border-b border-[#2A4A47] py-8 last:border-b-0 lg:border-b-0 lg:py-3 lg:px-9 lg:first:pl-0"
             >
               <article className="flex h-full flex-col">
@@ -52,7 +56,7 @@ export function Skills() {
                   {skill.tools}
                 </p>
               </article>
-            </AnimateOnScroll>
+            </AnimatedContent>
           ))}
         </div>
       </div>

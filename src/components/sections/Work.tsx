@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import AnimatedContent from "@/components/ui/AnimatedContent";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
 
@@ -14,7 +14,7 @@ export function Work() {
       className="border-b border-border-subtle pt-[4.5rem] pb-[5.3125rem]"
     >
       <div className="site-shell">
-        <AnimateOnScroll variant="fade-up">
+        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
           <div className="relative">
             <div className="flex items-center gap-3">
               <span className="h-px w-6 bg-accent" aria-hidden="true" />
@@ -30,11 +30,19 @@ export function Work() {
               <span className="italic text-accent">complexity usable.</span>
             </h2>
           </div>
-        </AnimateOnScroll>
+        </AnimatedContent>
 
         <div className="mt-11 space-y-32">
           {projects.map((project, index) => (
-            <AnimateOnScroll key={project.title} variant="fade-up" delay={index * 100}>
+            <AnimatedContent
+              key={project.title}
+              distance={32}
+              direction="vertical"
+              duration={0.6}
+              ease="power4.out"
+              threshold={0.1}
+              delay={index * 0.1}
+            >
               <article
                 className={`grid gap-8 lg:grid-cols-[minmax(0,46.8%)_minmax(0,1fr)] lg:items-start lg:gap-[4.1%] ${
                   index % 2 ? "lg:[&>figure]:order-2" : ""
@@ -119,7 +127,7 @@ export function Work() {
                   </div>
                 </div>
               </article>
-            </AnimateOnScroll>
+            </AnimatedContent>
           ))}
         </div>
       </div>

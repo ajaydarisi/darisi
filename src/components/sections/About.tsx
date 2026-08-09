@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import AnimatedContent from "@/components/ui/AnimatedContent";
 
 const values = [
   "I like untangling messy requirements until the next right product decision is obvious.",
@@ -16,7 +16,7 @@ export function About() {
       className="min-h-[46.625rem] py-[4.5rem]"
     >
       <div className="site-shell grid gap-12 lg:grid-cols-[26rem_minmax(0,1fr)] lg:gap-[5.875rem]">
-        <AnimateOnScroll variant="fade-up">
+        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
           <div className="flex items-center gap-3">
             <span className="h-px w-6 bg-accent" aria-hidden="true" />
             <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
@@ -29,9 +29,17 @@ export function About() {
           >
             Software engineer in Bengaluru, India.
           </h2>
-        </AnimateOnScroll>
+        </AnimatedContent>
 
-        <AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[4.0625rem]">
+        <AnimatedContent
+          distance={32}
+          direction="vertical"
+          duration={0.6}
+          ease="power4.out"
+          threshold={0.1}
+          delay={0.1}
+          className="lg:pt-[4.0625rem]"
+        >
           <div className="max-w-[43.25rem] space-y-4">
             <p className="text-[1.2rem] leading-[1.75] text-[var(--text-body)]">
               I&apos;m based in Bengaluru and I work on product web apps and
@@ -60,7 +68,7 @@ export function About() {
             &ldquo;The best software usually feels calm: fewer handoffs,
             clearer decisions, and execution that keeps moving.&rdquo;
           </blockquote>
-        </AnimateOnScroll>
+        </AnimatedContent>
       </div>
     </section>
   );
