@@ -380,11 +380,26 @@ git commit -m "refactor(motion): move section reveals to React Bits AnimatedCont
 - [ ] **Step 1: Prove both files are unreferenced**
 
 ```bash
-grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" --include="*.tsx" --include="*.ts" src/
+grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" \
+  --include="*.tsx" --include="*.ts" src/ \
+  | grep -v "^src/components/ui/animate-on-scroll.tsx:" \
+  | grep -v "^src/hooks/use-in-view.ts:"
 ```
 
-Expected: **no output at all.** If anything prints, stop — Task 3 is incomplete.
-Do not delete until this command is silent.
+Expected: **no output at all.** If anything prints, stop — Task 3 is incomplete, and
+some section still imports the old system. Do not delete until this command is silent.
+
+**Gate correction (2026-08-09):** the first draft of this gate grepped all of `src/`
+without excluding the two files being deleted. Those files reference themselves and
+each other, so the command returned 6 hits and could *never* be silent — the gate was
+unsatisfiable by construction. The exclusions above make it test what it always meant:
+no **external** importers. Caught by the Task 4 reviewer.
+
+After deletion, the unfiltered grep is the real confirmation, and it should be silent:
+
+```bash
+grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" --include="*.tsx" --include="*.ts" src/
+```
 
 - [ ] **Step 2: Delete**
 
