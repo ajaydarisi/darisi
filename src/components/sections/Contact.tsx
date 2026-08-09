@@ -20,7 +20,7 @@ export function Contact() {
       className="min-h-[39.3125rem] border-y border-border-subtle bg-grid-pattern py-[4.5rem]"
     >
       <div className="site-shell grid gap-12 lg:grid-cols-[40rem_minmax(0,1fr)] lg:gap-[7.0625rem]">
-        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+        <AnimatedContent>
           <div className="flex items-center gap-3">
             <span className="h-px w-6 bg-accent" aria-hidden="true" />
             <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
@@ -41,11 +41,6 @@ export function Contact() {
         </AnimatedContent>
 
         <AnimatedContent
-          distance={32}
-          direction="vertical"
-          duration={0.6}
-          ease="power4.out"
-          threshold={0.1}
           delay={0.1}
           className="lg:pt-[7.5625rem]"
         >

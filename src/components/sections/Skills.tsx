@@ -11,7 +11,7 @@ export function Skills() {
       className="min-h-[52.5625rem] bg-[#0F2724] py-[4.5rem] text-[#F6F2EA]"
     >
       <div className="site-shell">
-        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+        <AnimatedContent>
           <div className="flex items-center gap-3">
             <span className="h-px w-6 bg-[#DDA082]" aria-hidden="true" />
             <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-[#C8DAD6]">
@@ -31,11 +31,6 @@ export function Skills() {
           {skillAreas.map((skill, index) => (
             <AnimatedContent
               key={skill.title}
-              distance={32}
-              direction="vertical"
-              duration={0.6}
-              ease="power4.out"
-              threshold={0.1}
               delay={index * 0.1}
               className="border-b border-[#2A4A47] py-8 last:border-b-0 lg:border-b-0 lg:py-3 lg:px-9 lg:first:pl-0"
             >

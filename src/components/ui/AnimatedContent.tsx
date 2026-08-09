@@ -26,14 +26,18 @@ interface AnimatedContentProps extends React.HTMLAttributes<HTMLDivElement> {
   onDisappearanceComplete?: () => void;
 }
 
+// Site defaults, not upstream React Bits defaults. distance/duration/ease are tuned
+// to match the reveal this replaced: translate-y-8 (2rem = 32px) over 600ms on
+// --ease-standard, cubic-bezier(0.22, 1, 0.36, 1), whose closest GSAP built-in is
+// power4.out. Change the site's reveal timing here, not at the call sites.
 const AnimatedContent: React.FC<AnimatedContentProps> = ({
   children,
   container,
-  distance = 100,
+  distance = 32,
   direction = 'vertical',
   reverse = false,
-  duration = 0.8,
-  ease = 'power3.out',
+  duration = 0.6,
+  ease = 'power4.out',
   initialOpacity = 0,
   animateOpacity = true,
   scale = 1,

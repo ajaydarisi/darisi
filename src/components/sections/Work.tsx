@@ -14,7 +14,7 @@ export function Work() {
       className="border-b border-border-subtle pt-[4.5rem] pb-[5.3125rem]"
     >
       <div className="site-shell">
-        <AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+        <AnimatedContent>
           <div className="relative">
             <div className="flex items-center gap-3">
               <span className="h-px w-6 bg-accent" aria-hidden="true" />
@@ -36,11 +36,6 @@ export function Work() {
           {projects.map((project, index) => (
             <AnimatedContent
               key={project.title}
-              distance={32}
-              direction="vertical"
-              duration={0.6}
-              ease="power4.out"
-              threshold={0.1}
               delay={index * 0.1}
             >
               <article
