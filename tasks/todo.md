@@ -575,14 +575,70 @@ Both were errors in the plan, caught by the subagents executing it:
    reference themselves, so it returned 6 hits and could never be silent. Fixed in
    `d35f9ad`; the deletion itself was correct.
 
+### Whole-branch review outcome
+
+Two Important findings, both fixed in `753ce28`:
+
+1. **The accessibility fix set contained a regression.** Radix renders the mobile
+   sheet modally, so while it is open the header is `aria-hidden="true"` with
+   `pointer-events: none` — both measured. The `SheetTrigger` that flipped to an X
+   lives in that header and is therefore **inert**. Removing `SheetContent`'s own
+   close button to resolve a "two visible X" report deleted the only control
+   assistive tech could reach; touch screen-reader users had no way to dismiss the
+   menu, since there is no Escape key. A pointer tap on the header X only worked
+   because it fell through to the overlay.
+
+   This repo had already found and fixed this on 2026-08-06 — see "so the mobile
+   navigation no longer depends on the inert header trigger" further down this file.
+   That fix was undone and has now been restored, with a comment in `sheet.tsx`
+   naming the trap. The trigger no longer flips to an X, so there is still one
+   visible close affordance. Verified: exactly one reachable close control, 44×44,
+   inside the dialog, and it dismisses.
+
+2. **The `work-index` contract had the same flaw as the assertion it replaced.**
+   `/aria-current/` also matches the navbar's active "Work" link on that page, so
+   the test passed with the selector deleted. Now anchored to
+   `<button type="button" aria-current="true"`.
+
+Also corrected: the footer email link measured **40.8px at 375px**, not the 44px
+previously claimed (that figure came from a desktop-only measurement). Now `min-h-11`,
+verified 44px at 375 and 1280. The mobile trigger is 44×44, closing the deferred item
+below. Reveal timing moved into `AnimatedContent`'s defaults, removing the same five
+props from all eight call sites (net −30 lines) with behaviour verified unchanged.
+
+### Accepted: content is JS-gated (decided 2026-08-09)
+
+With JavaScript disabled, all 12 wrappers stay `visibility: hidden` — Work, Skills,
+About and Contact render blank, and `document.body.innerText` drops to 554 characters
+(hero, nav and footer only). The outgoing system rendered visible on first paint, so
+this is a real behaviour change, not a pre-existing condition.
+
+**Accepted deliberately.** The text remains present in the HTML source, and search
+engines that execute JavaScript see the revealed page. Non-JS clients and text-only
+extractors see a mostly-empty homepage.
+
+The one-line mitigation, if this is ever revisited:
+`<noscript><style>.invisible{visibility:visible!important}</style></noscript>` in
+`layout.tsx`. Nothing should be hidden-for-animation when there is no JS to animate.
+
+This also means the reveal half of the reduced-motion contract has no automated
+guard: `reveal-wrapper.static.test.mjs` asserts the *hidden* half only. A future edit
+to the reduced-motion branch would pass lint, build and both tests while blanking the
+site for reduced-motion users. Verify that path in a real browser after touching
+`AnimatedContent.tsx`.
+
 ### Deferred
 
-- Mobile hamburger/close button is 30×30. Passes WCAG 2.2's 24×24 minimum, misses
-  the 44×44 guideline. Out of scope for both the accessibility fix set and this
-  migration; `size-[1.875rem]` → `size-11` in `Navbar.tsx` if wanted.
 - The four unused reveal variants (`fade-in`, `fade-left`, `fade-right`, `scale-in`)
   no longer exist in code. The prop mapping to reproduce them is preserved in the
   spec's variant table.
+- `AnimatedContent.tsx` retains ~45 lines of unreachable props (`container`,
+  `reverse`, `disappearAfter`, `onComplete`, …). Left in place to keep the file
+  diffable against the upstream React Bits registry entry.
+- `AnimatedContent.tsx` is PascalCase in a kebab-case directory. That is the
+  registry's filename; renaming would break a future re-pull.
+- Reduced motion is sampled once at mount with no `change` listener. Only affects a
+  preference toggled mid-session, for reveals that have not yet fired.
 
 ---
 
