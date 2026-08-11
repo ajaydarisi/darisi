@@ -81,11 +81,11 @@ export function Hero() {
               <ArrowRight className="size-[1.1875rem]" aria-hidden="true" />
             </a>
             <a
-              href="#chat"
+              href="#connect"
               onClick={() =>
                 trackEvent(ANALYTICS_EVENTS.heroSecondaryCtaClick, {
                   location: "hero",
-                  target: "chat",
+                  target: "connect",
                 })
               }
               className="inline-flex h-[3.875rem] items-center rounded-full border-[1.5px] border-line px-[1.875rem] text-[1.0625rem] font-semibold text-foreground transition-[border-color,background-color,transform] duration-[var(--motion-base)] hover:-translate-y-[3px] hover:border-accent hover:bg-card"

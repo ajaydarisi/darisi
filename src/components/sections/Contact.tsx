@@ -13,8 +13,8 @@ const prompts = [
 export function Contact() {
   return (
     <section
-      id="chat"
-      aria-labelledby="chat-heading"
+      id="connect"
+      aria-labelledby="connect-heading"
       className="relative overflow-hidden pb-10 pt-[8.125rem]"
     >
       <div
@@ -29,7 +29,7 @@ export function Contact() {
         </p>
 
         <h2
-          id="chat-heading"
+          id="connect-heading"
           className="mt-6.5 max-w-[30rem] text-[clamp(2.4rem,5.4vw,4.4rem)] font-bold leading-[0.98] -tracking-[0.05em] text-foreground"
         >
           Tell me where it&apos;s stuck.

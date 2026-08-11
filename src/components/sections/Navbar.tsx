@@ -23,7 +23,7 @@ const links = [
   { label: "Work", id: "work" },
   { label: "Story", id: "story" },
   { label: "Notes", id: "notes" },
-  { label: "Chat", id: "chat" },
+  { label: "Connect", id: "connect" },
 ];
 
 export function Navbar() {
