@@ -69,7 +69,7 @@ const SheetContent = React.forwardRef<
           is the only close control assistive tech can reach. Do not remove it to
           resolve "two visible X" reports; change the trigger's icon instead. */}
       <DialogPrimitive.Close className="absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-muted-foreground transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text disabled:pointer-events-none">
-        <X className="h-4 w-4" />
+        <X className="h-4 w-4" aria-hidden="true" />
         <span className="sr-only">Close menu</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

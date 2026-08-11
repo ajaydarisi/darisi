@@ -1,124 +1,117 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AnimatedContent from "@/components/ui/AnimatedContent";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
 
+const total = String(projects.length).padStart(2, "0");
+
 export function Work() {
   return (
-    <section
-      id="work"
-      aria-labelledby="work-heading"
-      className="border-b border-border-subtle pt-[4.5rem] pb-[5.3125rem]"
-    >
+    <section id="work" aria-labelledby="work-heading" className="pb-10 pt-30">
       <div className="site-shell">
+        <p className="hand mb-1.5 rotate-[-2deg] text-[1.75rem] text-soft">
+          shipped, not slideware
+        </p>
         <AnimatedContent>
-          <div className="relative">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-6 bg-accent" aria-hidden="true" />
-              <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
-                Selected work · {String(projects.length).padStart(2, "0")}
-              </p>
-            </div>
-            <h2
-              id="work-heading"
-              className="mt-12 max-w-[40rem] font-display text-[clamp(3.25rem,6vw,4.8rem)] font-medium leading-[0.96] tracking-[-0.055em] text-foreground lg:ml-[22.4%]"
-            >
-              Systems that make{" "}
-              <span className="italic text-accent">complexity usable.</span>
-            </h2>
-          </div>
+          <h2
+            id="work-heading"
+            className="text-[clamp(2.6rem,7vw,6rem)] font-bold leading-[0.94] -tracking-[0.05em] text-foreground"
+          >
+            My latest work
+          </h2>
         </AnimatedContent>
 
-        <div className="mt-11 space-y-32">
+        <div className="mt-14 flex flex-col gap-7">
           {projects.map((project, index) => (
-            <AnimatedContent
-              key={project.title}
-              delay={index * 0.1}
-            >
-              <article
-                className={`grid gap-8 lg:grid-cols-[minmax(0,46.8%)_minmax(0,1fr)] lg:items-start lg:gap-[4.1%] ${
-                  index % 2 ? "lg:[&>figure]:order-2" : ""
-                }`}
-              >
-                <figure className="group relative aspect-[4/3] overflow-hidden bg-elevated">
-                  <Image
-                    src={project.image}
-                    alt={`Screenshot of ${project.title}`}
-                    fill
-                    sizes="(min-width: 1024px) 47vw, 100vw"
-                    className="object-cover object-top transition-transform duration-[var(--motion-enter)] group-hover:scale-[1.02]"
-                  />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-[#0F2724]/78 px-4 py-2.5 font-utility text-[0.625rem] font-medium uppercase tracking-[0.14em] text-[#F6F2EA] backdrop-blur-sm">
-                    {project.category}
-                  </figcaption>
-                </figure>
+            <AnimatedContent key={project.title} delay={index * 0.1}>
+              <article className="group rounded-[clamp(1.5rem,3vw,2.25rem)] bg-card p-[clamp(1.375rem,3vw,2.5rem)] shadow-[var(--shadow-soft)] transition-[transform,box-shadow] duration-[340ms] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:shadow-[var(--shadow-up)]">
+                <div className="grid items-stretch gap-11 [grid-template-columns:repeat(auto-fit,minmax(min(100%,20.625rem),1fr))]">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3.5">
+                      <span className="inline-flex h-8 items-center rounded-full bg-background px-3.5 text-[0.8125rem] font-semibold tracking-[0.02em] text-[var(--text-body)]">
+                        {project.category}
+                      </span>
+                      <span className="text-[0.8125rem] font-semibold text-soft">
+                        {String(index + 1).padStart(2, "0")} / {total}
+                      </span>
+                    </div>
 
-                <div className="min-w-0 lg:pt-1">
-                  <p className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-primary-text">
-                    {String(index + 1).padStart(2, "0")} · {project.category}
-                  </p>
-                  <h3 className="mt-4 font-display text-[clamp(2.25rem,4vw,3.2rem)] font-medium leading-[0.98] tracking-[-0.045em] text-foreground">
-                    {project.title}
-                  </h3>
-                  <p className="mt-4 max-w-[38rem] text-[0.9375rem] leading-6 text-[var(--text-body)]">
-                    {project.summary}
-                  </p>
+                    <h3 className="mt-[1.375rem] text-[clamp(2rem,3.4vw,3rem)] font-bold leading-none -tracking-[0.045em] text-foreground">
+                      {project.title}
+                    </h3>
+                    <p className="mt-[1.125rem] text-[1.0625rem] leading-[1.6] text-[var(--text-body)]">
+                      {project.summary}
+                    </p>
 
-                  <dl className="mt-6 grid gap-4 border-y border-border-subtle py-4 sm:grid-cols-3 sm:gap-5">
-                    {[
-                      { label: "Problem", content: project.problem },
-                      { label: "Role", content: project.role },
-                      { label: "Outcome", content: project.outcome },
-                    ].map((item) => (
-                      <div key={item.label}>
-                        <dt className="font-utility text-[0.625rem] font-medium uppercase tracking-[0.12em] text-primary-text">
-                          {item.label}
-                        </dt>
-                        <dd className="mt-2 text-xs leading-5 text-muted-foreground">
-                          {item.content}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
+                    <dl className="mt-7.5 flex flex-col gap-0.5">
+                      {[
+                        { label: "Problem", content: project.problem, radius: "rounded-t-[1.25rem] rounded-b-md" },
+                        { label: "Role", content: project.role, radius: "rounded-md" },
+                        { label: "Outcome", content: project.outcome, radius: "rounded-t-md rounded-b-[1.25rem]" },
+                      ].map((item) => (
+                        <div
+                          key={item.label}
+                          className={`bg-background px-5.5 py-[1.125rem] ${item.radius}`}
+                        >
+                          <dt className="text-xs font-bold uppercase tracking-[0.09em] text-accent">
+                            {item.label}
+                          </dt>
+                          <dd className="mt-2 text-[0.90625rem] leading-[1.6] text-[var(--text-body)]">
+                            {item.content}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
 
-                  <ul
-                    className="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-utility text-[0.625rem] font-medium uppercase tracking-[0.1em] text-muted-foreground"
-                    aria-label="Technologies used"
-                  >
-                    {project.tech.map((tech) => (
-                      <li
-                        key={tech}
-                        className="after:ml-3 after:text-border after:content-['/'] last:after:hidden"
+                    <div className="mt-6.5 flex flex-wrap items-center gap-5">
+                      {project.action ? (
+                        <a
+                          href={project.action.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                            trackEvent(ANALYTICS_EVENTS.workProjectClick, {
+                              project: project.title,
+                            })
+                          }
+                          className="inline-flex h-[3.375rem] items-center gap-3 rounded-full bg-fill px-6.5 text-base font-semibold text-on-fill transition-[transform,gap] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:gap-[1.125rem]"
+                        >
+                          {project.action.label}
+                          <ArrowRight className="size-[1.125rem]" aria-hidden="true" />
+                        </a>
+                      ) : null}
+                      {project.note ? (
+                        <p className="hand text-[1.375rem] leading-[1.2] text-soft">
+                          {project.note}
+                        </p>
+                      ) : null}
+                      <ul
+                        className="flex flex-wrap gap-2"
+                        aria-label="Technologies used"
                       >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
+                        {project.tech.map((tech) => (
+                          <li
+                            key={tech}
+                            className="rounded-full border-[1.5px] border-line px-3.5 py-2 text-[0.8125rem] font-medium text-soft"
+                          >
+                            {tech}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
 
-                  <div className="mt-6">
-                    {project.action ? (
-                      <a
-                        href={project.action.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 border-b border-primary-text pb-1 text-sm font-medium text-foreground transition-colors hover:text-primary-text"
-                        onClick={() =>
-                          trackEvent(ANALYTICS_EVENTS.workProjectClick, {
-                            project: project.title,
-                          })
-                        }
-                      >
-                        {project.action.label}
-                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                      </a>
-                    ) : project.note ? (
-                      <p className="border-l border-primary-text pl-3 text-sm leading-relaxed text-muted-foreground">
-                        {project.note}
-                      </p>
-                    ) : null}
+                  <div className="relative min-h-[21.25rem] overflow-hidden rounded-3xl bg-panel2 shadow-[var(--shadow-soft)]">
+                    <Image
+                      src={project.image}
+                      alt={`Screenshot of ${project.title}`}
+                      fill
+                      sizes="(min-width: 64rem) 36rem, 100vw"
+                      className="object-cover object-top transition-transform duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.03]"
+                    />
                   </div>
                 </div>
               </article>

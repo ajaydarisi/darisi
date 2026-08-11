@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "npx serve@latest out",
+    "lint": "eslint",
+    "test": "node --test tests/"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

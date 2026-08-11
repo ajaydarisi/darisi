@@ -1,4 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap");
+/* DM Sans, DM Mono, Source Serif 4, and Caveat are self-hosted via next/font/google
+   in src/app/layout.tsx (see the comment there) — not loaded here. Lightning CSS,
+   Tailwind v4's CSS bundler, doesn't fetch remote @import targets, so a
+   `@import url(fonts.googleapis.com/...)` in this file is silently dropped. */
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -31,9 +34,22 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 
-  --font-sans: "DM Sans", var(--font-inter), Arial, sans-serif;
-  --font-display: "Source Serif 4", Georgia, serif;
-  --font-utility: "DM Mono", var(--font-utility-stack);
+  --font-sans: var(--font-dm-sans), var(--font-inter), Arial, sans-serif;
+  --font-hand: var(--font-caveat), "Segoe Script", cursive;
+
+  /* Warm-theme surfaces. Named after the design source ("Darisi Warm") so the
+     mapping back to it stays obvious. Existing roles (background/foreground/
+     card/accent) already matched, so they are reused rather than duplicated. */
+  --color-panel2: var(--panel2);
+  --color-fill: var(--fill);
+  --color-on-fill: var(--on-fill);
+  --color-feature: var(--feature);
+  --color-on-feature: var(--on-feature);
+  --color-feature-body: var(--feature-body);
+  --color-feature-mark: var(--feature-mark);
+  --color-nav: var(--nav-bg);
+  --color-soft: var(--soft);
+  --color-line: var(--line);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -47,15 +63,12 @@
 :root {
   --radius: 0.75rem;
   --radius-control: 0.75rem;
-  --radius-panel: 1rem;
-  --radius-tag: 0.5rem;
-  --page-gutter: 2rem;
-  --content-wide: 80rem;
-  --content-reading: 48rem;
-  --content-measure: 42rem;
-  --section-space: clamp(5rem, 9vw, 7.5rem);
-  --section-space-tight: clamp(3.5rem, 6vw, 5rem);
-  --font-utility-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  /* Fluid side gutter: scales continuously with viewport width instead of
+     jumping at a breakpoint, so tablet widths get real spacing too, not just
+     phone and desktop. `.site-shell` centres within --content-wide once the
+     viewport is wide enough for the gutter to stop growing. */
+  --page-gutter: clamp(1.25rem, 4vw, 3rem);
+  --content-wide: 96rem;
   --motion-fast: 160ms;
   --motion-base: 240ms;
   --motion-enter: 600ms;
@@ -63,7 +76,21 @@
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --background: #0F2724;
   --foreground: #F6F2EA;
-  --text-body: var(--muted-foreground);
+  --text-body: #A8BEB9;
+  --soft: #7E9793;
+  --panel2: #1C3A37;
+  --fill: #F6F2EA;
+  --on-fill: #0F2724;
+  --feature: #1C3A37;
+  --on-feature: #F6F2EA;
+  --feature-body: #A8BEB9;
+  --feature-mark: #DDA082;
+  --nav-bg: #1C3A37;
+  --line: rgba(246, 242, 234, 0.1);
+  --wash1: rgba(221, 160, 130, 0.28);
+  --wash2: rgba(15, 39, 36, 0);
+  --shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.18), 0 18px 40px rgba(0, 0, 0, 0.28);
+  --shadow-up: 0 4px 8px rgba(0, 0, 0, 0.22), 0 28px 60px rgba(0, 0, 0, 0.38);
   --surface: var(--card);
   --elevated: var(--secondary);
   --primary: #C8DAD6;
@@ -90,8 +117,6 @@
   --focus-outline: var(--ring);
   --scrollbar-thumb: var(--primary);
   --scrollbar-thumb-hover: var(--primary-hover);
-  --pattern-dot-color: color-mix(in srgb, var(--foreground) 3%, transparent);
-  --pattern-grid-color: color-mix(in srgb, var(--foreground) 2%, transparent);
   --skip-link-background: color-mix(in srgb, var(--background) 96%, transparent);
   --skip-link-foreground: var(--foreground);
   --skip-link-border: color-mix(in srgb, var(--ring) 35%, transparent);
@@ -111,7 +136,24 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --background: #F6F2EA;
   --foreground: #1A2421;
-  --text-body: var(--secondary-foreground);
+  --text-body: #4A5A55;
+  /* Darkened from the design's #7A8A85 — that read 2.99:1 against --card, below
+     the 4.5:1 AA minimum for the normal-size text it's actually used for
+     (reading times, dates, footer copyright, tool lists). 5.2–5.7:1 here. */
+  --soft: #586461;
+  --panel2: #E4DFD4;
+  --fill: #0F2724;
+  --on-fill: #F6F2EA;
+  --feature: #0F2724;
+  --on-feature: #F6F2EA;
+  --feature-body: #A8BEB9;
+  --feature-mark: #C8DAD6;
+  --nav-bg: #0F2724;
+  --line: rgba(26, 36, 33, 0.1);
+  --wash1: rgba(221, 160, 130, 0.55);
+  --wash2: rgba(246, 242, 234, 0);
+  --shadow-soft: 0 2px 4px rgba(26, 36, 33, 0.04), 0 18px 40px rgba(26, 36, 33, 0.07);
+  --shadow-up: 0 4px 8px rgba(26, 36, 33, 0.05), 0 28px 60px rgba(26, 36, 33, 0.12);
   --surface: var(--card);
   --elevated: var(--secondary);
   --primary: #0F2724;
@@ -125,7 +167,11 @@ html[data-theme="light"] {
   --border-subtle: var(--border);
   --input: #D5D0C5;
   --ring: #1D6B63;
-  --accent: #C4714E;
+  /* Darkened from the design's #C4714E — that read 3.23:1 against --background,
+     below the 4.5:1 AA minimum for the small bold labels it's used for (Problem/
+     Role/Outcome, numbered list markers). Still a clear warm terracotta at
+     5.3–5.7:1. Dark theme's accent (#DDA082) already passes and is untouched. */
+  --accent: #914D30;
   --accent-foreground: #0A1F1D;
   --secondary: #EDE9E0;
   --secondary-foreground: #3D4F4B;
@@ -138,8 +184,6 @@ html[data-theme="light"] {
   --focus-outline: var(--ring);
   --scrollbar-thumb: var(--primary);
   --scrollbar-thumb-hover: var(--primary-hover);
-  --pattern-dot-color: color-mix(in srgb, var(--foreground) 6%, transparent);
-  --pattern-grid-color: color-mix(in srgb, var(--foreground) 4.5%, transparent);
   --skip-link-background: color-mix(in srgb, var(--background) 96%, transparent);
   --skip-link-foreground: var(--foreground);
   --skip-link-border: color-mix(in srgb, var(--ring) 32%, transparent);
@@ -158,7 +202,7 @@ html[data-theme="light"] {
   }
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 6.5rem;
     overflow-x: hidden;
   }
   body {
@@ -222,219 +266,235 @@ html[data-theme="light"] {
   }
 }
 
-/* Decorative background patterns */
-.bg-dot-pattern {
-  background-image: radial-gradient(
-    circle,
-    var(--pattern-dot-color) 1px,
-    transparent 1px
-  );
-  background-size: 32px 32px;
-}
-
-.bg-grid-pattern {
-  background-image: linear-gradient(
-      var(--pattern-grid-color) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, var(--pattern-grid-color) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
 .site-shell {
   width: min(calc(100% - (var(--page-gutter) * 2)), var(--content-wide));
   margin-inline: auto;
 }
 
-.section-heading {
-  max-width: var(--content-measure);
-}
-
-.section-heading--center {
-  margin-inline: auto;
-  text-align: center;
-}
-
-.section-title {
-  margin-top: 1rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.875rem, 3vw, 2.75rem);
-  font-weight: 520;
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-  color: var(--foreground);
-}
-
-.section-description {
-  margin-top: 1rem;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--text-body);
-}
-
-.evidence-ledger {
-  margin-top: 1.75rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.evidence-ledger__item {
-  display: grid;
-  grid-template-columns: minmax(5rem, 0.42fr) 1fr;
-  gap: 1rem;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-block: 0.875rem;
-}
-
-.evidence-ledger__item dt {
-  font-family: var(--font-utility-stack);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1.5;
-  text-transform: uppercase;
-  color: var(--primary-text);
-}
-
-.evidence-ledger__item dd {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.65;
-  color: var(--muted-foreground);
-}
-
-.portfolio-hero__orb {
-  position: absolute;
-  top: 4.7rem;
-  right: -3.8rem;
-  width: 22.7rem;
-  height: 22.7rem;
-  border: 1px solid color-mix(in srgb, var(--ring) 12%, transparent);
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle at 40% 40%,
-    color-mix(in srgb, var(--ring) 8%, transparent),
-    transparent 70%
-  );
-}
-
-.portfolio-hero__rule {
-  background: linear-gradient(
-    to right,
-    var(--accent),
-    var(--border) 60%,
-    transparent
-  );
-}
-
-/* Keyframe animations */
-@keyframes scroll-dot {
-  0% {
+/* Ambient motion for the warm homepage: a breathing wash behind the hero and
+   contact sections, drifting screenshot cards, and the availability dot. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
     opacity: 1;
     transform: translateY(0);
   }
-  100% {
-    opacity: 0;
-    transform: translateY(14px);
-  }
 }
 
-@keyframes hero-rise {
+@keyframes fadein {
   from {
-    transform: translateY(20px);
+    opacity: 0;
   }
   to {
-    transform: translateY(0);
+    opacity: 1;
   }
 }
 
-.animate-hero-rise {
-  animation: hero-rise var(--motion-enter) var(--ease-standard) both;
+/* Scale only — the washes centre themselves with the `translate` property so
+   this keyframe can't clobber their horizontal centring. */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
 }
 
-.animate-scroll-dot {
-  animation: scroll-dot 1.5s ease-in-out infinite;
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+  50% {
+    transform: translateY(-10px) rotate(calc(var(--tilt, 0deg) + 2deg));
+  }
 }
 
-/* Long-form article typography (blog posts) */
+@keyframes pulsedot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Applied with Tailwind's arbitrary `animate-[...]` utilities so per-element
+   delays and durations stay at the call site. */
+
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 500;
+}
+
+/* Long-form article typography (blog posts).
+   Posts are authored as plain `p` / `h2` / `ul` / `ol` / `blockquote` markup, so
+   the warm treatments — accent-dot bullets, numbered question cards, callouts —
+   live here rather than as per-post classes. */
 .blog-prose {
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  max-width: 44rem;
+  font-size: 1.125rem;
+  line-height: 1.75;
   color: var(--text-body);
 }
 
 .blog-prose > * + * {
-  margin-top: 1.25rem;
+  margin-top: 1.125rem;
 }
 
 .blog-prose h2 {
-  margin-top: 3rem;
-  font-family: var(--font-display);
-  font-size: 1.5625rem;
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  margin-top: 3.25rem;
+  font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
   color: var(--foreground);
+  scroll-margin-top: 7rem;
+}
+
+.blog-prose h2 + * {
+  margin-top: 1.25rem;
 }
 
 .blog-prose h3 {
   margin-top: 2.25rem;
-  font-family: var(--font-display);
-  font-size: 1.1875rem;
-  font-weight: 500;
-  letter-spacing: -0.015em;
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
   color: var(--foreground);
 }
 
 .blog-prose strong {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .blog-prose a {
   color: var(--foreground);
   text-decoration: underline;
-  text-decoration-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--accent) 60%, transparent);
   text-underline-offset: 4px;
   transition: text-decoration-color 200ms ease;
 }
 
 .blog-prose a:hover {
-  text-decoration-color: var(--primary-hover);
+  text-decoration-color: var(--accent);
 }
 
-.blog-prose ul,
-.blog-prose ol {
-  padding-left: 1.5rem;
-}
-
+/* Unordered lists: accent dots on their own gutter, no list marker. */
 .blog-prose ul {
-  list-style-type: disc;
+  margin-top: 1.375rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
 }
 
+/* The dot is absolutely positioned rather than a flex sibling: post markup puts
+   a bare `<strong>` and a text node inside each `li`, and flex would break those
+   into separate items. */
+.blog-prose ul > li {
+  position: relative;
+  padding-left: 1.375rem;
+}
+
+.blog-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6875rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #dda082;
+}
+
+/* Opt-in: a comparison list that reads better as a card grid than as bullets. */
+.blog-prose ul.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.75rem;
+}
+
+.blog-prose ul.card-grid > li {
+  display: block;
+  border-radius: 1.375rem;
+  background: var(--card);
+  padding: 1.375rem 1.5rem;
+  font-size: 0.96875rem;
+  line-height: 1.6;
+}
+
+.blog-prose ul.card-grid > li::before {
+  content: none;
+}
+
+.blog-prose ul.card-grid > li > strong {
+  display: block;
+  margin-bottom: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Ordered lists read as the decision cards from the design: the counter sits in
+   the accent colour beside the text instead of as a list marker. */
 .blog-prose ol {
-  list-style-type: decimal;
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: blog-step;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.blog-prose li {
-  margin-top: 0.5rem;
-  padding-left: 0.25rem;
+.blog-prose ol > li {
+  counter-increment: blog-step;
+  position: relative;
+  border-radius: 1.5rem;
+  background: var(--card);
+  padding: 1.375rem 1.625rem 1.375rem 4rem;
+  font-size: 1.03125rem;
+  line-height: 1.65;
 }
 
-.blog-prose li::marker {
-  color: var(--muted-subtle);
+.blog-prose ol > li::before {
+  content: counter(blog-step, decimal-leading-zero);
+  position: absolute;
+  left: 1.625rem;
+  top: 1.375rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.65;
+  color: var(--accent);
 }
 
 .blog-prose blockquote {
-  border-left: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
-  padding-left: 1.25rem;
-  color: var(--muted-foreground);
+  margin-top: 1.625rem;
+  border-radius: 1.5rem;
+  background: var(--panel2);
+  padding: 1.5rem 1.75rem;
+  font-size: 1.1875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--foreground);
 }
 
-@media (max-width: 40rem) {
-  .evidence-ledger__item {
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
-  }
+.blog-prose blockquote > * + * {
+  margin-top: 0.75rem;
 }
 
 .skip-link {

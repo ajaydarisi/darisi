@@ -1,30 +1,44 @@
 "use client";
 
-import { ArrowUp } from "lucide-react";
+import { Send } from "lucide-react";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
+import { socialUrls } from "@/lib/seo";
+
+const socials = [
+  { label: "GitHub", href: socialUrls.github },
+  { label: "LinkedIn", href: socialUrls.linkedin },
+];
 
 export function Footer() {
   return (
-    <footer aria-label="Site footer" className="bg-[#0F2724] text-[#F6F2EA]">
-      <div className="site-shell grid h-[6.1875rem] grid-cols-[1fr_auto_1fr] items-center gap-3 font-utility text-[0.5rem] font-medium uppercase tracking-[0.1em] sm:text-[0.625rem]">
+    <footer aria-label="Site footer" className="pb-10 pt-15">
+      <div className="site-shell flex flex-wrap items-center justify-between gap-6 rounded-[clamp(1.75rem,6vw,999px)] bg-card px-[clamp(1.5rem,3vw,2.5rem)] py-5.5 shadow-[var(--shadow-soft)]">
         <a
           href={`mailto:${CONTACT_EMAIL}`}
-          className="inline-flex min-h-11 min-w-0 items-center truncate text-[#C8DAD6] transition-colors hover:text-[#F6F2EA]"
           onClick={() =>
             trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, { location: "footer" })
           }
+          className="inline-flex min-h-11 items-center gap-3 text-lg font-semibold text-foreground transition-colors hover:text-accent"
         >
+          <Send className="size-[1.1875rem]" strokeWidth={1.9} aria-hidden="true" />
           {CONTACT_EMAIL}
         </a>
-        <p className="whitespace-nowrap text-[#C8DAD6]">© Ajay Darisi · Bengaluru</p>
-        <a
-          href="#main-content"
-          className="inline-flex min-h-11 justify-self-end items-center gap-2 text-[#F6F2EA] transition-colors hover:text-[#C8DAD6]"
-        >
-          Back to top
-          <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
-        </a>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          {socials.map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-[2.875rem] items-center rounded-full bg-background px-5 text-[0.9375rem] font-semibold text-[var(--text-body)] transition-[transform,color] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:text-foreground"
+            >
+              {social.label}
+            </a>
+          ))}
+          <p className="ml-2.5 text-sm text-soft">© Ajay Darisi · Bengaluru</p>
+        </div>
       </div>
     </footer>
   );

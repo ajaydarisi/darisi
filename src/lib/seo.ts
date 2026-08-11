@@ -36,13 +36,13 @@ const LINKEDIN_URL = "https://linkedin.com/in/ajaydarisi";
 export const socialUrls = { github: GITHUB_URL, linkedin: LINKEDIN_URL };
 
 /**
- * Last material change to the homepage and /work content.
+ * Last material change to the homepage content.
  *
- * The sitemap's `lastmod` for those two routes reads from here. It is set by
- * hand — not from the build clock — because a build-time date would claim both
- * pages changed on every deploy, and Google discards `lastmod` it finds
- * unreliable. Bump this when project entries, skill areas, or the hero/about
- * copy actually change; leave it alone for styling and asset work.
+ * The sitemap's `lastmod` for `/` reads from here. It is set by hand — not
+ * from the build clock — because a build-time date would claim the page
+ * changed on every deploy, and Google discards `lastmod` it finds unreliable.
+ * Bump this when project entries, skill areas, or the hero/story copy
+ * actually change; leave it alone for styling and asset work.
  */
 export const siteContentRevised = "2026-08-07";
 

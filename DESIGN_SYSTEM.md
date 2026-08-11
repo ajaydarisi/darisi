@@ -1,122 +1,242 @@
 # DARISI Design System
 
-## Measured Signal
+## Darisi Warm
 
 Darisi is a portfolio for teams assessing whether Ajay can turn an ambiguous
 product, operational workflow, or platform decision into dependable software.
-The system should feel like the work it represents: calm, precise, and
-evidence-led.
+The system reads as warm and personal rather than corporate: a cream/deep-green
+palette, a hand-written Caveat accent alongside the working DM Sans/Source
+Serif type, and a rounded, pill-shaped UI vocabulary (navigation, buttons,
+cards) instead of hard-edged panels.
 
-The signature pattern is the **evidence ledger**: concise labelled rows that
-make the problem, ownership, and outcome easy to scan. The golden ratio belongs
-to the brand mark and wordmark; the interface uses a practical 4px/8px rhythm.
+The signature pattern is the **labelled brief**: concise `Problem / Role /
+Outcome` (or brief-question) rows that make the evidence easy to scan without
+reading full paragraphs. Motion is a small set of shared keyframes — `rise`,
+`fadein`, `breathe`, `floaty`, `pulsedot` — applied per element via Tailwind's
+arbitrary `animate-[…]` syntax rather than bespoke per-component animation.
 
 ## Principles
 
 1. Lead with a recognisable business problem before a technology choice.
-2. Make proof visible: state the problem, role, and outcome in the same order.
-3. Keep the D mark and wordmark as the expressive element; surrounding UI stays quiet.
-4. Use burgundy for decisions and filled actions, never as small dark-theme text.
-5. Preserve enough contrast, focus, and motion restraint for real working conditions.
+2. Make proof visible: state the problem, role, and outcome in the same order,
+   every time.
+3. The hand-written Caveat accents are seasoning, not the message — they carry
+   tone (eyebrows, asides, one pull-quote), never load-bearing content.
+4. Use the warm terracotta accent for small labels and focus states, never as
+   a large fill behind body copy.
+5. Preserve enough contrast, focus, and motion restraint for real working
+   conditions; respect `prefers-reduced-motion`.
 
 ## Foundations
 
 ### Color roles
 
-| Role | Dark | Light | Use |
-| --- | --- | --- | --- |
-| Canvas | `#0B0F0E` | `#F7FAF9` | Page background |
-| Surface | `#121917` | `#FFFFFF` | Panels and alternating sections |
-| Elevated | `#18211E` | `#ECF3F0` | Controls and inset emphasis |
-| Strong text | `#F2F5F3` | `#0F1A16` | Headings and high-emphasis copy |
-| Body text | `#D5DCD8` | `#28352F` | Long-form and section descriptions |
-| Muted text | `#A9B5AF` | `#3F4A46` | Supporting detail |
-| Subtle text | `#7C8A84` | `#5E6B66` | Metadata only |
-| Brand ink | `#0F2724` | `#0F2724` | Baked-in brand assets: app icon tile and the standalone wordmark files |
-| Action fill | `#B7394F` | `#8B1E2D` | Primary buttons, active controls, and dark-theme scrollbar thumb |
-| Action hover | `#BD3E54` | `#6F1724` | Hovered primary actions |
-| Signal Rose | `#E46A79` | `#8B1E2D` | Dark-theme readable signal text, focus, icon and label states |
-| Control border | `#607169` | `#7B8983` | Inputs, outlined controls, panel boundaries |
-| Structural rule | `#233029` | `#D8E2DE` | Ledger rows and low-emphasis dividers |
+Defined in `src/app/globals.css` as CSS custom properties, themed via
+`html[data-theme="light"|"dark"]`, and exposed to Tailwind through `@theme
+inline` (`--color-background` → `bg-background`, etc.).
+
+| Role | Token | Dark | Light | Use |
+| --- | --- | --- | --- | --- |
+| Canvas | `--background` | `#0F2724` | `#F6F2EA` | Page background |
+| Ink | `--foreground` | `#F6F2EA` | `#1A2421` | Headings, high-emphasis copy |
+| Body | `--text-body` | `#A8BEB9` | `#4A5A55` | Paragraph copy |
+| Soft | `--soft` | `#7E9793` | `#586461` | Small metadata: dates, reading time, footer copyright, tool lists |
+| Card | `--card` | `#162F2C` | `#EDE9E0` | Elevated panels, list rows |
+| Panel 2 | `--panel2` | `#1C3A37` | `#E4DFD4` | Secondary surface (pull-quote, comparison cards) |
+| Fill | `--fill` / `--on-fill` | `#F6F2EA` on `#0F2724` | `#0F2724` on `#F6F2EA` | Primary filled buttons |
+| Feature | `--feature` / `--on-feature` | `#1C3A37` on `#F6F2EA` | `#0F2724` on `#F6F2EA` | The dark intro/CTA card in Story and post sidebars |
+| Feature body | `--feature-body` | `#A8BEB9` (both themes) | — | Body copy inside a `--feature` panel |
+| Nav | `--nav-bg` | `#1C3A37` | `#0F2724` | Navbar — always dark, independent of site theme |
+| Accent | `--accent` | `#DDA082` | `#914D30` | Small bold labels, focus rings, links, the hero's full stop |
+| Line | `--line` | `rgba(246,242,234,0.10)` | `rgba(26,36,33,0.10)` | Hairline borders on warm surfaces |
+| Wash 1/2 | `--wash1` / `--wash2` | terracotta → transparent | terracotta → transparent | Ambient radial gradients behind Hero/Contact |
 
 **Rules:**
 
-- `--primary` is an action fill, not ordinary text on a dark surface.
-- `--primary-text` is the readable signal role.
-- Use `--border` where a control or panel must be independently discernible;
-  use `--border-subtle` for internal ledger rules.
+- `--accent`'s light value is deliberately darker than the raw brand terracotta
+  (`#C4714E`) — see Palette approval below. Do not revert it to the lighter hex
+  without re-checking contrast; it was changed specifically because the
+  lighter value failed AA on the small bold labels it's used for.
+- `--nav-bg` is independent of `data-theme`: the navbar is always the dark
+  green pill in both themes. `Navbar.tsx` also hardcodes a few literal hex
+  values (`#F6F2EA`, `#0F2724`, `#DDA082`) for exactly this reason — they're
+  the fixed dark-nav palette, not theme-reactive tokens.
 - Brand assets fall into two kinds. Masked assets (`logo.svg`,
   `darisi-wordmark.svg` via `BrandMark`) carry no colour of their own and take
-  `--primary` per theme. Baked assets (the app icon family, the standalone
-  wordmark files) carry `#0F2724` and do not respond to the theme.
+  `--primary`/`--feature-mark` per theme. Baked assets (the app icon family,
+  the standalone wordmark files) carry `#0F2724` and do not respond to theme.
 
 ### Palette approval
 
-Text, focus, and controls are chosen for WCAG 2.2 AA contrast on their intended
-surfaces. Baked brand artwork stays `#0F2724` in both themes and is not used to
-communicate an interactive state. See the [W3C contrast
-criterion](https://www.w3.org/TR/WCAG22/#contrast-minimum) for the standard.
+Text, focus, and controls are chosen for WCAG 2.2 AA contrast (4.5:1 normal
+text, 3:1 large text/non-text) on their intended surfaces. See the [W3C
+contrast criterion](https://www.w3.org/TR/WCAG22/#contrast-minimum).
 
-| Pair | Dark ratio | Light ratio | Status |
+| Pair | Light ratio | Dark ratio | Status |
 | --- | ---: | ---: | --- |
-| Strong text / canvas | 17.57:1 | 16.95:1 | Approved |
-| Body text / canvas | 13.83:1 | 12.19:1 | Approved |
-| Muted text / canvas | 9.11:1 | 8.77:1 | Approved |
-| Signal text / canvas | 6.09:1 | 8.61:1 | Approved |
-| Signal text / elevated | 5.20:1 | 8.03:1 | Approved |
-| Control border / surface | 3.45:1 | 3.65:1 | Approved |
-| Button foreground / action fill | 5.15:1 | 9.05:1 | Approved |
+| Ink / canvas | 14.27:1 | 14.08:1 | Approved |
+| Body / canvas | 6.52:1 | 8.03:1 | Approved |
+| Soft / canvas | 5.51:1 | 5.04:1 | Approved |
+| Soft / card | 5.08:1 | 4.56:1 | Approved |
+| Accent / canvas | 5.69:1 | 7.05:1 | Approved |
+| Accent / card | 5.24:1 | 6.38:1 | Approved |
+| On-feature / feature | 14.08:1 | 11.00:1 | Approved |
+| Feature body / feature | 8.03:1 | 6.28:1 | Approved |
+| On-fill / fill | 14.08:1 | 14.08:1 | Approved |
+
+Every pair above is a *minimum* — computed against the two surfaces each role
+actually sits on (canvas and card). Re-run the contrast check before changing
+`--soft` or `--accent` in either theme; both were tuned specifically to clear
+4.5:1 on the smallest, most information-bearing text that uses them (reading
+times, dates, `Problem`/`Role`/`Outcome` labels), not just against canvas.
 
 ### Typography
 
-| Role | Face | Treatment | Use |
+Self-hosted via `next/font/google` in `src/app/layout.tsx` (not a `@import` in
+CSS — Tailwind v4's CSS bundler doesn't fetch remote `@import` targets, so a
+font loaded that way silently never arrives). Only two families are used
+anywhere on the site, and both are `preload`d.
+
+| Role | Token | Face | Use |
 | --- | --- | --- | --- |
-| Brand display | Custom DARISI wordmark | Reserved, never recreated with text | Hero and footer |
-| Display | Inter Variable | 520 weight, tight tracking | Page and section headings |
-| UI / body | Inter Variable | 400–600 weight | Copy, controls, cards |
-| Utility | Native mono stack | 11px, uppercase, tracked | Eyebrows, ledger labels, supporting metadata |
+| Sans | `--font-sans` | DM Sans (var. weight) → Inter → Arial | Body text, sitewide default |
+| Hand | `--font-hand` | Caveat 500/600 | Eyebrows, asides, one pull-quote per section — never the only copy |
+
+`.hand` applies `font-family: var(--font-hand); font-weight: 500;` — use the
+class, not the raw Tailwind font utility, so weight stays consistent.
+
+DM Mono and Source Serif 4 (`--font-utility`/`--font-display`) were only ever
+rendered by `/work`, which no longer exists; they were removed from
+`layout.tsx` and `globals.css` along with it. Reintroduce a face deliberately
+if a future page needs one — don't assume either token still exists.
 
 ### Layout and spacing
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--content-wide` | 72rem | Homepage and navigation |
-| `--content-reading` | 48rem | Blog and focused reading flows |
-| `--content-measure` | 42rem | Section intro copy |
-| `--page-gutter` | 20–32px fluid | Mobile and desktop page gutters |
-| `--section-space` | 80–120px fluid | Main section rhythm |
-| `--section-space-tight` | 56–80px fluid | Blog and footer rhythm |
-| `--radius-control` | 12px | Buttons, inputs, mobile-nav rows |
-| `--radius-panel` | 16px | Cards and inset panels |
-| `--radius-tag` | 8px | Eyebrow labels |
+| `--content-wide` | 96rem | `.site-shell` max width before it centres |
+| `--page-gutter` | `clamp(1.25rem, 4vw, 3rem)` | `.site-shell`'s side inset; scales continuously with viewport width (20px → 48px), no breakpoint jump, so tablet widths get real spacing too |
+| `--radius-control` | 12px | Focus-ring/control radius (used by the skip link and the mobile sheet's close button) |
+
+Every other radius is written as a literal Tailwind value at the call site
+(`rounded-[1.75rem]`, `rounded-full`) rather than through a shared token.
 
 ### Elevation and motion
 
-- **Card:** `--shadow-card`; reserve `--shadow-card-hover` for interactive cards.
-- **Fast:** 160ms for color changes.
-- **Base:** 240ms for controls and theme changes.
-- **Enter:** 600ms, one restrained fade-up reveal family.
-- Respect `prefers-reduced-motion`; do not use ambient animation outside the
-  small hero scroll cue.
+- **Shadow:** `--shadow-soft` for resting cards, `--shadow-up` on hover/focus
+  and for the floating nav pill.
+- **Keyframes** (`globals.css`): `rise` (fade + rise-in, section reveals),
+  `fadein`, `breathe` (ambient background wash), `floaty` (drifting collage
+  cards, respects a `--tilt` custom property per card), `pulsedot` (the
+  availability indicator).
+- Apply keyframes with Tailwind's arbitrary syntax at the call site —
+  `animate-[rise_700ms_var(--ease-standard)_both]` — so each element owns its
+  own delay/duration instead of a shared `.animate-*` class. `--ease-standard`
+  is `cubic-bezier(0.22, 1, 0.36, 1)`.
+- Section-level reveals (headings, cards) go through `AnimatedContent`
+  (GSAP + ScrollTrigger), not the raw keyframes — see below.
+- Respect `prefers-reduced-motion`: `AnimatedContent` snaps to its final state
+  instead of animating; the global media query in `globals.css` collapses all
+  other animation/transition durations to near-zero.
 
 ## Components
 
-### BrandMark
+### AnimatedContent (`src/components/ui/AnimatedContent.tsx`)
 
-`BrandMark` centralises the correct source asset and dimensions.
+Shared scroll-triggered reveal wrapper. Site defaults for `distance`,
+`duration`, and `ease` live in the component itself, not at call sites — change
+the site's reveal timing there. Renders `invisible` until its GSAP timeline
+plays, then sets `visibility: visible`; on `prefers-reduced-motion` it snaps to
+its final state on mount instead.
+
+### BrandMark (`src/components/ui/brand-mark.tsx`)
 
 | Variant | Use |
 | --- | --- |
 | `mark` | Compact navigation and small decorative brand moments |
-| `wordmark` | Hero and footer |
+| `wordmark` | Story panel |
 
-`BrandMark` paints the asset as a CSS mask over `bg-primary`, so only the alpha
+Paints the source SVG as a CSS mask over a background color, so only the alpha
 channel of the source reaches the page and the mark follows the theme token.
 Keep `public/logo.svg` and `public/darisi-wordmark.svg` as bare glyphs — no
-tile, no background, no baked colour — or the mask will pick up the frame. Do
-not alter them when adding a placement.
+tile, no background, no baked colour — or the mask will pick up the frame.
 
-### App icon
+### Sheet (`src/components/ui/sheet.tsx`)
+
+Radix `Dialog` wrapper backing the mobile nav menu. Keep
+`DialogPrimitive.Close` in `SheetContent` even though the header's own trigger
+visually flips to an X — Radix makes the header inert (`aria-hidden`,
+`pointer-events: none`) while the dialog is open, so the explicit `Close` is
+the only control assistive tech can reach.
+
+### ThemeToggle / LocalTime (`src/components/ui/`)
+
+`ThemeToggle` reads/writes `document.documentElement.dataset.theme` and
+`localStorage` via `useSyncExternalStore`. `LocalTime` renders the Bengaluru
+wall clock client-only (`suppressHydrationWarning` on the one node whose text
+differs between server and client).
+
+### PostToc / ReadingProgress (`src/components/blog/`)
+
+`withHeadingIds` reads a post's own `h2`s server-side, stamps their ids, and
+returns both the annotated content and the heading list — no per-post table of
+contents to maintain by hand. `ReadingProgress` is a fixed top-of-viewport
+scroll bar, independent client component.
+
+## Patterns
+
+### Hero
+
+- The hero fills at least one viewport (`min-h-[100svh]`) so the next section
+  never peeks in before the first scroll.
+- A short line of context, the name as an oversized display heading with a
+  full-stop accent, two CTAs, an availability line, and a row of proof pills.
+- A decorative, `aria-hidden` collage of three project screenshots on desktop,
+  each drifting independently via `floaty` with its own `--tilt`.
+- Do not hide hero content while waiting for client-side animation.
+
+### Work
+
+- Category + index, title, summary, a `Problem / Role / Outcome` brief, tech
+  tags, and one explicit live-product action where public.
+- The homepage's `#work` section is the only place selected work is
+  described — there is no standalone `/work` route. Images there sit below
+  the fold (Hero fills the first viewport) and are left to lazy-load.
+
+### Story
+
+- One dark `--feature` panel carries the personal intro + CV ask; numbered
+  value statements and skill-area cards sit alongside it.
+
+### Notes / Blog
+
+- Keep the reading width compact (`.blog-prose` caps at 44rem).
+- Post bodies stay plain `p`/`h2`/`ul`/`ol`/`blockquote` markup — `.blog-prose`
+  supplies the warm treatments (accent-dot bullets, numbered cards for `ol`, a
+  panel callout for `blockquote`, an opt-in `ul.card-grid` for comparisons) so
+  a new post never has to hand-author them.
+- `PostLayout` owns the reading-progress bar, back-to-notes pill, brief card,
+  sticky contents + CTA sidebar, related notes, and the closing contact band.
+
+### Contact
+
+Use conversational prompt chips that help a visitor identify a relevant
+starting point. The primary action is email; social links remain secondary.
+
+## Accessibility and QA
+
+- Keep normal text at least 4.5:1 and large text/non-text indicators at least
+  3:1 against their *actual* rendered surface — check the specific
+  background a color sits on, not just canvas (see Palette approval).
+- Do not communicate state through color alone; pair it with label, shape, or
+  position.
+- Retain the skip link, logical heading order (one `h1` per page), visible
+  focus rings, and reduced-motion support.
+- Check 390px, ~768px (the nav's own mobile/desktop breakpoint), and desktop
+  layouts in both themes after system changes.
+- Verify theme toggling without hydration warnings or layout shifts.
+
+## App icon
 
 The tile that represents the site *outside* the page: browser tab, bookmark,
 home screen, PWA. Unlike `BrandMark` it cannot follow the theme — it sits on
@@ -153,97 +273,14 @@ none is edited by hand.
 - `apple-touch-icon.png` is the one deliberate exception to the rounded,
   transparent tile. Keep it opaque.
 
-### SectionHeading
-
-Use for the repeated `eyebrow + heading + description` pattern.
-
-| Property | Options | Use |
-| --- | --- | --- |
-| `eyebrow` | short descriptor | What the section is |
-| `title` | concise outcome-led heading | Main point |
-| `description` | optional | Clarifies relevance |
-| `align` | `start`, `center` | Start for evidence; centre for capability/contact overviews |
-
-### EvidenceLedger
-
-Use only when labels carry meaning. The portfolio uses it for `Problem → Role →
-Outcome`; the blog uses it for the article brief. Do not use it as decorative
-numbering.
-
-### Badge
-
-| Variant | Meaning |
-| --- | --- |
-| `eyebrow` | Section or page label; mono, squared, signal-coloured |
-| `tag` | Taxonomy, technology, category, or conversational prompt |
-| `media` | Project-image label; opaque enough to read over photography |
-| `secondary` | Quiet neutral tag |
-| `outline` | Sparse contextual metadata when a panel is already busy |
-
-### Card
-
-| Variant | Use | Interaction |
-| --- | --- | --- |
-| `default` | Static grouping | No movement |
-| `interactive` | Linked case studies, capabilities, posts | Small lift, stronger border, elevated shadow |
-| `inset` | Supporting context, article brief, contact prompt | No shadow, controlled contrast |
-
-### Button
-
-| Variant | Use |
-| --- | --- |
-| `default` | One primary action in a local decision group |
-| `outline` | Supporting external or secondary action |
-| `ghost` | Low-priority utility action |
-
-All buttons have visible keyboard focus, a 40px minimum default target, and
-keep their action wording consistent before and after interaction.
-
-## Patterns
-
-### Hero
-
-- Full wordmark is the thesis; the following copy immediately explains what
-  kind of work Darisi does.
-- A small utility list names the three relevant practice areas.
-- Do not hide hero content while waiting for client-side animation.
-
-### Case study card
-
-1. Product image and category tag.
-2. Clear project summary.
-3. Evidence ledger: problem, role, outcome.
-4. Technology tags as secondary proof.
-5. One explicit live-product action, where public.
-
-### Blog
-
-- Keep the reading width compact.
-- Use page metadata and the article brief before long-form copy.
-- Keep case-study cards and blog cards visually related but not identical:
-  the former foreground evidence, the latter foreground the reading decision.
-
-### Contact
-
-Use conversational prompts that help a visitor identify a relevant starting
-point. The primary action is email; social links remain secondary.
-
-## Accessibility and QA
-
-- Keep normal text at least 4.5:1 and large text/non-text indicators at least
-  3:1 against their intended surface.
-- Do not communicate state through red alone; pair it with label, shape, or
-  position.
-- Retain the skip link, logical heading order, visible focus rings, and reduced
-  motion support.
-- Check 390px, 768px, and desktop layouts in both themes after system changes.
-- Verify theme toggling without hydration warnings or layout shifts.
-
 ## Implementation map
 
 - Tokens and global composition live in `src/app/globals.css`.
 - Shared primitives live in `src/components/ui/`.
 - Brand assets live in `public/`, generated from `src/app/icon.svg`.
-- Homepage patterns live in `src/components/sections/`.
-- `src/lib/site-content.ts` remains the source of truth for public work and
-  capability content.
+- Homepage sections live in `src/components/sections/`; blog templates in
+  `src/components/blog/`.
+- `src/lib/site-content.ts` is the source of truth for public work and
+  capability content; `src/lib/blog.ts` for post metadata.
+- There is no standalone `/work` route (removed 2026-08-11) — selected work
+  lives only on the homepage's `#work` section.

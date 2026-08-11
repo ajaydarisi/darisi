@@ -2105,3 +2105,162 @@ Reinstated the shared Sheet close control and made it a 44px keyboard-accessible
 target, so the mobile navigation no longer depends on the inert header trigger.
 Verified lint, an optimized Next 16.3.0 build (12 static routes), static-export
 artifacts, production dependency audit, and mobile-browser dismissal behavior.
+
+---
+
+## "Darisi Warm" homepage redesign (2026-08-10)
+
+Source: Claude Design project `Darisi UI redesign`, file `Darisi Warm.dc.html`.
+
+- [x] Read the design file and its imported assets, and map its tokens onto the existing theme system.
+- [x] Add the warm surface tokens, the Caveat display face, and the ambient keyframes to `globals.css`.
+- [x] Rebuild the navigation as a floating desktop pill plus a rounded mobile bar and menu sheet.
+- [x] Rebuild Hero, Work, Story (About + Skills merged), Notes, Contact (`#chat`), and Footer.
+- [x] Verify both themes, desktop and mobile, `/blog` and `/work`, lint, and the static build.
+
+### Review (done)
+
+The design's content already matched `site-content.ts` and `blog.ts`, so nothing
+was retyped — the sections read from the existing sources. Existing primitives
+were reused rather than replaced: `AnimatedContent` drives every `data-reveal`
+element, the Radix `Sheet` backs the mobile menu (keeping its focus trap and
+reachable close control), and `ThemeToggle` kept its store and only changed
+shape. `About.tsx` and `Skills.tsx` were deleted; their content lives in
+`Story.tsx`.
+
+Two deviations from the design, both deliberate:
+
+- The Notes cards link to real posts (`/blog/<slug>`), and a small "all the
+  notes" link points at `/blog`, which the design left unreachable.
+- The `breathe` keyframe animates scale only; the washes centre themselves with
+  the `translate` property. The design folded `translateX(-50%)` into both the
+  inline style and the keyframe, which double-shifted the gradient.
+
+Verified: production build (16 static routes), ESLint clean, both themes at
+1440px and 390px, mobile menu open/close, and `/blog` + `/work` still rendering
+correctly under the new shared navigation.
+
+---
+
+## "Darisi Post" article template (2026-08-10)
+
+Source: Claude Design project `Darisi UI redesign`, file `Darisi Post.dc.html`.
+
+- [x] Rebuild `PostLayout` to the design: reading-progress bar, back pill, meta row, author row, brief card, sticky contents + CTA sidebar, related notes, closing contact band.
+- [x] Rewrite `.blog-prose` so hand-authored post markup renders the warm treatments.
+- [x] Bring the `/blog` index into the warm card language and mark "Notes" current in the nav off the homepage.
+- [x] Remove the left/right page gutter site-wide.
+- [x] Verify both themes, desktop and mobile, lint, and the static build.
+
+### Review (done)
+
+The contents list is derived on the server by `withHeadingIds`, which walks the
+post's JSX children, collects the `h2` labels, and clones the headings with
+slugified ids. Nothing is duplicated into post metadata and the list ships in
+the HTML — an earlier client-side version was also rejected by the
+`react-hooks/set-state-in-effect` lint rule.
+
+Post bodies stay plain markup. `.blog-prose` carries the design's treatments:
+accent-dot bullets, `ol` as numbered decision cards, `blockquote` as the panel
+callout, and an opt-in `ul.card-grid` for comparison lists. The dot and the
+counter are absolutely positioned rather than flex siblings — post `li`s contain
+a bare `<strong>` plus a text node, and flex split those into separate columns.
+
+Deviations from the design: the sidebar CTA copy is generalised, since one
+layout serves all five posts; and the mobile bar keeps its Menu sheet instead of
+swapping in an "All notes" link, because the article header already carries that
+affordance and the sheet is the only route to the rest of the nav.
+
+`--page-gutter` is now `0rem`. Content runs to the viewport edge below 1280px,
+including on mobile; the token is the single place to put a margin back.
+
+---
+
+## Production-readiness review (2026-08-11)
+
+Full sweep: dead code, broken links/anchors, accessibility, SEO/metadata,
+React/Next correctness, CSS hygiene, build/lint config. Findings and fixes:
+
+- [x] Fixed two WCAG AA contrast failures in the light theme: `--soft`
+      (2.99:1 on card → 5.08:1) and `--accent` (3.23:1 on background → 5.69:1).
+      Both were failing on real information-bearing text (reading times,
+      dates, footer copyright, Problem/Role/Outcome labels, numbered lists),
+      not decorative elements. Dark theme was already passing and is
+      untouched.
+- [x] Fixed the LCP warning on `/work` — its case-file screenshot had no
+      `priority`, so Next flagged it as an unmarked LCP image.
+- [x] Stopped preloading DM Mono, Source Serif 4, and Inter sitewide.
+      `next/font` auto-preloads every family applied at `<html>` scope on
+      every route; only DM Sans (body) and Caveat (hand accents) are on the
+      critical path everywhere — the other three are only rendered by `/work`
+      (or, for Inter, never — it's fallback insurance behind DM Sans).
+- [x] Added the missing `<Footer />` to `/work` — every other route renders
+      it, `/work` silently didn't.
+- [x] Fixed `animate-rise` on the desktop nav pill — not a real Tailwind
+      class, so the pill never animated in. Now `animate-[rise_700ms_var(--ease-standard)_both]`,
+      matching every other reveal in the codebase.
+- [x] Added `aria-hidden="true"` to the mobile sheet's close-icon `<X>`,
+      matching every other icon usage.
+- [x] Removed six dead UI components with zero importers (`button.tsx`,
+      `card.tsx`, `select.tsx`, `evidence-ledger.tsx`, `section-heading.tsx`,
+      `badge.tsx`) and their backing CSS (`.section-heading*`,
+      `.evidence-ledger*`, `.portfolio-hero__*`, `hero-rise`/`scroll-dot`
+      keyframes, `.bg-dot-pattern`/`.bg-grid-pattern`, and the now-orphaned
+      `--pattern-*-color`/`--content-measure`/`--content-reading`/
+      `--section-space*` tokens).
+- [x] Removed the dead `ANALYTICS_EVENTS.navPrimaryCtaClick` constant (no nav
+      CTA fires it since the redesign removed the desktop nav's primary
+      button).
+- [x] Fixed `package.json`'s `start` script — `next start` hard-errors under
+      `output: "export"` (confirmed by running it). Now `npx serve@latest out`,
+      Next's own recommended replacement.
+- [x] Added a `test` script wiring up the two `node:test` files that already
+      existed in `tests/` but weren't runnable via npm.
+- [x] Fixed `tests/reveal-wrapper.static.test.mjs` — its hardcoded count (12)
+      and comment described the pre-redesign Work/Skills/About/Contact
+      structure. Updated to 18, matching Work/Story/Notes today.
+- [x] Rewrote `DESIGN_SYSTEM.md` (fully described the old "Measured Signal"
+      burgundy palette and deleted components) and the stale parts of
+      `REPO_CONTEXT.md` (referenced two files — `animate-on-scroll.tsx`,
+      `src/hooks/use-in-view.ts` — that don't exist; replaced by
+      `AnimatedContent.tsx`) to match the live "Darisi Warm" system.
+- [x] Verified: production build (16 static routes), both `node:test` files,
+      ESLint, `tsc --noEmit`, and a full-page screenshot pass of every route
+      in both themes at desktop/mobile widths.
+
+### Known, deliberate gap (not fixed — flagging, not silently redesigning)
+
+`/work` (`work-index.tsx`) predates the "Darisi Warm" redesign and still uses
+the older token vocabulary (`text-muted-foreground`, `border-border-subtle`,
+`font-display`/`font-utility`, Source Serif 4/DM Mono). Those tokens are still
+live in `globals.css`, so the page renders correctly — it just looks visually
+distinct from the rest of the site. Left alone rather than redesigned without
+being asked; noted in `DESIGN_SYSTEM.md`'s implementation map.
+
+---
+
+## Remove /work page (2026-08-11)
+
+The standalone `/work` route never got its warm-redesign pass (flagged as a
+known gap in the previous review) and duplicated content already on the
+homepage's `#work` section. Removed rather than redesigned.
+
+- [x] Deleted `src/app/work/page.tsx`, `src/components/sections/work-index.tsx`,
+      `tests/work-index.static.test.mjs`.
+- [x] Fixed every reference that would otherwise 404 or go stale:
+      `sitemap.ts` (dropped the `/work` entry), `llms.txt/route.ts` (dropped
+      the "Selected work" page link, re-pointed TexLedger's fallback href from
+      `/work` to `/#work`), `site-content.ts` (removed `buildWorkPageJsonLd`
+      and its `WORK_ID`/breadcrumb plumbing; `buildWorkItemList`'s per-item
+      fallback URL now points at `/#work` instead of the dead route).
+- [x] Removed DM Mono and Source Serif 4 entirely from `layout.tsx` and
+      `globals.css` (`--font-utility`, `--font-display`, `--font-utility-stack`,
+      `--radius-panel`, `--radius-tag`) — `/work` was their only consumer, so
+      self-hosting them was pure dead weight once it was gone.
+- [x] Updated `DESIGN_SYSTEM.md` and `REPO_CONTEXT.md`, both of which
+      documented `/work` and the now-removed font/radius tokens.
+- [x] Verified: build (15 static routes, was 16), both remaining checks
+      (`node --test`, now 1 test since `work-index.static.test.mjs` is gone),
+      ESLint, `tsc --noEmit`, `/work` 404s, homepage JSON-LD's TexLedger entry
+      resolves to `/#work`, and only DM Sans + Caveat + fallback Inter load
+      as fonts anywhere on the site.

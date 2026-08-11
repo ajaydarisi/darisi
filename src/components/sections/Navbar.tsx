@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
-import { BrandMark } from "@/components/ui/brand-mark";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LocalTime } from "@/components/ui/local-time";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
+import { CONTACT_EMAIL } from "@/lib/site-content";
 import {
   Sheet,
   SheetClose,
@@ -18,41 +18,24 @@ import {
 } from "@/components/ui/sheet";
 
 const links = [
-  { label: "Work", href: "/work" },
-  { label: "Skills", href: "/#skills" },
-  { label: "About", href: "/#about" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Hey", id: "hey" },
+  { label: "Work", id: "work" },
+  { label: "Story", id: "story" },
+  { label: "Notes", id: "notes" },
+  { label: "Chat", id: "chat" },
 ];
-
-function sectionId(href: string): string | null {
-  return href.includes("#") ? href.split("#")[1] : null;
-}
 
 export function Navbar() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
+  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-
-  const isLinkActive = (href: string) => {
-    const id = sectionId(href);
-    return id ? activeSection === id : pathname.startsWith(href);
-  };
+  const [activeSection, setActiveSection] = useState("hey");
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (!isHome) return;
 
-  useEffect(() => {
     const sections = links
-      .map((link) => {
-        const id = sectionId(link.href);
-        return id ? document.getElementById(id) : null;
-      })
+      .map((link) => document.getElementById(link.id))
       .filter((el): el is HTMLElement => el !== null);
 
     if (sections.length === 0) return;
@@ -70,124 +53,102 @@ export function Navbar() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [isHome]);
+
+  // Off the homepage the anchors point at sections that are not on the page, so
+  // the current item comes from the route instead of the scroll position.
+  const isActive = (id: string) =>
+    isHome ? activeSection === id : pathname.startsWith("/blog") && id === "notes";
 
   return (
     <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-      <header
-        className={`fixed inset-x-0 top-0 z-[60] w-screen border-b transition-all duration-[var(--motion-base)] ${
-          scrolled
-            ? "border-border bg-background/95 backdrop-blur-xl"
-            : "border-transparent bg-transparent"
-        }`}
-      >
+      {/* Narrow: a rounded bar with a menu trigger. The nav is sticky rather than
+          fixed, so it occupies flow space and the hero pulls back up under it. */}
+      <div className="sticky top-0 z-[90] px-4 pt-3.5 md:hidden">
         <nav
           aria-label="Main navigation"
-          className="site-shell flex h-[4.25rem] items-center justify-between"
+          className="flex h-14 items-center justify-between gap-3 rounded-full bg-nav pl-1.5 pr-2 shadow-[var(--shadow-up)]"
         >
-          <Link href="/" className="flex items-center" aria-label="Darisi home">
-            <BrandMark variant="mark" alt="" className="h-9 w-9" />
-          </Link>
-
-          <div className="hidden items-center lg:flex">
-            <div className="flex items-center gap-2">
-              {links.map((link) => {
-                const isActive = isLinkActive(link.href);
-
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    aria-current={isActive ? "true" : undefined}
-                    className={`px-3.5 py-2 text-sm transition-colors duration-[var(--motion-fast)] ${
-                      isActive
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-            <ThemeToggle className="ml-3" />
-            <Button asChild className="ml-3 h-10 rounded-none px-6 text-[0.8125rem] shadow-none hover:translate-y-0 hover:shadow-none">
-              <Link
-                href="/#contact"
-                onClick={() =>
-                  trackEvent(ANALYTICS_EVENTS.navPrimaryCtaClick, {
-                    location: "desktop_nav",
-                  })
-                }
-              >
-                Get in Touch
-              </Link>
-            </Button>
-          </div>
-
-          <SheetTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="size-11 p-0 lg:hidden"
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+          <ThemeToggle />
+          <SheetTrigger className="inline-flex h-[2.875rem] items-center gap-3 rounded-full pl-5 pr-4 text-[1.0625rem] font-semibold text-[#F6F2EA]">
+            Menu
+            <span aria-hidden="true" className="flex w-[1.375rem] flex-col gap-[5px]">
+              <span className="h-0.5 bg-[#F6F2EA]" />
+              <span className="h-0.5 bg-[#F6F2EA]" />
+            </span>
           </SheetTrigger>
         </nav>
-      </header>
+      </div>
+
+      {/* Wide: a centred floating pill. */}
+      <div className="pointer-events-none sticky top-0 z-20 hidden justify-center pt-[1.125rem] md:flex">
+        <nav
+          aria-label="Main navigation"
+          className="animate-[rise_700ms_var(--ease-standard)_both] pointer-events-auto flex max-w-[calc(100vw-1.25rem)] items-center gap-0.5 overflow-x-auto rounded-full bg-nav p-[7px] shadow-[var(--shadow-up)] [scrollbar-width:none]"
+        >
+          <ThemeToggle className="size-[2.375rem]" />
+          {links.map((link) => (
+            <Link
+              key={link.id}
+              href={`/#${link.id}`}
+              aria-current={isActive(link.id) ? "true" : undefined}
+              className={`shrink-0 rounded-full px-[clamp(0.6875rem,3.4vw,1.125rem)] pb-2.5 pt-[0.5625rem] text-[clamp(0.84375rem,3.4vw,0.9375rem)] font-semibold -tracking-[0.01em] transition-colors duration-[var(--motion-base)] ${
+                isActive(link.id)
+                  ? "bg-[rgba(221,160,130,0.18)] text-[#DDA082]"
+                  : "text-[#C8DAD6] hover:bg-[rgba(246,242,234,0.12)] hover:text-[#F6F2EA]"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
 
       <SheetContent
         side="top"
-        className="top-[4.25rem] min-h-[calc(100svh-4.25rem)] rounded-none border-x-0 border-t-0 bg-background p-0 lg:hidden"
+        className="inset-[5.25rem_1rem_1rem] flex flex-col overflow-y-auto overscroll-contain rounded-[2.125rem] border-0 bg-nav px-[1.625rem] pb-[1.625rem] pt-[1.375rem] shadow-[var(--shadow-up)] [&>button:last-child]:right-[1.625rem] [&>button:last-child]:top-[1.375rem] [&>button:last-child]:rounded-full [&>button:last-child]:bg-[rgba(246,242,234,0.10)] [&>button:last-child]:text-[#F6F2EA] [&>button:last-child]:hover:bg-[rgba(246,242,234,0.2)] [&>button:last-child]:hover:text-[#F6F2EA] md:hidden"
       >
         <SheetTitle className="sr-only">Mobile navigation</SheetTitle>
         <SheetDescription className="sr-only">
           Navigate to the main sections of Ajay Darisi&apos;s site.
         </SheetDescription>
 
-        <nav className="site-shell flex flex-col gap-1 py-8">
-          {links.map((link) => {
-            const isActive = isLinkActive(link.href);
-
-            return (
-              <SheetClose key={link.label} asChild>
-                <Link
-                  href={link.href}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`flex items-center border-b border-border-subtle px-1 py-4 font-display text-2xl transition-colors duration-[var(--motion-base)] hover:text-primary-text ${
-                    isActive ? "text-primary-text" : "text-muted-foreground"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </SheetClose>
-            );
-          })}
-          <div className="mt-6">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="font-utility text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                Theme
-              </span>
-              <ThemeToggle />
-            </div>
-            <Button asChild className="w-full" size="default">
+        <div className="mt-[3.75rem] flex flex-col">
+          {links.map((link) => (
+            <SheetClose key={link.id} asChild>
               <Link
-                href="/#contact"
-                onClick={() => {
-                  trackEvent(ANALYTICS_EVENTS.navMobileCtaClick, {
-                    location: "mobile_nav",
-                  });
-                  setMobileOpen(false);
-                }}
+                href={`/#${link.id}`}
+                aria-current={isActive(link.id) ? "true" : undefined}
+                className={`flex items-center justify-between gap-4 border-b border-[rgba(246,242,234,0.12)] px-1 py-[clamp(0.6875rem,2.2vh,1.125rem)] text-[clamp(1.4375rem,6.6vw,2.125rem)] font-bold -tracking-[0.04em] ${
+                  isActive(link.id) ? "text-[#DDA082]" : "text-[#F6F2EA]"
+                }`}
               >
-                Get in Touch
+                {link.label}
+                <ArrowRight
+                  className="size-[1.375rem] shrink-0 text-[#DDA082]"
+                  aria-hidden="true"
+                />
               </Link>
-            </Button>
-          </div>
-        </nav>
+            </SheetClose>
+          ))}
+        </div>
+
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          onClick={() => {
+            trackEvent(ANALYTICS_EVENTS.navMobileCtaClick, {
+              location: "mobile_nav",
+            });
+            setMobileOpen(false);
+          }}
+          className="mt-8 inline-flex h-[2.875rem] shrink-0 items-center self-start rounded-full bg-[#DDA082] px-[1.375rem] text-base font-bold text-[#0F2724]"
+        >
+          Start a project
+        </a>
+
+        <p className="hand mt-auto pt-[1.375rem] text-[1.375rem] leading-[1.2] text-[#A8BEB9]">
+          open to new work · Bengaluru <LocalTime />
+        </p>
       </SheetContent>
     </Sheet>
   );

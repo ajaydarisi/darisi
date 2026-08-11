@@ -3,7 +3,6 @@ type EventProps = Record<string, string | number | boolean>;
 export const ANALYTICS_EVENTS = {
   heroPrimaryCtaClick: "hero_primary_cta_click",
   heroSecondaryCtaClick: "hero_secondary_cta_click",
-  navPrimaryCtaClick: "nav_primary_cta_click",
   navMobileCtaClick: "nav_mobile_cta_click",
   workProjectClick: "work_project_click",
   fallbackEmailClick: "fallback_email_click",

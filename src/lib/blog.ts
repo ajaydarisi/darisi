@@ -167,7 +167,8 @@ export const blogLastModified: string = blogPosts
   .reduce((newest, date) => (date > newest ? date : newest));
 
 export function formatPostDate(datePublished: string): string {
-  return new Date(`${datePublished}T00:00:00Z`).toLocaleDateString("en-US", {
+  // en-GB for "12 July 2026" — day-first, no comma, matching the post design.
+  return new Date(`${datePublished}T00:00:00Z`).toLocaleDateString("en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",
