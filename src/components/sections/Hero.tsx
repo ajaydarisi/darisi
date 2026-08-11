@@ -42,14 +42,14 @@ export function Hero() {
     <section
       id="hey"
       aria-label="Introduction"
-      className="relative -mt-[4.625rem] min-h-[100svh] pb-10"
+      className="relative -mt-18.5 min-h-svh"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-[16.25rem] left-1/2 h-[56.25rem] w-[93.75rem] animate-[breathe_12s_ease-in-out_infinite] bg-[radial-gradient(closest-side,var(--wash1),var(--wash2))] [translate:-50%]"
+        className="pointer-events-none absolute -top-65 left-1/2 h-225 w-375 animate-[breathe_12s_ease-in-out_infinite] bg-[radial-gradient(closest-side,var(--wash1),var(--wash2))] [translate:-50%]"
       />
 
-      <div className="site-shell relative flex flex-wrap items-start gap-14 pt-[clamp(7.875rem,13vw,11rem)]">
+      <div className="site-shell relative flex flex-wrap items-start gap-14 pt-[clamp(7.875rem,13vw,22rem)]">
         <div className="min-w-0 flex-[1_1_35rem]">
           <p className="max-w-[44rem] animate-[rise_800ms_80ms_var(--ease-standard)_both] text-[clamp(1.25rem,2.4vw,1.9rem)] font-medium leading-[1.3] -tracking-[0.02em] text-[var(--text-body)]">
             Hey! I&apos;m a software engineer who turns messy product and
