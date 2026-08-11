@@ -36,11 +36,13 @@ export default function Post() {
         not attempt. You run it yourself — it is a piece of infrastructure
         with its own upgrades, monitoring, and configuration surface.
       </p>
-      <p>
-        That last sentence is the crux of the decision, so it is worth
-        sitting with: one is a feature of a platform you already use, the
-        other is a server you commit to operating.
-      </p>
+      <blockquote>
+        <p>
+          That last sentence is the crux of the decision, so it is worth
+          sitting with: one is a feature of a platform you already use, the
+          other is a server you commit to operating.
+        </p>
+      </blockquote>
 
       <h2>Where Supabase Auth is the right call</h2>
       <p>
@@ -115,21 +117,21 @@ export default function Post() {
         social login, both do MFA, both issue tokens. The real differences
         are structural:
       </p>
-      <ul>
+      <ul className="card-grid">
         <li>
-          <strong>Scope:</strong> one product’s users vs. an organization’s
+          <strong>Scope</strong> one product’s users vs. an organization’s
           identity across many systems.
         </li>
         <li>
-          <strong>Operations:</strong> a managed feature vs. a server you
+          <strong>Operations</strong> a managed feature vs. a server you
           run and upgrade.
         </li>
         <li>
-          <strong>Authorization model:</strong> database row-level security
+          <strong>Authorization model</strong> database row-level security
           vs. realm and role structures that applications interpret.
         </li>
         <li>
-          <strong>Protocol depth:</strong> Supabase covers modern OAuth and
+          <strong>Protocol depth</strong> Supabase covers modern OAuth and
           OIDC needs; Keycloak adds SAML and directory federation for the
           enterprise world.
         </li>

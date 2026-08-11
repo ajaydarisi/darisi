@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Theme = "light" | "dark";
@@ -121,37 +121,13 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
-      aria-pressed={isLight}
       onClick={toggleTheme}
       className={cn(
-        "relative inline-flex h-8 w-16 shrink-0 items-center rounded-full border border-border bg-elevated p-1 text-muted-foreground transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-text focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "grid size-11 shrink-0 place-items-center rounded-full text-[#DDA082] transition-[background-color,transform] duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[rgba(246,242,234,0.09)] hover:rotate-[35deg] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DDA082]",
         className
       )}
     >
-      <span className="sr-only">
-        {isLight ? "Switch to dark theme" : "Switch to light theme"}
-      </span>
-      <Moon
-        aria-hidden="true"
-        className="absolute left-2 h-4 w-4 transition-colors duration-[var(--motion-base)]"
-      />
-      <Sun
-        aria-hidden="true"
-        className="absolute right-2 h-4 w-4 transition-colors duration-[var(--motion-base)]"
-      />
-      <span
-        aria-hidden="true"
-        className={cn(
-          "relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-floating)] transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)]",
-          isLight ? "translate-x-8" : "translate-x-0"
-        )}
-      >
-        {isLight ? (
-          <Sun className="h-3.5 w-3.5" />
-        ) : (
-          <Moon className="h-3.5 w-3.5" />
-        )}
-      </span>
+      <Sun aria-hidden="true" className="size-[1.1875rem]" strokeWidth={1.9} />
     </button>
   );
 }

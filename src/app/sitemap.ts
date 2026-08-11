@@ -15,18 +15,12 @@ export const dynamic = "force-static";
  */
 const absolute = (path: string) => `${seoConfig.siteUrl}${path}`;
 
-// Both the homepage Work section and /work render these.
 const projectImages = projects.map((project) => absolute(project.image));
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: seoConfig.siteUrl,
-      lastModified: siteContentRevised,
-      images: projectImages,
-    },
-    {
-      url: absolute("/work"),
       lastModified: siteContentRevised,
       images: projectImages,
     },

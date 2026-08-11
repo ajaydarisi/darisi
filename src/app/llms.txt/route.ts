@@ -22,7 +22,7 @@ portfolio: selected work, how I work, and writing drawn from real product delive
 ## Work
 
 ${projects
-  .map((p) => `- [${p.title}](${p.action?.href ?? url("/work")}): ${p.summary}`)
+  .map((p) => `- [${p.title}](${p.action?.href ?? url("/#work")}): ${p.summary}`)
   .join("\n")}
 
 ## Focus areas
@@ -38,7 +38,6 @@ ${blogPosts
 ## Pages
 
 - [Home](${url("/")})
-- [Selected work](${url("/work")})
 - [Blog](${url("/blog")})
 - [RSS feed](${url("/feed.xml")})
 

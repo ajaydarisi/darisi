@@ -1,3 +1,649 @@
+# React Bits scroll reveals — Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
+> (recommended) or superpowers:executing-plans to implement this plan task-by-task.
+> Steps use checkbox (`- [ ]`) syntax for tracking.
+
+Status: **implemented, verified, reviewed** — see `## Review` below.
+
+Spec: `docs/superpowers/specs/2026-08-09-react-bits-scroll-reveals-design.md`
+
+**Goal:** Replace the hand-rolled scroll-reveal system with the React Bits
+`AnimatedContent` component at all 8 call sites, without regressing reduced-motion
+support or the accessibility fixes landed on 2026-08-09.
+
+**Architecture:** Install `AnimatedContent` as vendored source via the shadcn registry
+already configured in `components.json`. Patch it for `"use client"`, reduced motion,
+and a dead demo-site scroller lookup. Rewrite all 8 call sites to use it directly.
+Delete `animate-on-scroll.tsx` and `use-in-view.ts`.
+
+**Tech Stack:** Next.js 16.3 App Router (`output: "export"`), React 19.2, Tailwind v4,
+`gsap@^3.13.0` + ScrollTrigger (new), shadcn CLI, `node --test` for static contracts.
+
+## Global Constraints
+
+- `output: "export"` — static export. No server. Everything ships to the client.
+- `components.json` sets `rsc: true` — client components need an explicit `"use client"`.
+- Reveal timing must match the outgoing system: `distance={32}` (was `translate-y-8`),
+  `duration={0.6}` (was 600ms), `threshold={0.1}`, `ease="power4.out"`.
+- **GSAP takes delay in SECONDS. The outgoing props are MILLISECONDS.** Every delay
+  must be divided by 1000. `delay={100}` in GSAP is a 100-second delay.
+- Do not touch `src/components/sections/Hero.tsx`. It is the LCP element.
+- Do not modify `globals.css` motion tokens.
+- Do not revert any of the seven accessibility fixes from 2026-08-09.
+- No `Co-Authored-By` lines in commit messages.
+
+---
+
+## Task 1: Install and patch AnimatedContent
+
+**Files:**
+- Create: `src/components/ui/AnimatedContent.tsx` (via shadcn CLI, then patched)
+- Modify: `package.json` (adds `gsap`)
+
+**Interfaces:**
+- Consumes: nothing.
+- Produces: default export `AnimatedContent`, a `React.FC` accepting
+  `{ children, distance?: number, direction?: 'vertical'|'horizontal', reverse?: boolean,
+  duration?: number, ease?: string, threshold?: number, delay?: number, scale?: number,
+  className?: string }` plus standard `HTMLAttributes<HTMLDivElement>`.
+  Task 3 imports it as `import AnimatedContent from "@/components/ui/AnimatedContent"`.
+
+- [x] **Step 1: Install the component**
+
+```bash
+npx shadcn@latest add @react-bits/AnimatedContent-TS-TW
+```
+
+Expected: writes `AnimatedContent.tsx` under `src/components/ui/` and adds
+`gsap@^3.13.0` to `package.json`. If the CLI prompts for a target directory, accept
+the `@/components/ui` alias.
+
+- [x] **Step 2: Confirm what landed**
+
+```bash
+npm ls gsap && ls src/components/ui/AnimatedContent.tsx
+```
+
+Expected: `gsap@3.13.x` resolved, file exists.
+
+- [x] **Step 3: Apply the three patches**
+
+Open `src/components/ui/AnimatedContent.tsx` and make exactly these edits.
+
+**Patch 1** — add as the very first line of the file:
+
+```tsx
+"use client";
+```
+
+**Patch 3** — replace the demo-site scroller lookup. Find:
+
+```tsx
+let scrollerTarget: Element | string | null = container || document.getElementById('snap-main-container') || null;
+```
+
+Replace with:
+
+```tsx
+let scrollerTarget: Element | string | null = container || null;
+```
+
+**Patch 2** — the reduced-motion guard. Find the opening of the effect:
+
+```tsx
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+```
+
+Replace with:
+
+```tsx
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // The wrapper ships with Tailwind's `invisible` class and is only ever revealed
+    // by the gsap.set below. A bare `return` here would leave content permanently
+    // hidden, so snap to the final state instead of bailing out.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1, visibility: "visible" });
+      return;
+    }
+```
+
+- [x] **Step 4: Verify the patches are all present**
+
+```bash
+head -1 src/components/ui/AnimatedContent.tsx
+grep -c "prefers-reduced-motion" src/components/ui/AnimatedContent.tsx
+grep -c "snap-main-container" src/components/ui/AnimatedContent.tsx
+```
+
+Expected: `"use client";` — then `1` — then `0`.
+
+- [x] **Step 5: Typecheck and build**
+
+```bash
+npx tsc --noEmit && npm run build
+```
+
+Expected: no type errors; build emits 16 routes. The component is not yet imported
+anywhere, so this only proves it compiles.
+
+- [x] **Step 6: Commit**
+
+```bash
+git add package.json package-lock.json src/components/ui/AnimatedContent.tsx
+git commit -m "feat(motion): vendor React Bits AnimatedContent with reduced-motion guard"
+```
+
+---
+
+## Task 2: Static contract for the reveal wrapper (write this BEFORE migrating)
+
+**Files:**
+- Create: `tests/reveal-wrapper.static.test.mjs`
+
+**Interfaces:**
+- Consumes: Task 1's component (not yet imported anywhere — that is the point).
+- Produces: a `node --test` contract runnable via `node --test tests/`.
+
+This is written before the migration so it genuinely fails first. It mirrors the
+existing `tests/work-index.static.test.mjs` convention: plain `node:test`, no
+framework, asserting against the static export.
+
+- [x] **Step 1: Write the failing test**
+
+```js
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import test from "node:test";
+
+test("homepage reveals ship hidden and are revealed by script", () => {
+  const outputPath = ["out/index.html", "out/index/index.html"].find(existsSync);
+  assert.ok(outputPath, "expected a static homepage");
+  const html = readFileSync(outputPath, "utf8");
+
+  // AnimatedContent renders its wrapper as `class="invisible ..."` and only reveals
+  // it from JS. There are 8 <AnimatedContent> tags in source, but two of them sit
+  // inside .map() calls, so the homepage renders 12 wrappers:
+  //   Work    1 heading + 3 projects   = 4
+  //   Skills  1 heading + 3 skillAreas = 4
+  //   About   1 + 1                    = 2
+  //   Contact 1 + 1                    = 2
+  // Asserting the exact count is deliberate — a >= threshold would pass while a
+  // whole section was left unmigrated.
+  const hidden = html.match(/class="invisible/g) ?? [];
+  assert.equal(
+    hidden.length,
+    12,
+    `expected 12 hidden reveal wrappers on the homepage, found ${hidden.length}`
+  );
+});
+```
+
+**Count correction (2026-08-09):** an earlier draft of this plan asserted 8 here,
+conflating *source tags* with *rendered wrappers*. `Work.tsx` and `Skills.tsx` wrap
+their `.map()` bodies, so 8 tags render 12 elements. Caught during Task 3.
+
+- [x] **Step 2: Run it and watch it fail for the right reason**
+
+```bash
+npm run build && node --test tests/reveal-wrapper.static.test.mjs
+```
+
+Expected: FAIL with `expected 12 hidden reveal wrappers on the homepage, found 0`.
+Task 1 vendored the component but nothing imports it yet, so zero wrappers render.
+A failure mentioning "expected a static homepage" instead means the build did not
+emit — fix that first.
+
+- [x] **Step 3: Commit the failing test**
+
+```bash
+git add tests/reveal-wrapper.static.test.mjs
+git commit -m "test(motion): add failing contract for hidden reveal wrappers"
+```
+
+---
+
+## Task 3: Migrate the 8 call sites
+
+**Files:**
+- Modify: `src/components/sections/Work.tsx:5,17,33,37,122`
+- Modify: `src/components/sections/Skills.tsx:3,14,28,32,55`
+- Modify: `src/components/sections/About.tsx:3,19,32,34,63`
+- Modify: `src/components/sections/Contact.tsx:4,23,41,43,99`
+
+**Interfaces:**
+- Consumes: `AnimatedContent` from Task 1.
+- Produces: no exports. Sections render identical DOM inside a wrapper `<div>` that
+  now carries the `invisible` class until GSAP reveals it.
+
+In every file, replace the import:
+
+```tsx
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+```
+
+with:
+
+```tsx
+import AnimatedContent from "@/components/ui/AnimatedContent";
+```
+
+Then apply the per-file rewrites below. Closing tags become `</AnimatedContent>`.
+
+- [x] **Step 1: Work.tsx**
+
+Line 17 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 37 — replace `<AnimateOnScroll key={project.title} variant="fade-up" delay={index * 100}>` with:
+
+```tsx
+<AnimatedContent
+  key={project.title}
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={index * 0.1}
+>
+```
+
+Close both at lines 33 and 122 with `</AnimatedContent>`.
+
+- [x] **Step 2: Skills.tsx**
+
+Line 14 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 32 — replace the multi-line opening tag with:
+
+```tsx
+<AnimatedContent
+  key={skill.title}
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={index * 0.1}
+  className="border-b border-[#2A4A47] py-8 last:border-b-0 lg:border-b-0 lg:py-3 lg:px-9 lg:first:pl-0"
+>
+```
+
+Close both at lines 28 and 55 with `</AnimatedContent>`.
+
+- [x] **Step 3: About.tsx**
+
+Line 19 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 34 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[4.0625rem]">` with:
+
+```tsx
+<AnimatedContent
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={0.1}
+  className="lg:pt-[4.0625rem]"
+>
+```
+
+Close both at lines 32 and 63 with `</AnimatedContent>`.
+
+- [x] **Step 4: Contact.tsx**
+
+Line 23 — replace `<AnimateOnScroll variant="fade-up">` with:
+
+```tsx
+<AnimatedContent distance={32} direction="vertical" duration={0.6} ease="power4.out" threshold={0.1}>
+```
+
+Line 43 — replace `<AnimateOnScroll variant="fade-up" delay={100} className="lg:pt-[7.5625rem]">` with:
+
+```tsx
+<AnimatedContent
+  distance={32}
+  direction="vertical"
+  duration={0.6}
+  ease="power4.out"
+  threshold={0.1}
+  delay={0.1}
+  className="lg:pt-[7.5625rem]"
+>
+```
+
+Close both at lines 41 and 99 with `</AnimatedContent>`.
+
+- [x] **Step 5: Verify no stragglers and no millisecond delays survived**
+
+```bash
+grep -rn "AnimateOnScroll" --include="*.tsx" src/components/sections/ || echo "OK: no references left"
+grep -rn "delay={1[0-9][0-9]}\|delay={index \* 100}" --include="*.tsx" src/ || echo "OK: no ms delays left"
+grep -rc "<AnimatedContent" --include="*.tsx" src/components/sections/
+```
+
+Expected: `OK: no references left` — then `OK: no ms delays left` — then `2` for each
+of the four section files (8 total).
+
+- [x] **Step 6: Typecheck, lint, build**
+
+```bash
+npx tsc --noEmit && npm run lint && npm run build
+```
+
+Expected: clean; 16 routes emitted.
+
+- [x] **Step 7: Make the Task 2 test pass**
+
+```bash
+node --test tests/
+```
+
+Expected: `# pass 2`, `# fail 0`. The reveal-wrapper test that failed with `found 0`
+in Task 2 should now report 8 wrappers and pass.
+
+- [x] **Step 8: Commit**
+
+```bash
+git add src/components/sections/
+git commit -m "refactor(motion): move section reveals to React Bits AnimatedContent"
+```
+
+---
+
+## Task 4: Delete the superseded reveal system
+
+**Files:**
+- Delete: `src/components/ui/animate-on-scroll.tsx`
+- Delete: `src/hooks/use-in-view.ts`
+
+**Interfaces:**
+- Consumes: Task 3 must be complete — these files must have zero importers.
+- Produces: nothing.
+
+- [x] **Step 1: Prove both files are unreferenced**
+
+```bash
+grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" \
+  --include="*.tsx" --include="*.ts" src/ \
+  | grep -v "^src/components/ui/animate-on-scroll.tsx:" \
+  | grep -v "^src/hooks/use-in-view.ts:"
+```
+
+Expected: **no output at all.** If anything prints, stop — Task 3 is incomplete, and
+some section still imports the old system. Do not delete until this command is silent.
+
+**Gate correction (2026-08-09):** the first draft of this gate grepped all of `src/`
+without excluding the two files being deleted. Those files reference themselves and
+each other, so the command returned 6 hits and could *never* be silent — the gate was
+unsatisfiable by construction. The exclusions above make it test what it always meant:
+no **external** importers. Caught by the Task 4 reviewer.
+
+After deletion, the unfiltered grep is the real confirmation, and it should be silent:
+
+```bash
+grep -rn "animate-on-scroll\|use-in-view\|useInView\|AnimateOnScroll" --include="*.tsx" --include="*.ts" src/
+```
+
+- [x] **Step 2: Delete**
+
+```bash
+git rm src/components/ui/animate-on-scroll.tsx src/hooks/use-in-view.ts
+```
+
+- [x] **Step 3: Typecheck, build, and re-run the suite**
+
+```bash
+npx tsc --noEmit && npm run build && node --test tests/
+```
+
+Expected: clean; 16 routes; `# pass 2 # fail 0`. A failure here means a missed
+importer.
+
+- [x] **Step 4: Commit**
+
+```bash
+git commit -m "chore(motion): drop superseded AnimateOnScroll and useInView"
+```
+
+---
+
+## Task 5: Verification gates
+
+**Files:**
+- Modify: `tasks/todo.md` (append a `## Review` section to this plan)
+
+**Interfaces:**
+- Consumes: Tasks 1–4 complete.
+- Produces: recorded measurements. No code.
+
+None of these are optional. If gate 2 or gate 3 fails, the change does not ship.
+
+- [x] **Step 1: Gate — build and tests**
+
+```bash
+npm run lint && npm run build && node --test tests/
+```
+
+Expected: clean lint, 16 routes, `# pass 2 # fail 0`.
+
+- [x] **Step 2: Gate — bundle delta (record the number)**
+
+```bash
+du -sh out/_next/static/chunks && npm ls gsap
+```
+
+Compare against the pre-change baseline. Record the actual delta in the Review
+section. Expected roughly +40 KB gzipped; report what you measure, not what is
+expected here.
+
+- [x] **Step 3: Gate — no flash on load**
+
+Start the preview, hard-reload the homepage with cache disabled, and watch the Work
+section. Content must fade in from hidden. It must NOT paint, vanish, then animate.
+
+```bash
+npx serve out -p 4173
+```
+
+- [x] **Step 4: Gate — reduced motion (the critical one)**
+
+With `prefers-reduced-motion: reduce` emulated, load the homepage and run this in the
+console:
+
+```js
+[...document.querySelectorAll('.invisible')]
+  .filter(el => getComputedStyle(el).visibility === 'hidden').length
+```
+
+Expected: **`0`**. Any other number means reduced-motion users see blank sections —
+the exact failure the guard exists to prevent. Also confirm all four sections show
+their text, and that no element sits at `opacity: 0`.
+
+- [x] **Step 5: Gate — accessibility has not regressed**
+
+Re-run the sweep from the 2026-08-09 audit on the built output: contrast in both
+themes, 44px touch targets, no label-in-name mismatches, single close control in the
+mobile sheet, no `aria-pressed` on the theme toggle.
+
+- [x] **Step 6: Write the Review section**
+
+Append `## Review` to this plan section in `tasks/todo.md` recording: measured bundle
+delta, each gate's pass/fail, and anything deferred.
+
+- [x] **Step 7: Commit**
+
+```bash
+git add tasks/todo.md
+git commit -m "docs(motion): record React Bits reveal migration review"
+```
+
+---
+
+## Review
+
+Status: **implemented, verified** — all five gates pass. Branch
+`feat/react-bits-reveals`, 8 commits.
+
+### Gates
+
+| # | Gate | Result |
+| --- | --- | --- |
+| 1 | Build + tests | ✅ lint clean, 16 routes, `# pass 2  # fail 0` |
+| 2 | Bundle delta | ⚠️ **+43.5 KB gzipped** — measured, see below |
+| 3 | No flash / reveals fire | ✅ 12/12 reveal on scroll, none stuck |
+| 4 | Reduced motion | ✅ 0 hidden, 0 dimmed, 0 translated, without scrolling |
+| 5 | Accessibility | ✅ all seven 2026-08-09 fixes intact, both themes |
+
+### Bundle delta (gate 2)
+
+Total JS, gzipped, whole `out/_next/static` tree:
+
+| | gzipped | raw |
+| --- | --- | --- |
+| `main` (no gsap) | 212.8 KB | 1268 KB |
+| this branch | 256.3 KB | 1376 KB |
+| **delta** | **+43.5 KB** | +108 KB |
+
+This is the cost the spec flagged and the user accepted, now a measured number
+rather than an estimate. It lands on a site at PSI mobile 73 / LCP 6.5s with image
+resizing (86 KiB) and legacy JS (14 KiB) still open above. Nothing here reduces
+that debt; it adds to it. Revisit if mobile performance becomes the priority —
+`git revert` of this branch plus `npm install` is a clean rollback.
+
+### Gate 4 detail — the failure mode that did not happen
+
+Under `prefers-reduced-motion: reduce`, with **no scrolling at all**: 12 wrappers,
+`visibility: hidden` on 0, opacity below 0.99 on 0, non-identity transform on 0.
+Content probes in all four migrated sections render with no hidden ancestor.
+
+This is the case the spec called lethal: the `invisible` class is removed only by
+`gsap.set`, so an early `return` in the reduced-motion branch would have left every
+animated section permanently blank. The guard snaps to the final state instead, and
+this measurement is the proof it works.
+
+### Verification method note
+
+The Claude Browser pane could not verify gate 3. Scripted scrolling there mutates
+`scrollTop` without emitting scroll events — measured: `scrollTop` moved 300 → 2200
+with **0** `scroll` events on either `window` or `document`. ScrollTrigger listens
+for those events, so every reveal appeared permanently stuck at `opacity: 0`, which
+looks exactly like a catastrophic regression.
+
+It was not. Re-run under Playwright with real `mouse.wheel` input, all 12 wrappers
+reveal correctly. **Gates 3 and 4 must be verified with real input events**, not
+scripted scroll assignment.
+
+### Known false positives
+
+The contrast sweep reports 3 failures at 1.09:1 on the project figcaptions
+("E-commerce", "Marketplace", "Internal Tool"). These are not real: the caption sits
+on a `bg-[#0F2724]/78` scrim expressed in `oklab()`, which the sweep's colour parser
+skips, so it falls through to the page background. True worst-case ratio over a pure
+white screenshot is 6.9:1. Pre-existing, unrelated to this change.
+
+Two console warnings about unused font preloads are also pre-existing (`next/font`),
+and untouched by this work.
+
+### Plan defects found during execution
+
+Both were errors in the plan, caught by the subagents executing it:
+
+1. **Wrapper count (Task 2/3).** The contract asserted 8 rendered wrappers. The true
+   number is 12 — `Work` and `Skills` wrap their `.map()` bodies over 3 items each,
+   so 8 source tags render 12 elements. The Task 3 implementer hit the red test,
+   root-caused it, and refused to edit the test to match its own output. Fixed in
+   `92d6ff7`.
+2. **Unsatisfiable gate (Task 4).** The pre-deletion grep searched all of `src/` for
+   references to the two files it guarded, without excluding those files. They
+   reference themselves, so it returned 6 hits and could never be silent. Fixed in
+   `d35f9ad`; the deletion itself was correct.
+
+### Whole-branch review outcome
+
+Two Important findings, both fixed in `753ce28`:
+
+1. **The accessibility fix set contained a regression.** Radix renders the mobile
+   sheet modally, so while it is open the header is `aria-hidden="true"` with
+   `pointer-events: none` — both measured. The `SheetTrigger` that flipped to an X
+   lives in that header and is therefore **inert**. Removing `SheetContent`'s own
+   close button to resolve a "two visible X" report deleted the only control
+   assistive tech could reach; touch screen-reader users had no way to dismiss the
+   menu, since there is no Escape key. A pointer tap on the header X only worked
+   because it fell through to the overlay.
+
+   This repo had already found and fixed this on 2026-08-06 — see "so the mobile
+   navigation no longer depends on the inert header trigger" further down this file.
+   That fix was undone and has now been restored, with a comment in `sheet.tsx`
+   naming the trap. The trigger no longer flips to an X, so there is still one
+   visible close affordance. Verified: exactly one reachable close control, 44×44,
+   inside the dialog, and it dismisses.
+
+2. **The `work-index` contract had the same flaw as the assertion it replaced.**
+   `/aria-current/` also matches the navbar's active "Work" link on that page, so
+   the test passed with the selector deleted. Now anchored to
+   `<button type="button" aria-current="true"`.
+
+Also corrected: the footer email link measured **40.8px at 375px**, not the 44px
+previously claimed (that figure came from a desktop-only measurement). Now `min-h-11`,
+verified 44px at 375 and 1280. The mobile trigger is 44×44, closing the deferred item
+below. Reveal timing moved into `AnimatedContent`'s defaults, removing the same five
+props from all eight call sites (net −30 lines) with behaviour verified unchanged.
+
+### Accepted: content is JS-gated (decided 2026-08-09)
+
+With JavaScript disabled, all 12 wrappers stay `visibility: hidden` — Work, Skills,
+About and Contact render blank, and `document.body.innerText` drops to 554 characters
+(hero, nav and footer only). The outgoing system rendered visible on first paint, so
+this is a real behaviour change, not a pre-existing condition.
+
+**Accepted deliberately.** The text remains present in the HTML source, and search
+engines that execute JavaScript see the revealed page. Non-JS clients and text-only
+extractors see a mostly-empty homepage.
+
+The one-line mitigation, if this is ever revisited:
+`<noscript><style>.invisible{visibility:visible!important}</style></noscript>` in
+`layout.tsx`. Nothing should be hidden-for-animation when there is no JS to animate.
+
+This also means the reveal half of the reduced-motion contract has no automated
+guard: `reveal-wrapper.static.test.mjs` asserts the *hidden* half only. A future edit
+to the reduced-motion branch would pass lint, build and both tests while blanking the
+site for reduced-motion users. Verify that path in a real browser after touching
+`AnimatedContent.tsx`.
+
+### Deferred
+
+- The four unused reveal variants (`fade-in`, `fade-left`, `fade-right`, `scale-in`)
+  no longer exist in code. The prop mapping to reproduce them is preserved in the
+  spec's variant table.
+- `AnimatedContent.tsx` retains ~45 lines of unreachable props (`container`,
+  `reverse`, `disappearAfter`, `onComplete`, …). Left in place to keep the file
+  diffable against the upstream React Bits registry entry.
+- `AnimatedContent.tsx` is PascalCase in a kebab-case directory. That is the
+  registry's filename; renaming would break a future re-pull.
+- Reduced motion is sampled once at mount with no `change` listener. Only affects a
+  preference toggled mid-session, for reveals that have not yet fired.
+
+---
+
 # Full SEO pass — remaining gaps
 
 Status: **implemented, verified** — see `## Review` below.
@@ -1459,3 +2105,162 @@ Reinstated the shared Sheet close control and made it a 44px keyboard-accessible
 target, so the mobile navigation no longer depends on the inert header trigger.
 Verified lint, an optimized Next 16.3.0 build (12 static routes), static-export
 artifacts, production dependency audit, and mobile-browser dismissal behavior.
+
+---
+
+## "Darisi Warm" homepage redesign (2026-08-10)
+
+Source: Claude Design project `Darisi UI redesign`, file `Darisi Warm.dc.html`.
+
+- [x] Read the design file and its imported assets, and map its tokens onto the existing theme system.
+- [x] Add the warm surface tokens, the Caveat display face, and the ambient keyframes to `globals.css`.
+- [x] Rebuild the navigation as a floating desktop pill plus a rounded mobile bar and menu sheet.
+- [x] Rebuild Hero, Work, Story (About + Skills merged), Notes, Contact (`#chat`), and Footer.
+- [x] Verify both themes, desktop and mobile, `/blog` and `/work`, lint, and the static build.
+
+### Review (done)
+
+The design's content already matched `site-content.ts` and `blog.ts`, so nothing
+was retyped — the sections read from the existing sources. Existing primitives
+were reused rather than replaced: `AnimatedContent` drives every `data-reveal`
+element, the Radix `Sheet` backs the mobile menu (keeping its focus trap and
+reachable close control), and `ThemeToggle` kept its store and only changed
+shape. `About.tsx` and `Skills.tsx` were deleted; their content lives in
+`Story.tsx`.
+
+Two deviations from the design, both deliberate:
+
+- The Notes cards link to real posts (`/blog/<slug>`), and a small "all the
+  notes" link points at `/blog`, which the design left unreachable.
+- The `breathe` keyframe animates scale only; the washes centre themselves with
+  the `translate` property. The design folded `translateX(-50%)` into both the
+  inline style and the keyframe, which double-shifted the gradient.
+
+Verified: production build (16 static routes), ESLint clean, both themes at
+1440px and 390px, mobile menu open/close, and `/blog` + `/work` still rendering
+correctly under the new shared navigation.
+
+---
+
+## "Darisi Post" article template (2026-08-10)
+
+Source: Claude Design project `Darisi UI redesign`, file `Darisi Post.dc.html`.
+
+- [x] Rebuild `PostLayout` to the design: reading-progress bar, back pill, meta row, author row, brief card, sticky contents + CTA sidebar, related notes, closing contact band.
+- [x] Rewrite `.blog-prose` so hand-authored post markup renders the warm treatments.
+- [x] Bring the `/blog` index into the warm card language and mark "Notes" current in the nav off the homepage.
+- [x] Remove the left/right page gutter site-wide.
+- [x] Verify both themes, desktop and mobile, lint, and the static build.
+
+### Review (done)
+
+The contents list is derived on the server by `withHeadingIds`, which walks the
+post's JSX children, collects the `h2` labels, and clones the headings with
+slugified ids. Nothing is duplicated into post metadata and the list ships in
+the HTML — an earlier client-side version was also rejected by the
+`react-hooks/set-state-in-effect` lint rule.
+
+Post bodies stay plain markup. `.blog-prose` carries the design's treatments:
+accent-dot bullets, `ol` as numbered decision cards, `blockquote` as the panel
+callout, and an opt-in `ul.card-grid` for comparison lists. The dot and the
+counter are absolutely positioned rather than flex siblings — post `li`s contain
+a bare `<strong>` plus a text node, and flex split those into separate columns.
+
+Deviations from the design: the sidebar CTA copy is generalised, since one
+layout serves all five posts; and the mobile bar keeps its Menu sheet instead of
+swapping in an "All notes" link, because the article header already carries that
+affordance and the sheet is the only route to the rest of the nav.
+
+`--page-gutter` is now `0rem`. Content runs to the viewport edge below 1280px,
+including on mobile; the token is the single place to put a margin back.
+
+---
+
+## Production-readiness review (2026-08-11)
+
+Full sweep: dead code, broken links/anchors, accessibility, SEO/metadata,
+React/Next correctness, CSS hygiene, build/lint config. Findings and fixes:
+
+- [x] Fixed two WCAG AA contrast failures in the light theme: `--soft`
+      (2.99:1 on card → 5.08:1) and `--accent` (3.23:1 on background → 5.69:1).
+      Both were failing on real information-bearing text (reading times,
+      dates, footer copyright, Problem/Role/Outcome labels, numbered lists),
+      not decorative elements. Dark theme was already passing and is
+      untouched.
+- [x] Fixed the LCP warning on `/work` — its case-file screenshot had no
+      `priority`, so Next flagged it as an unmarked LCP image.
+- [x] Stopped preloading DM Mono, Source Serif 4, and Inter sitewide.
+      `next/font` auto-preloads every family applied at `<html>` scope on
+      every route; only DM Sans (body) and Caveat (hand accents) are on the
+      critical path everywhere — the other three are only rendered by `/work`
+      (or, for Inter, never — it's fallback insurance behind DM Sans).
+- [x] Added the missing `<Footer />` to `/work` — every other route renders
+      it, `/work` silently didn't.
+- [x] Fixed `animate-rise` on the desktop nav pill — not a real Tailwind
+      class, so the pill never animated in. Now `animate-[rise_700ms_var(--ease-standard)_both]`,
+      matching every other reveal in the codebase.
+- [x] Added `aria-hidden="true"` to the mobile sheet's close-icon `<X>`,
+      matching every other icon usage.
+- [x] Removed six dead UI components with zero importers (`button.tsx`,
+      `card.tsx`, `select.tsx`, `evidence-ledger.tsx`, `section-heading.tsx`,
+      `badge.tsx`) and their backing CSS (`.section-heading*`,
+      `.evidence-ledger*`, `.portfolio-hero__*`, `hero-rise`/`scroll-dot`
+      keyframes, `.bg-dot-pattern`/`.bg-grid-pattern`, and the now-orphaned
+      `--pattern-*-color`/`--content-measure`/`--content-reading`/
+      `--section-space*` tokens).
+- [x] Removed the dead `ANALYTICS_EVENTS.navPrimaryCtaClick` constant (no nav
+      CTA fires it since the redesign removed the desktop nav's primary
+      button).
+- [x] Fixed `package.json`'s `start` script — `next start` hard-errors under
+      `output: "export"` (confirmed by running it). Now `npx serve@latest out`,
+      Next's own recommended replacement.
+- [x] Added a `test` script wiring up the two `node:test` files that already
+      existed in `tests/` but weren't runnable via npm.
+- [x] Fixed `tests/reveal-wrapper.static.test.mjs` — its hardcoded count (12)
+      and comment described the pre-redesign Work/Skills/About/Contact
+      structure. Updated to 18, matching Work/Story/Notes today.
+- [x] Rewrote `DESIGN_SYSTEM.md` (fully described the old "Measured Signal"
+      burgundy palette and deleted components) and the stale parts of
+      `REPO_CONTEXT.md` (referenced two files — `animate-on-scroll.tsx`,
+      `src/hooks/use-in-view.ts` — that don't exist; replaced by
+      `AnimatedContent.tsx`) to match the live "Darisi Warm" system.
+- [x] Verified: production build (16 static routes), both `node:test` files,
+      ESLint, `tsc --noEmit`, and a full-page screenshot pass of every route
+      in both themes at desktop/mobile widths.
+
+### Known, deliberate gap (not fixed — flagging, not silently redesigning)
+
+`/work` (`work-index.tsx`) predates the "Darisi Warm" redesign and still uses
+the older token vocabulary (`text-muted-foreground`, `border-border-subtle`,
+`font-display`/`font-utility`, Source Serif 4/DM Mono). Those tokens are still
+live in `globals.css`, so the page renders correctly — it just looks visually
+distinct from the rest of the site. Left alone rather than redesigned without
+being asked; noted in `DESIGN_SYSTEM.md`'s implementation map.
+
+---
+
+## Remove /work page (2026-08-11)
+
+The standalone `/work` route never got its warm-redesign pass (flagged as a
+known gap in the previous review) and duplicated content already on the
+homepage's `#work` section. Removed rather than redesigned.
+
+- [x] Deleted `src/app/work/page.tsx`, `src/components/sections/work-index.tsx`,
+      `tests/work-index.static.test.mjs`.
+- [x] Fixed every reference that would otherwise 404 or go stale:
+      `sitemap.ts` (dropped the `/work` entry), `llms.txt/route.ts` (dropped
+      the "Selected work" page link, re-pointed TexLedger's fallback href from
+      `/work` to `/#work`), `site-content.ts` (removed `buildWorkPageJsonLd`
+      and its `WORK_ID`/breadcrumb plumbing; `buildWorkItemList`'s per-item
+      fallback URL now points at `/#work` instead of the dead route).
+- [x] Removed DM Mono and Source Serif 4 entirely from `layout.tsx` and
+      `globals.css` (`--font-utility`, `--font-display`, `--font-utility-stack`,
+      `--radius-panel`, `--radius-tag`) — `/work` was their only consumer, so
+      self-hosting them was pure dead weight once it was gone.
+- [x] Updated `DESIGN_SYSTEM.md` and `REPO_CONTEXT.md`, both of which
+      documented `/work` and the now-removed font/radius tokens.
+- [x] Verified: build (15 static routes, was 16), both remaining checks
+      (`node --test`, now 1 test since `work-index.static.test.mjs` is gone),
+      ESLint, `tsc --noEmit`, `/work` 404s, homepage JSON-LD's TexLedger entry
+      resolves to `/#work`, and only DM Sans + Caveat + fallback Inter load
+      as fonts anywhere on the site.
