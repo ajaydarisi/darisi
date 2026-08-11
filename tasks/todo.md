@@ -1,3 +1,29 @@
+# Ask About Ajay CTA — Pending implementation plan
+
+Status: **implemented and verified**
+
+Spec: `docs/superpowers/specs/2026-08-11-ask-about-ajay-cta-design.md`
+
+- [x] Confirm the portfolio is the integration point and chat.darisi.in is the destination.
+- [x] Select the Story feature card as the placement.
+- [x] Review the design spec with the user.
+- [x] Create the implementation plan.
+- [x] Implement with a failing static contract first.
+- [x] Run lint, build, and static tests; record results below.
+
+## Review
+
+Added **Ask about Ajay** below **Ask for my CV** in the Story feature card.
+It opens `https://chat.darisi.in` in a protected new tab and records
+`story_chat_cta_click` with `location: "story_feature"`.
+
+Evidence: the new static test failed before the CTA existed, then passed after
+the change. `npm run build`, `npm run lint`, `npx tsc --noEmit`, and
+`git diff --check` all exited 0. Browser screenshot automation was unavailable
+because the configured `agent-browser` binary is not installed.
+
+---
+
 # React Bits scroll reveals — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development

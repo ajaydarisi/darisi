@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowDownToLine } from "lucide-react";
+import { ArrowDownToLine, MessageCircle } from "lucide-react";
 import AnimatedContent from "@/components/ui/AnimatedContent";
 import { BrandMark } from "@/components/ui/brand-mark";
+import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL, skillAreas } from "@/lib/site-content";
 
 const values = [
@@ -59,6 +60,24 @@ export function Story() {
                     aria-hidden="true"
                   />
                   Ask for my CV
+                </a>
+                <a
+                  href="https://chat.darisi.in"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() =>
+                    trackEvent(ANALYTICS_EVENTS.storyChatCtaClick, {
+                      location: "story_feature",
+                    })
+                  }
+                  className="mt-3 inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
+                >
+                  <MessageCircle
+                    className="size-[1.0625rem]"
+                    strokeWidth={1.9}
+                    aria-hidden="true"
+                  />
+                  Ask about Ajay
                 </a>
               </div>
             </div>

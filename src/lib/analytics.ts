@@ -6,6 +6,7 @@ export const ANALYTICS_EVENTS = {
   navMobileCtaClick: "nav_mobile_cta_click",
   workProjectClick: "work_project_click",
   fallbackEmailClick: "fallback_email_click",
+  storyChatCtaClick: "story_chat_cta_click",
 } as const;
 
 type AnalyticsEventName =
