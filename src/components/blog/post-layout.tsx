@@ -77,12 +77,12 @@ export function PostLayout({ post, children }: PostLayoutProps) {
             <div className="mt-8.5 flex flex-wrap items-center gap-3.5">
               <span
                 aria-hidden="true"
-                className="grid size-[2.875rem] shrink-0 place-items-center rounded-full bg-feature"
+                className="brand-feature grid size-[2.875rem] shrink-0 place-items-center rounded-full bg-feature"
               >
                 <BrandMark
                   variant="mark"
                   alt=""
-                  className="size-[1.625rem] bg-feature-mark!"
+                  className="h-[1.625rem] w-[1.904296875rem] text-feature-mark!"
                 />
               </span>
               <span className="text-base font-semibold text-foreground">

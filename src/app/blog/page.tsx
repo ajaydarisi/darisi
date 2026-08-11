@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
+    locale: seoConfig.locale,
     url: `${seoConfig.siteUrl}/blog`,
     siteName: seoConfig.siteName,
     title: blogIndexTitle,

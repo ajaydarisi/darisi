@@ -62,9 +62,9 @@ inline` (`--color-background` → `bg-background`, etc.).
   values (`#F6F2EA`, `#0F2724`, `#DDA082`) for exactly this reason — they're
   the fixed dark-nav palette, not theme-reactive tokens.
 - Brand assets fall into two kinds. Masked assets (`logo.svg`,
-  `darisi-wordmark.svg` via `BrandMark`) carry no colour of their own and take
-  `--primary`/`--feature-mark` per theme. Baked assets (the app icon family,
-  the standalone wordmark files) carry `#0F2724` and do not respond to theme.
+  `darisi-wordmark.svg` via `BrandMark`) include the full lockup geometry,
+  including its contrast dot, while CSS paints them with the active semantic
+  colours. Baked app-icon assets carry `#0F2724` and do not respond to theme.
 
 ### Palette approval
 
@@ -154,12 +154,14 @@ its final state on mount instead.
 | Variant | Use |
 | --- | --- |
 | `mark` | Compact navigation and small decorative brand moments |
-| `wordmark` | Story panel |
+| `wordmark` | Hero, Story panel, Footer |
 
-Paints the source SVG as a CSS mask over a background color, so only the alpha
-channel of the source reaches the page and the mark follows the theme token.
-Keep `public/logo.svg` and `public/darisi-wordmark.svg` as bare glyphs — no
-tile, no background, no baked colour — or the mask will pick up the frame.
+Paints the source SVG as one CSS mask, so the complete lockup — including the
+contrast dot stored in the asset — follows the active theme. Keep
+`public/logo.svg` and `public/darisi-wordmark.svg` free of tiles and
+backgrounds; only their glyph and dot geometry should reach the mask. Dark
+and light surfaces use scoped `--logo-dot` values where necessary so the dot
+retains contrast against its immediate background.
 
 ### Sheet (`src/components/ui/sheet.tsx`)
 

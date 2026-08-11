@@ -98,6 +98,7 @@ export default function Image() {
               x 120..375, so the default 0 0 512 512 frame renders it clipped. */}
           <svg width="96" height="96" viewBox="-38.5 -30 572 572">
             <path fillRule="evenodd" clipRule="evenodd" d={D_PATH} fill={SUPPORTING} />
+            <circle cx="427" cy="416" r="40" fill={ACCENT} />
           </svg>
         </div>
       </div>

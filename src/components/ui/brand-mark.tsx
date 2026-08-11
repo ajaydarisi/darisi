@@ -5,13 +5,13 @@ type BrandMarkVariant = "mark" | "wordmark";
 const assets = {
   mark: {
     src: "/logo.svg",
-    width: 512,
+    width: 600,
     height: 512,
     alt: "Darisi logo",
   },
   wordmark: {
     src: "/darisi-wordmark.svg",
-    width: 828,
+    width: 900,
     height: 256,
     alt: "DARISI",
   },
@@ -41,6 +41,11 @@ export function BrandMark({ variant, className, alt }: BrandMarkProps) {
     WebkitMaskPosition: "center",
     WebkitMaskRepeat: "no-repeat",
     WebkitMaskSize: "contain",
+    backgroundColor: "currentColor",
+    backgroundImage:
+      variant === "mark"
+        ? "linear-gradient(to right, currentColor 0 62.5%, var(--logo-dot) 62.5% 100%)"
+        : "linear-gradient(to right, currentColor 0 92.048%, var(--logo-dot) 92.048% 100%)",
   } satisfies CSSProperties;
 
   return (
@@ -48,7 +53,7 @@ export function BrandMark({ variant, className, alt }: BrandMarkProps) {
       role={label ? "img" : undefined}
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}
-      className={`block bg-primary forced-colors:bg-[CanvasText] ${className ?? ""}`}
+      className={`block text-primary forced-colors:text-[CanvasText] ${className ?? ""}`}
       style={style}
     />
   );

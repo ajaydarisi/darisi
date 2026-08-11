@@ -29,19 +29,19 @@ export function Story() {
 
         <div className="mt-14 grid gap-7 [grid-template-columns:repeat(auto-fit,minmax(min(100%,21.25rem),1fr))]">
           <AnimatedContent className="flex">
-            <div className="flex flex-col gap-8 rounded-[clamp(1.5rem,3vw,2.25rem)] bg-feature px-[clamp(1.5rem,3.4vw,2.75rem)] py-[clamp(1.75rem,4vw,3rem)] text-on-feature shadow-[var(--shadow-soft)]">
+            <div className="story-feature flex flex-col gap-8 rounded-[clamp(1.5rem,3vw,2.25rem)] bg-feature px-[clamp(1.5rem,3.4vw,2.75rem)] py-[clamp(1.75rem,4vw,3rem)] text-on-feature shadow-[var(--shadow-soft)]">
               <p className="text-[clamp(1.35rem,2.2vw,1.85rem)] font-medium leading-[1.35] -tracking-[0.025em]">
-                I&apos;m based in Bengaluru and I work on product web apps and
-                internal systems. What I enjoy most is the seam where product
-                clarity, interface decisions, and implementation meet — the place
-                where a vague requirement turns into something people can actually
-                use.
+                I&apos;m Ajay Darisi, based in Bengaluru, and I work on product
+                web apps and internal systems. What I enjoy most is the seam where
+                product clarity, interface decisions, and implementation meet —
+                the place where a vague requirement turns into something people
+                can actually use.
               </p>
               <div>
                 <BrandMark
                   variant="wordmark"
                   alt="Darisi"
-                  className="w-[11.875rem] bg-feature-mark!"
+                  className="w-[11.875rem] text-feature-mark!"
                 />
                 <p className="mt-[1.125rem] text-[0.9375rem] leading-[1.7] text-feature-body">
                   darisi.in is my personal site. It&apos;s where I keep the things
@@ -51,7 +51,7 @@ export function Story() {
                 </p>
                 <a
                   href={`mailto:${CONTACT_EMAIL}?subject=CV%20request`}
-                  className="mt-6.5 inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[rgba(246,242,234,0.22)] bg-[rgba(246,242,234,0.10)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[rgba(246,242,234,0.18)]"
+                  className="mt-6.5 inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
                 >
                   <ArrowDownToLine
                     className="size-[1.0625rem]"

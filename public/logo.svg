@@ -1,4 +1,4 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="600" height="512" viewBox="0 0 600 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!--
     Golden Ratio "D" Favicon — Darisi (filled for small-size legibility)
     Outer D: height=400, width=400/φ ≈ 247  →  ratio ≈ φ
@@ -10,4 +10,5 @@
     d="M 120 56 L 120 456 C 460 456 460 56 120 56 Z M 192 120 L 192 392 C 400 392 400 120 192 120 Z"
     fill="#0F2724"
   />
+  <circle cx="427" cy="416" r="40" fill="#914D30" />
 </svg>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Send } from "lucide-react";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { CONTACT_EMAIL } from "@/lib/site-content";
 import { socialUrls } from "@/lib/seo";
@@ -13,7 +14,7 @@ const socials = [
 export function Footer() {
   return (
     <footer aria-label="Site footer" className="pb-10 pt-15">
-      <div className="site-shell flex flex-wrap items-center justify-between gap-6 rounded-[clamp(1.75rem,6vw,999px)] bg-card px-[clamp(1.5rem,3vw,2.5rem)] py-5.5 shadow-[var(--shadow-soft)]">
+      <div className="site-shell grid items-center gap-6 rounded-[clamp(1.75rem,6vw,999px)] bg-card px-[clamp(1.5rem,3vw,2.5rem)] py-5.5 shadow-[var(--shadow-soft)] md:grid-cols-[1fr_auto_1fr]">
         <a
           href={`mailto:${CONTACT_EMAIL}`}
           onClick={() =>
@@ -25,7 +26,15 @@ export function Footer() {
           {CONTACT_EMAIL}
         </a>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="justify-self-center">
+          <BrandMark
+            variant="wordmark"
+            alt=""
+            className="w-[7rem]"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5 md:justify-self-end">
           {socials.map((social) => (
             <a
               key={social.label}
@@ -37,7 +46,7 @@ export function Footer() {
               {social.label}
             </a>
           ))}
-          <p className="ml-2.5 text-sm text-soft">© Ajay Darisi · Bengaluru</p>
+          <p className="ml-2.5 text-sm text-soft">© Darisi · Bengaluru</p>
         </div>
       </div>
     </footer>

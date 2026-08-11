@@ -188,6 +188,7 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
     },
     openGraph: {
       type: "article",
+      locale: seoConfig.locale,
       url,
       siteName: seoConfig.siteName,
       title: post.title,
@@ -195,7 +196,7 @@ export function buildPostMetadata(post: BlogPostMeta): Metadata {
       publishedTime: post.datePublished,
       modifiedTime: postLastModified(post),
       section: post.tag,
-      authors: [seoConfig.personName],
+      authors: [seoConfig.siteUrl],
       images: [ogImage],
     },
     twitter: {

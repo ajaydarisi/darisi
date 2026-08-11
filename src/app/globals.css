@@ -86,6 +86,14 @@
   --feature-body: #A8BEB9;
   --feature-mark: #DDA082;
   --nav-bg: #1C3A37;
+  --nav-fg: #F6F2EA;
+  --nav-muted: #C8DAD6;
+  --nav-accent: #DDA082;
+  --nav-hover: rgba(246, 242, 234, 0.12);
+  --nav-active: rgba(221, 160, 130, 0.18);
+  --nav-close-bg: rgba(246, 242, 234, 0.10);
+  --nav-border: rgba(246, 242, 234, 0.12);
+  --nav-mark: #C8DAD6;
   --line: rgba(246, 242, 234, 0.1);
   --wash1: rgba(221, 160, 130, 0.28);
   --wash2: rgba(15, 39, 36, 0);
@@ -105,6 +113,7 @@
   --input: #2A4A47;
   --ring: #2A8278;
   --accent: #DDA082;
+  --logo-dot: #DDA082;
   --accent-foreground: #0F2724;
   --secondary: #1C3A37;
   --secondary-foreground: #C8DAD6;
@@ -131,6 +140,15 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
+  --nav-bg: #F6F2EA;
+  --nav-fg: #0F2724;
+  --nav-muted: #4A5A55;
+  --nav-accent: #914D30;
+  --nav-hover: rgba(15, 39, 36, 0.08);
+  --nav-active: rgba(145, 77, 48, 0.15);
+  --nav-close-bg: rgba(15, 39, 36, 0.08);
+  --nav-border: rgba(15, 39, 36, 0.12);
+  --nav-mark: #0F2724;
 }
 
 html[data-theme="light"] {
@@ -149,6 +167,14 @@ html[data-theme="light"] {
   --feature-body: #A8BEB9;
   --feature-mark: #C8DAD6;
   --nav-bg: #0F2724;
+  --nav-fg: #F6F2EA;
+  --nav-muted: #C8DAD6;
+  --nav-accent: #DDA082;
+  --nav-hover: rgba(246, 242, 234, 0.12);
+  --nav-active: rgba(221, 160, 130, 0.18);
+  --nav-close-bg: rgba(246, 242, 234, 0.10);
+  --nav-border: rgba(246, 242, 234, 0.12);
+  --nav-mark: #C8DAD6;
   --line: rgba(26, 36, 33, 0.1);
   --wash1: rgba(221, 160, 130, 0.55);
   --wash2: rgba(246, 242, 234, 0);
@@ -172,6 +198,7 @@ html[data-theme="light"] {
      Role/Outcome, numbered list markers). Still a clear warm terracotta at
      5.3–5.7:1. Dark theme's accent (#DDA082) already passes and is untouched. */
   --accent: #914D30;
+  --logo-dot: #914D30;
   --accent-foreground: #0A1F1D;
   --secondary: #EDE9E0;
   --secondary-foreground: #3D4F4B;
@@ -194,6 +221,36 @@ html[data-theme="light"] {
   --shadow-sheet: 0 24px 80px rgba(26, 36, 33, 0.16);
   --overlay-background: rgba(22, 22, 22, 0.36);
   color-scheme: light;
+}
+
+.story-feature {
+  --logo-dot: #DDA082;
+  --feature-action-border: rgba(246, 242, 234, 0.22);
+  --feature-action-bg: rgba(246, 242, 234, 0.10);
+  --feature-action-hover: rgba(246, 242, 234, 0.18);
+}
+
+.brand-nav {
+  --logo-dot: #DDA082;
+}
+
+.brand-feature {
+  --logo-dot: #DDA082;
+}
+
+html[data-theme="dark"] .story-feature {
+  --logo-dot: #914D30;
+  --feature: #F6F2EA;
+  --on-feature: #0F2724;
+  --feature-body: #4A5A55;
+  --feature-mark: #0F2724;
+  --feature-action-border: rgba(15, 39, 36, 0.22);
+  --feature-action-bg: rgba(15, 39, 36, 0.08);
+  --feature-action-hover: rgba(15, 39, 36, 0.14);
+}
+
+html[data-theme="dark"] .brand-nav {
+  --logo-dot: #914D30;
 }
 
 @layer base {

@@ -1,4 +1,4 @@
-import { blogLastModified, blogPosts, postLastModified } from "@/lib/blog";
+import { blogLastModified, blogPosts } from "@/lib/blog";
 import { blogIndexDescription, blogIndexTitle } from "@/lib/blog";
 import { seoConfig } from "@/lib/seo";
 
@@ -26,7 +26,7 @@ export function GET() {
       <guid isPermaLink="true">${url}</guid>
       <description>${escape(post.description)}</description>
       <category>${escape(post.tag)}</category>
-      <pubDate>${rfc822(postLastModified(post))}</pubDate>
+      <pubDate>${rfc822(post.datePublished)}</pubDate>
     </item>`;
     })
     .join("\n");

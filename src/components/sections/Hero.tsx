@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { LocalTime } from "@/components/ui/local-time";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import { projects } from "@/lib/site-content";
@@ -56,8 +57,13 @@ export function Hero() {
             operations problems into software teams can rely on.
           </p>
 
-          <h1 className="mt-[1.125rem] animate-[rise_900ms_160ms_var(--ease-standard)_both] text-[clamp(3.4rem,12.6vw,11rem)] font-bold leading-[0.9] -tracking-[0.05em] text-foreground">
-            Ajay Darisi<span className="text-accent">.</span>
+          <h1 className="mt-[1.125rem] flex items-end animate-[rise_900ms_160ms_var(--ease-standard)_both]">
+            <span className="sr-only">Ajay Darisi — Software Engineer</span>
+            <BrandMark
+              variant="wordmark"
+              alt=""
+              className="w-[clamp(15rem,48vw,43rem)]"
+            />
           </h1>
 
           <div className="mt-10 flex animate-[fadein_900ms_420ms_both] flex-wrap items-center gap-3.5">

@@ -2264,3 +2264,330 @@ homepage's `#work` section. Removed rather than redesigned.
       ESLint, `tsc --noEmit`, `/work` 404s, homepage JSON-LD's TexLedger entry
       resolves to `/#work`, and only DM Sans + Caveat + fallback Inter load
       as fonts anywhere on the site.
+
+---
+
+## SEO audit (2026-08-11)
+
+- [x] Add static-output checks for indexable routes, 404 directives, sitemap,
+      robots, RSS, and JSON-LD.
+- [x] Remove the 404 indexing conflict; restore blog `og:locale`; correct RSS
+      publication-date handling; retain truthful date-only content data.
+- [x] Give the visual Hero wordmark a truthful semantic H1 without changing its
+      rendered lockup.
+- [x] Make tests build-backed and remove source files proved unused by `rg`.
+- [x] Verify build, tests, lint, TypeScript, output artefacts, and document the
+      audit results.
+
+### Review
+
+- Removed the contradictory `index, follow` / `noindex` directives from both
+  static 404 documents by deleting redundant root robots metadata. Normal pages
+  remain indexable by default; error pages now emit only `noindex`.
+- Restored `og:locale` on the blog index and all posts, made article Open Graph
+  authors point to the canonical profile URL, and made RSS item `pubDate`
+  immutable when a future revision has a `dateModified` value.
+- Kept the Hero's visual DARISI lockup while adding a truthful accessible H1;
+  refreshed the homepage sitemap `lastmod` for the material copy change.
+- Removed the unused wordmark PNG and unreferenced local Inter source files
+  (~750 KB). `npm test` now rebuilds before inspecting static output, and its
+  five SEO checks validate every indexable page plus sitemap, robots, feed, and
+  404 output.
+- Intentionally did not invent exact publication timestamps or article-specific
+  imagery. The existing dates and shared social card are accurate; per-article
+  timestamps/images can be added when source material exists.
+
+---
+
+## Embedded brand dots (2026-08-11)
+
+- [x] Add the contrast-dot geometry to `logo.svg` and `darisi-wordmark.svg`.
+- [x] Render each asset as one themed mask; remove the separate dot markup and
+      its per-placement sizing API.
+- [x] Update callers, docs, and the static contract; verify build, tests, lint,
+      TypeScript, and responsive placement.
+
+### Review
+
+- Each SVG now owns its circle geometry. `BrandMark` paints the complete asset
+  through one CSS mask with a themed two-colour gradient, retaining theme-aware
+  ink and accent colours without a sibling dot element.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and live mobile/desktop rendering in both themes. No standalone dot nodes
+  remain and neither viewport overflows.
+
+---
+
+## Compact-mark dot refinement (2026-08-11)
+
+- [x] Move the embedded D dot next to the visible glyph and use a stronger
+      orange across both source lockups and their themed masks.
+- [x] Update the static contract and colour documentation; verify build,
+      tests, lint, TypeScript, and the compact mark at mobile/desktop widths.
+
+### Review
+
+- The compact dot now starts four SVG units after the D's widest point, while
+  both lockups use the design system's `#DDA082` orange without adding markup.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and the mobile navbar with no standalone dot node or horizontal overflow.
+
+---
+
+## Unified lockup dot colour (2026-08-11)
+
+- [x] Use the Hero wordmark's accent for both embedded SVG dots and remove the
+      compact mark's colour override.
+- [x] Update the static contract and docs; verify build, tests, lint,
+      TypeScript, and the Hero/navbar colour match.
+
+### Review
+
+- Both SVG circles now carry `#914D30`; their single-mask renderer uses the
+  active `--accent` token, so compact and full lockups always share a dot.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and matching live dark-theme gradient values for the compact D and Hero wordmark.
+
+---
+
+## Compact-dot spacing (2026-08-11)
+
+- [x] Move the circle in `logo.svg` closer to the D's lower curve and update
+      the source-geometry check.
+- [x] Verify build, tests, lint, TypeScript, and the compact lockup's spacing.
+
+### Review
+
+- The circle moved to `cx="400"`, beside the D's lower curve. A valid localized
+  radial gradient keeps that embedded circle on the active accent colour.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and a live mobile render with no horizontal overflow.
+
+---
+
+## D-dot curve alignment (2026-08-11)
+
+- [x] Set the embedded D dot to a measured near-tangent position after the
+      lower curve and update its mask position contract.
+- [x] Verify build, tests, lint, TypeScript, and the rendered compact lockup.
+
+### Review
+
+- The `cx="340"` position leaves an approximately 8-unit gap from the D path,
+  creating a clean just-after relationship without overlap.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and the live mobile navbar with no horizontal overflow.
+
+---
+
+## Wordmark-dot edge alignment (2026-08-11)
+
+- [x] Align the wordmark dot's left edge to the final I and its bottom edge to
+      the overall lockup baseline established by the D.
+- [x] Update the mask-paint position contract; verify build, tests, lint,
+      TypeScript, and the rendered wordmark.
+
+### Review
+
+- The wordmark circle uses `cx="848.433402" cy="232.09153" r="20"`: its
+  left edge matches the final I's rendered edge (`828.433402`), and its bottom
+  matches the D-established overall baseline (`252.09153`).
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and the live desktop Hero with no horizontal overflow.
+
+---
+
+## Wordmark-dot terminal baseline (2026-08-11)
+
+- [x] Align the wordmark dot's bottom edge to the final I's rendered bottom,
+      keeping its left edge aligned to the final I.
+- [x] Verify build, tests, lint, TypeScript, and the rendered Hero lockup.
+
+### Review
+
+- The wordmark SVG uses `cx="848.433402" cy="187.10835" r="20"`: its left
+  edge remains aligned to the final I's right edge, and its bottom aligns to
+  the final I's bottom.
+- Verified 11 static tests, production build, ESLint, TypeScript, and diff
+  whitespace checks.
+
+---
+
+## Wordmark-only dot spacing (2026-08-11)
+
+- [x] Increase only the full wordmark's terminal gap to 24 SVG units.
+- [x] Re-run tests, build, lint, TypeScript, and whitespace checks.
+
+### Review
+
+- The full wordmark dot now uses `cx="872.433402"`, leaving a 24-unit gap
+  after the final I while retaining the existing bottom alignment.
+- The compact D logo remains unchanged; all 11 tests and checks pass.
+
+---
+
+## Production-safe dot coloring (2026-08-11)
+
+- [x] Anchor both mask gradients at their terminal glyph edges so the full
+      embedded dots render orange across every placement and theme.
+- [x] Re-run tests, build, lint, TypeScript, and whitespace checks.
+
+### Review
+
+- The compact mask transitions at the D's right edge (`62.5%`); the wordmark
+  transitions at the final I's right edge (`92.048%`). The 24-unit wordmark gap
+  remains transparent, and the entire embedded dot is orange.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and a live Hero screenshot with a fully orange wordmark dot.
+
+---
+
+## Theme surface contrast (2026-08-11)
+
+- [x] Use a white Navbar in dark mode with dark readable controls.
+- [x] Keep the light-mode Navbar dark and make the Story feature card white only
+      in dark mode with matching dark copy and controls.
+- [x] Verify both theme token states, tests, build, lint, TypeScript, and
+      whitespace checks.
+
+### Review
+
+- Added semantic Navbar tokens for foreground, muted, active, hover, close,
+  border, accent, and logo colors; dark mode maps them to a warm-white surface.
+- Scoped the Story feature card's dark-mode white treatment without changing
+  other feature cards or the light theme.
+- Verified live light/dark computed colors plus 11 static tests, production
+  build, ESLint, TypeScript, and diff whitespace checks.
+
+---
+
+## Reversed logo-dot palette (2026-08-11)
+
+- [x] Use a dedicated theme-aware logo-dot token: peach in dark mode and
+      terracotta in light mode across all BrandMark placements.
+- [x] Re-run tests, build, lint, TypeScript, and whitespace checks.
+
+### Review
+
+- `--logo-dot` resolves to `#DDA082` in dark mode and `#914D30` in light mode;
+  all mask gradients use that token instead of the broader accent token.
+- Verified live computed gradients in both themes plus 11 static tests,
+  production build, ESLint, TypeScript, and diff whitespace checks.
+
+---
+
+## Hero/Story dot consistency (2026-08-11)
+
+- [x] Share the same dedicated logo-dot token between Hero and Story wordmarks.
+- [x] Verify both rendered wordmarks resolve to the same dark-theme dot color.
+
+### Review
+
+- Hero and Story both resolve `--logo-dot` to `#DDA082` in dark mode and use the
+  same BrandMark gradient; the placement-specific text color no longer affects
+  the dot.
+- Verified live computed styles plus the full test, build, lint, TypeScript,
+  and whitespace suite.
+
+---
+
+## Story dot inversion (2026-08-11)
+
+- [x] Reverse the Story wordmark dot relative to Hero in each theme.
+- [x] Verify both themes and the full checks.
+
+### Review
+
+- Light: Hero `#914D30`, Story `#DDA082`. Dark: Hero `#DDA082`, Story
+  `#914D30`.
+- Verified live computed values plus 12 static tests, production build, ESLint,
+  TypeScript, and diff whitespace checks.
+
+---
+
+## Navbar dot inversion (2026-08-11)
+
+- [x] Give the Navbar's compact mark the same inverted dot palette as Story.
+- [x] Verify both themes and the full checks.
+
+### Review
+
+- Navbar compact dots now resolve to `#DDA082` in light mode and `#914D30` in
+  dark mode, matching Story's inverted palette.
+- Verified live values plus 12 static tests, production build, ESLint,
+  TypeScript, and diff whitespace checks.
+
+---
+
+## Remaining logo placements (2026-08-11)
+
+- [x] Add the contrast dot to SVG/app favicon artwork and the social-card mark.
+- [x] Apply the dark-surface dot treatment to the blog byline mark.
+- [x] Regenerate raster favicons and verify all logo placements.
+
+### Review
+
+- SVG, ICO, 48px, 192px, and Apple-touch favicon assets now include the
+  terracotta dot on their fixed light background. The social card and blog
+  byline use peach against their dark surfaces.
+- Verified the favicon artwork, live blog byline colors in both themes, 12
+  static tests, production build, ESLint, TypeScript, and diff whitespace.
+
+---
+
+## Brand-dot visible spacing (2026-08-11)
+
+- [x] Increase the shared terminal-glyph-to-dot gap to a visibly readable
+      12 SVG units in both lockups and their mask gradients.
+- [x] Re-run tests, build, lint, TypeScript, and whitespace checks.
+
+### Review
+
+- The compact dot now starts 12 units after the D's widest point; the wordmark
+  dot starts 12 units after the final I while preserving bottom alignment.
+- Verified 11 static tests, production build, ESLint, TypeScript, and diff
+  whitespace checks.
+
+---
+
+## Brand-dot optical spacing (2026-08-11)
+
+- [x] Add a small gap between each logo's terminal glyph and embedded dot.
+- [x] Verify tests, build, lint, TypeScript, and whitespace checks.
+
+### Review
+
+- Added a 6-unit SVG gap in both lockups and matched the mask gradient cutoffs
+  to the new dot positions.
+- Verified 11 static tests, production build, ESLint, TypeScript, and diff
+  whitespace checks.
+
+---
+
+## D-dot edge alignment (2026-08-11)
+
+- [x] Align the dot's left edge to the D's rightmost bound and its bottom edge
+      to the D's bottom bound in the compact SVG and mask painter.
+- [x] Verify build, tests, lint, TypeScript, and the rendered compact lockup.
+
+### Review
+
+- The compact SVG uses `cx="500" cy="416" r="40"`: left edge `460` matches
+  the D's rightmost edge, and bottom edge `456` matches the D's bottom.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and the live mobile mask with no horizontal overflow.
+
+---
+
+## Corrected D-dot edge alignment (2026-08-11)
+
+- [x] Align the circle to the D path's actual rightmost curve point (`x=375`),
+      retaining the shared bottom alignment.
+- [x] Verify build, tests, lint, TypeScript, and the rendered compact lockup.
+
+### Review
+
+- The compact SVG uses `cx="415" cy="416" r="40"`: its left edge is the
+  D's actual Bézier maximum (`375`), and its bottom remains aligned at `456`.
+- Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
+  and the live mobile navbar with no horizontal overflow.

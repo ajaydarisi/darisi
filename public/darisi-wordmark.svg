@@ -1,6 +1,6 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 828.433402 256"
+  viewBox="0 0 900 256"
   role="img"
   aria-labelledby="title desc"
 >
@@ -8,7 +8,8 @@
   <desc id="desc">DARISI wordmark constructed on a golden-ratio grid</desc>
   <!--
     Let H = 256 and φ = 1.61803398875.
-    The visible lockup is exactly 2φH × H (828.433402 × 256).
+    The DARISI glyphs occupy exactly 2φH × H (828.433402 × 256), followed
+    by a fixed contrast dot.
     The D is the original Darisi path, uniformly scaled to an H/φ-wide
     module. The remaining sequence is [H/5, H/φ², H/5, H/φ², H/5,
     H/φ³, H/5, H/φ², H/5, H/φ³].
@@ -34,4 +35,5 @@
     <path d="M700.900206 78.008351C693.750103 63.808351 680.150206 56.024845 664 56.024845 641.900103 56.024845 626.149897 69.908351 626.149897 90.958351 626.149897 111.508351 641.900103 121.508351 668.091649 131.308351 694.283196 141.108351 709.666804 152.458351 709.666804 173.258351 709.666804 190.408351 694.283196 199.975155 669.091649 199.975155 650.200103 199.975155 635.350103 192.008351 626.149897 181.458351" />
     <path d="M775.133196 56.024845H821.300206M798.216701 56.024845V199.975155M775.133196 199.975155H821.300206" />
   </g>
+  <circle cx="872.433402" cy="187.10835" r="20" fill="#914D30" />
 </svg>

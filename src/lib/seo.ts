@@ -23,7 +23,6 @@ export interface SeoConfig {
   };
   sameAs: string[];
   knowsAbout: string[];
-  keywords: string[];
 }
 
 const googleSiteVerification =
@@ -44,7 +43,7 @@ export const socialUrls = { github: GITHUB_URL, linkedin: LINKEDIN_URL };
  * Bump this when project entries, skill areas, or the hero/story copy
  * actually change; leave it alone for styling and asset work.
  */
-export const siteContentRevised = "2026-08-07";
+export const siteContentRevised = "2026-08-11";
 
 export const seoConfig: SeoConfig = {
   siteUrl: "https://darisi.in",
@@ -85,18 +84,6 @@ export const seoConfig: SeoConfig = {
     "Internationalization",
     "Next.js",
     "TypeScript",
-  ],
-  keywords: [
-    "Ajay Darisi",
-    "Darisi",
-    "software engineer",
-    "software engineer portfolio",
-    "Next.js developer",
-    "TypeScript developer",
-    "React developer",
-    "internal tools developer",
-    "payments integration",
-    "software engineer Bengaluru",
   ],
 };
 
@@ -212,7 +199,6 @@ export const siteMetadata: Metadata = {
   metadataBase: new URL(seoConfig.siteUrl),
   title: seoConfig.title,
   description: seoConfig.description,
-  keywords: seoConfig.keywords,
   authors: [{ name: seoConfig.personName, url: seoConfig.siteUrl }],
   creator: seoConfig.personName,
   publisher: seoConfig.personName,
@@ -236,17 +222,6 @@ export const siteMetadata: Metadata = {
     title: seoConfig.title,
     description: seoConfig.description,
     images: [ogImage.url],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
   manifest: "/manifest.json",
   icons: {
