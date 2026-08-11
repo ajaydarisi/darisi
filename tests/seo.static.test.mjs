@@ -122,7 +122,7 @@ test("the visual Hero wordmark retains a truthful text h1", () => {
   assert.match(heroHeading, /darisi-wordmark\.svg/);
 });
 
-test("crawl artefacts are complete and obsolete wordmark output is absent", () => {
+test("crawl artefacts and the raster wordmark output are complete", () => {
   const robots = readOutput("out/robots.txt");
   const sitemap = readOutput("out/sitemap.xml");
   const feed = readOutput("out/feed.xml");
@@ -137,5 +137,5 @@ test("crawl artefacts are complete and obsolete wordmark output is absent", () =
   assert.equal((feed.match(/<item>/g) ?? []).length, 5);
   assert.match(feed, /<atom:link [^>]*rel="self"[^>]*type="application\/rss\+xml"/);
   assert.match(feedSource, /<pubDate>\$\{rfc822\(post\.datePublished\)\}<\/pubDate>/);
-  assert.ok(!existsSync("out/darisi-wordmark.png"));
+  assert.ok(existsSync("out/darisi-wordmark.png"));
 });

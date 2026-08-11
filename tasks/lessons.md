@@ -39,3 +39,5 @@
   regardless of whether they show the compact or full lockup.
 - Treat browser icons and social images as logo placements too: their dots must
   be designed against their fixed artwork backgrounds, not the page theme.
+- When a deliberately removed static asset is restored, update the static-export
+  contract so builds verify its presence rather than treating it as stale output.

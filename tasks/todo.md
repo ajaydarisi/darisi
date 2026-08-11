@@ -2561,6 +2561,20 @@ homepage's `#work` section. Removed rather than redesigned.
 
 ---
 
+## Raster wordmark asset (2026-08-11)
+
+- [x] Generate `darisi-wordmark.png` from the current SVG at its native size.
+- [x] Verify static export includes the new raster asset and all checks pass.
+
+### Review
+
+- `public/darisi-wordmark.png` is a 900×256 rasterization of the current SVG,
+  including its updated dot geometry and color.
+- Verified the static export emits it plus 12 tests, production build, ESLint,
+  TypeScript, and diff whitespace checks.
+
+---
+
 ## Brand-dot visible spacing (2026-08-11)
 
 - [x] Increase the shared terminal-glyph-to-dot gap to a visibly readable
