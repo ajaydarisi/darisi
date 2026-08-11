@@ -41,3 +41,5 @@
   be designed against their fixed artwork backgrounds, not the page theme.
 - When a deliberately removed static asset is restored, update the static-export
   contract so builds verify its presence rather than treating it as stale output.
+- Keep adjacent actions in a shared wrapping flex group so horizontal and
+  narrow-screen spacing comes from one `gap` rule.

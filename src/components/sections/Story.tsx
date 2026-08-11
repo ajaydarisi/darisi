@@ -50,35 +50,37 @@ export function Story() {
                   putting software together. Everything here is work I&apos;ve
                   personally shaped end to end.
                 </p>
-                <a
-                  href={`mailto:${CONTACT_EMAIL}?subject=CV%20request`}
-                  className="mt-6.5 inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
-                >
-                  <ArrowDownToLine
-                    className="size-[1.0625rem]"
-                    strokeWidth={1.9}
-                    aria-hidden="true"
-                  />
-                  Ask for my CV
-                </a>
-                <a
-                  href="https://chat.darisi.in"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() =>
-                    trackEvent(ANALYTICS_EVENTS.storyChatCtaClick, {
-                      location: "story_feature",
-                    })
-                  }
-                  className="mt-3 inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
-                >
-                  <MessageCircle
-                    className="size-[1.0625rem]"
-                    strokeWidth={1.9}
-                    aria-hidden="true"
-                  />
-                  Ask about Ajay
-                </a>
+                <div className="mt-6.5 flex flex-wrap gap-3">
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}?subject=CV%20request`}
+                    className="inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
+                  >
+                    <ArrowDownToLine
+                      className="size-[1.0625rem]"
+                      strokeWidth={1.9}
+                      aria-hidden="true"
+                    />
+                    Ask for my CV
+                  </a>
+                  <a
+                    href="https://chat.darisi.in"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() =>
+                      trackEvent(ANALYTICS_EVENTS.storyChatCtaClick, {
+                        location: "story_feature",
+                      })
+                    }
+                    className="inline-flex h-13 items-center gap-3 rounded-full border-[1.5px] border-[color:var(--feature-action-border)] bg-[var(--feature-action-bg)] px-6 text-[0.9375rem] font-semibold text-on-feature transition-[background-color,transform] duration-[var(--motion-base)] hover:-translate-y-0.5 hover:bg-[var(--feature-action-hover)]"
+                  >
+                    <MessageCircle
+                      className="size-[1.0625rem]"
+                      strokeWidth={1.9}
+                      aria-hidden="true"
+                    />
+                    Ask about Ajay
+                  </a>
+                </div>
               </div>
             </div>
           </AnimatedContent>
