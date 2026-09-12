@@ -17,6 +17,8 @@ export function Footer() {
       <div className="site-shell grid items-center gap-6 rounded-[clamp(1.75rem,6vw,999px)] bg-card px-[clamp(1.5rem,3vw,2.5rem)] py-5.5 shadow-[var(--shadow-soft)] md:grid-cols-[1fr_auto_1fr]">
         <a
           href={`mailto:${CONTACT_EMAIL}`}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={() =>
             trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, { location: "footer" })
           }

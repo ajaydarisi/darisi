@@ -37,6 +37,8 @@ export function Contact() {
 
         <a
           href={`mailto:${CONTACT_EMAIL}`}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={() =>
             trackEvent(ANALYTICS_EVENTS.fallbackEmailClick, {
               location: "contact_section",
