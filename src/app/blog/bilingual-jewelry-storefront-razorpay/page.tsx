@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PostLayout } from "@/components/blog/post-layout";
 import { buildPostMetadata, getBlogPost } from "@/lib/blog";
 
@@ -21,6 +22,21 @@ export default function Post() {
         actually needed, the decisions that mattered, and what I would tell
         anyone planning a storefront with similar constraints.
       </p>
+
+      <figure>
+        <Image
+          src="/screenshots/bfg.webp"
+          alt="Bhagyalakshmi Future Gold homepage with bridal jewelry photography and Explore Collection and View Discounts actions."
+          width={1352}
+          height={748}
+          sizes="(min-width: 1280px) 800px, (min-width: 1024px) 60vw, 100vw"
+          className="h-auto w-full rounded-2xl border border-line"
+        />
+        <figcaption className="mt-3 text-sm leading-relaxed text-soft">
+          The storefront leads with wedding rental sets, with Categories and
+          Rentals in the main navigation.
+        </figcaption>
+      </figure>
 
       <h2>Wedding shoppers buy trust before they buy jewelry</h2>
       <p>

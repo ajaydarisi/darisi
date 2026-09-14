@@ -2631,3 +2631,99 @@ homepage's `#work` section. Removed rather than redesigned.
   D's actual Bézier maximum (`375`), and its bottom remains aligned at `456`.
 - Verified 11 static tests, production build, ESLint, TypeScript, whitespace,
   and the live mobile navbar with no horizontal overflow.
+
+---
+
+# Darisi expressive portfolio — 2026-09-14
+
+Approved plan: warm personal brand for clients and founders, with proof-led journeys.
+
+- [x] Add accessible Split Text, Tilted Card, Spotlight Card and harden shared reveals.
+- [x] Refine hero/mobile previews, project evidence links, Story and email contact.
+- [x] Add case-study imagery and mobile article contents.
+- [x] Update static contracts and current design/repository documentation.
+- [x] Verify lint, production export/tests, responsive themes, input/motion fallbacks and performance.
+
+## Review
+
+Implemented and reviewed on 2026-09-15. No deployment included.
+
+- Added locally owned React Bits adaptations with upstream license, using the
+  existing GSAP dependency. No animation framework or runtime dependency added.
+- Hero includes visible positioning, derived counts, linked desktop previews,
+  and compact mobile previews. Brand SVGs and their paint treatment are unchanged.
+- Work has stable anchors, concise briefs, mobile image-first evidence order,
+  case-study links and matching structured data. Story links capabilities to
+  evidence; Contact has a visible address and announced copy results.
+- Both case studies include inspected existing screenshots. Mobile native
+  contents disclosures precede the article body; desktop contents stay sticky.
+- Removed the obsolete test requiring hidden content. Repaired Node 24 test
+  discovery by explicitly selecting `tests/*.test.mjs`.
+
+### Verification
+
+- `npm run lint`, `npm test` (production export + 15 tests), and `git diff --check`
+  pass. Static review approved after resolving a mobile label-in-name mismatch.
+- Browser checked at 320, 390, 768, and 1440 CSS pixels in both themes. No
+  overflowing content/link/heading elements. The 390px hero shows all three
+  mobile previews within the first screen.
+- Followed mobile project anchor → BFG case study; confirmed image precedes the
+  brief. Native contents expands with a click and collapses with Enter.
+- Clipboard success and denied permission both announce the expected result;
+  denial tested via a local Permissions-Policy header. Busy button uses
+  aria-disabled rather than disabling/removing it from keyboard focus.
+- With all scripts blocked through a local CSP fixture, all 18 reveal wrappers
+  remain visible at opacity 1 and project/case-study links remain present.
+- An isolated browser fixture exercised live matchMedia preference changes:
+  tilt reaches approximately ±5° and scale(1.02, 1.02); reduced motion clears
+  transforms and pointer styles. Simulated coarse input disables pointer updates.
+  Returning to eligible input restores the effect. Fixtures are outside the repo.
+- Accessibility tree contains one copy of the split introduction and ordinary
+  linked preview names; no hydration errors found. Only expected Plausible
+  localhost warnings appeared during normal navigation.
+- The browser tool does not apply native page zoom shortcuts. Checked 720px
+  reflow (the CSS width equivalent of 1440px at 200%) without overflow; native
+  200% zoom and physical touch/screen-reader testing remain manual follow-ups.
+
+### Matched Lighthouse lab comparison
+
+One run each, local production exports, same mobile Lighthouse defaults and
+headless Chrome binary. These are lab observations, not field Core Web Vitals
+or evidence of statistically significant improvement.
+
+| Metric | Before | After |
+| --- | ---: | ---: |
+| Performance score | 73 | 74 |
+| Accessibility score | — | 100 |
+| First contentful paint | 1.36s | 1.35s |
+| Largest contentful paint (simulated) | 6.86s | 6.83s |
+| Total blocking time | 187ms | 179ms |
+| Cumulative layout shift | 0 | 0 |
+| Speed index | 3.00s | 2.03s |
+| Total transfer | 1,079,347 bytes | 1,090,017 bytes |
+
+No material regression observed. Simulated LCP remains an existing performance
+limitation; this change does not claim a passing field LCP. Original reports
+are `/tmp/darisi-before-lighthouse.json` and `/tmp/darisi-after-lighthouse.json`.
+The participant study remains a future validation activity when real users are
+available; no usability success rate is claimed.
+
+---
+
+## Notes return navigation — 2026-09-15
+
+- [x] Add a visible Home label to the sticky navigation on secondary routes.
+- [x] Add consistent Back to home / Notes navigation above the index and articles.
+- [x] Verify mobile/keyboard navigation, build, lint, existing tests, and review.
+
+### Review
+
+Added a persistent visible Home label on secondary routes and shared Back to
+home / All notes navigation above Notes and article content. Controls have 44px
+minimum touch targets, native link semantics, and existing focus outlines.
+
+Verified at 320px without overflow; Tab reached Back to home and Enter returned
+to `/`. Article links also return to `/` and `/blog` as labelled. Lint, production
+build, all 15 existing tests, whitespace checks, and focused code review pass.
+The local preview server now resolves `/blog/` to the Notes page instead of
+showing its exported article directory. No deployment performed.

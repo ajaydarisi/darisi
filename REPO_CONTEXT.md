@@ -14,31 +14,32 @@ This file is the source of truth for high-level repo context in new chats. Read 
 ## Entrypoints And Render Tree
 
 - `src/app/blog/page.tsx` and `src/app/blog/<slug>/page.tsx`
+  - Notes index and every article expose Back to home navigation; the sticky navbar also labels Home explicitly on secondary routes. Shared return links live in `src/components/blog/notes-navigation.tsx`.
   - Blog index and five posts; post metadata/JSON-LD come from the registry in `src/lib/blog.ts`, article shell is `src/components/blog/post-layout.tsx`, article typography is the `.blog-prose` block in `globals.css`
-  - `PostLayout` owns the reading-progress bar, the brief card, the sticky contents/CTA sidebar, related notes, and the closing contact band
+  - `PostLayout` owns the reading-progress bar, the brief card, the mobile contents disclosure, sticky desktop contents/CTA sidebar, related notes, and the closing contact band
   - The contents list is derived on the server by `withHeadingIds` in `src/components/blog/post-toc.tsx`, which reads the post's own `h2`s and stamps their ids — no per-post heading metadata to maintain
   - Post bodies stay plain `p`/`h2`/`ul`/`ol`/`blockquote` markup; `.blog-prose` turns those into the warm treatments (accent-dot bullets, numbered decision cards for `ol`, a panel callout for `blockquote`, and an opt-in `ul.card-grid`)
   - To add a post: add its entry to `blogPosts` in `src/lib/blog.ts`, then create `src/app/blog/<slug>/page.tsx` using `PostLayout` (sitemap and index pick it up automatically)
 - `src/app/layout.tsx`
-  - Owns root layout, local Inter font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
+  - Owns root layout, DM Sans/Caveat font setup, metadata, OpenGraph/Twitter tags, icons, manifest, and theme color
 - `src/app/page.tsx`
   - Owns homepage composition and injects JSON-LD built from shared site content
 - Actual render order in `src/app/page.tsx`
   - `Navbar -> Hero -> Work -> Story -> Notes -> Contact -> Footer`
-  - Homepage section ids are `hey`, `work`, `story`, `notes`, `chat`; the navbar links to `/#<id>` so the same nav works from `/blog`
+  - Homepage section ids are `hey`, `work`, `story`, `notes`, `connect`; the navbar links to `/#<id>` so the same nav works from `/blog`
   - There is no standalone `/work` route — selected work only ever lives on the homepage's `#work` section (`Work.tsx`)
 
 ## Content Ownership
 
 - Visible homepage content lives in `src/components/sections/`
-  - `Hero.tsx`: personal intro copy, primary CTAs, proof pills, and the screenshot collage
+  - `Hero.tsx`: personal intro copy, primary CTAs, derived project counts, linked desktop previews, and a compact mobile preview strip
   - `Work.tsx`: mini case studies for featured projects
   - `Story.tsx`: personal intro, values, and skill areas (replaced the former `About.tsx` + `Skills.tsx`)
   - `Notes.tsx`: recent blog posts, linking to `/blog/<slug>` and `/blog`
-  - `Contact.tsx`: the `#chat` closing section — email CTA and prompt chips, no form
+  - `Contact.tsx`: the `#connect` closing section — email CTA and prompt chips, no form
   - `Navbar.tsx` and `Footer.tsx`: navigation, links, brand, and social/contact links
 - Shared content and provider config live in `src/lib/site-content.ts`
-  - Owns project entries, skill areas, contact email, and JSON-LD builders
+  - Owns stable project ids, case-study destinations, capability evidence links, contact email, and JSON-LD builders
   - When updating public-facing work/skills/contact copy, update this module so the UI and structured data stay aligned
 
 ## Shared Primitives And Patterns
@@ -46,7 +47,9 @@ This file is the source of truth for high-level repo context in new chats. Read 
 - `src/components/ui/brand-mark.tsx`
   - Owns the compact D mark and full wordmark placements without changing source assets or their colours
 - `src/components/ui/AnimatedContent.tsx`
-  - Shared GSAP + ScrollTrigger reveal wrapper used by every scroll-triggered section (Work, Story, Notes); site defaults for distance/duration/ease live here, not at call sites
+  - Shared GSAP + ScrollTrigger reveal wrapper used by every scroll-triggered section (Work, Story, Notes); site defaults for distance/duration/ease live here, not at call sites; HTML stays visible and scoped GSAP matchMedia handles live reduced-motion changes
+- `src/components/ui/SplitText.tsx`, `TiltedCard.tsx`, `SpotlightCard.tsx`
+  - Locally adapted React Bits enhancements; reuse GSAP and semantic theme tokens. Upstream license is preserved alongside them. Tilt is desktop/fine-pointer only; essential content never depends on an effect.
 - `src/components/ui/sheet.tsx`
   - Radix Dialog-based sheet; backs the mobile nav menu in `Navbar.tsx`
 - `src/components/ui/theme-toggle.tsx`
@@ -64,7 +67,7 @@ This file is the source of truth for high-level repo context in new chats. Read 
   - Tailwind v4 imports, semantic dark/light theme tokens, layout/type/motion scales, shared system patterns, reduced-motion handling, and select styling
   - `--page-gutter` is `clamp(1.25rem, 4vw, 3rem)`: `.site-shell`'s side inset scales continuously with viewport width (no breakpoint jump) up to a 48px cap, then centres within `--content-wide`.
   - Warm homepage surfaces live alongside the base roles: `--panel2`, `--fill`/`--on-fill`, `--feature`/`--on-feature`, `--nav-bg`, `--soft`, `--line`, `--wash1`/`--wash2`, `--shadow-soft`/`--shadow-up`, exposed as Tailwind colours (`bg-fill`, `text-soft`, `border-line`, …)
-  - `rise`/`fadein`/`breathe`/`floaty`/`pulsedot` keyframes are applied through arbitrary `animate-[…]` utilities so per-element delays stay at the call site
+  - `rise`/`fadein`/`breathe`/`pulsedot` keyframes are applied through arbitrary `animate-[…]` utilities so per-element delays stay at the call site
 - `src/lib/utils.ts`
   - `cn()` helper for class merging
 - `src/lib/analytics.ts`

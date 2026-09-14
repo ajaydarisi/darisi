@@ -43,3 +43,6 @@
   contract so builds verify its presence rather than treating it as stale output.
 - Keep adjacent actions in a shared wrapping flex group so horizontal and
   narrow-screen spacing comes from one `gap` rule.
+- On Notes and other secondary content routes, expose a clearly labelled Home
+  action outside the mobile menu; a brand mark or conversational section label
+  alone is not a discoverable return path.

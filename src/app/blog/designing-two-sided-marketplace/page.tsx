@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PostLayout } from "@/components/blog/post-layout";
 import { buildPostMetadata, getBlogPost } from "@/lib/blog";
 
@@ -30,6 +31,21 @@ export default function Post() {
         </a>{" "}
         if you want to click along.
       </p>
+
+      <figure>
+        <Image
+          src="/screenshots/devmarket.webp"
+          alt="DevMarket homepage with a talent-search headline and separate Hire a Developer and Find Projects buttons."
+          width={1352}
+          height={748}
+          sizes="(min-width: 1280px) 800px, (min-width: 1024px) 60vw, 100vw"
+          className="h-auto w-full rounded-2xl border border-line"
+        />
+        <figcaption className="mt-3 text-sm leading-relaxed text-soft">
+          Two visible entry points give clients and developers separate starting
+          paths from the landing page.
+        </figcaption>
+      </figure>
 
       <h2>Onboarding: the fork in the road comes first</h2>
       <p>

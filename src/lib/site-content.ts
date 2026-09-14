@@ -6,6 +6,8 @@ export interface ProjectAction {
 }
 
 export interface ProjectEntry {
+  id: string;
+  caseStudyHref?: string;
   title: string;
   category: string;
   summary: string;
@@ -19,6 +21,8 @@ export interface ProjectEntry {
 }
 
 export interface SkillArea {
+  evidenceHref: string;
+  evidenceLabel: string;
   title: string;
   description: string;
   tools: string;
@@ -34,18 +38,24 @@ export const CONTACT_EMAIL = seoConfig.contactEmail;
 export const skillAreas: SkillArea[] = [
   {
     title: "Product Web Apps",
+    evidenceHref: "/#devmarket",
+    evidenceLabel: "Explore DevMarket",
     description:
       "Building product surfaces where UX and implementation stay connected — SaaS-style workflows, onboarding, dashboards, and role-aware interfaces.",
     tools: "Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, TanStack Query",
   },
   {
     title: "Internal Tools & Data",
+    evidenceHref: "/#texledger",
+    evidenceLabel: "Explore TexLedger",
     description:
       "Turning messy operational workflows into focused systems for CRM, approvals, reporting, inventory, and finance-heavy processes.",
     tools: "PostgreSQL, Supabase, schema design, reporting UX, admin systems",
   },
   {
     title: "Platform Layers",
+    evidenceHref: "/blog/keycloak-vs-supabase-auth",
+    evidenceLabel: "Read the authentication guide",
     description:
       "The plumbing that usually blocks a launch: payments, authentication, registration flows, and internationalization.",
     tools: "Razorpay, Keycloak, Supabase Auth, multi-language / i18n flows",
@@ -54,16 +64,18 @@ export const skillAreas: SkillArea[] = [
 
 export const projects: ProjectEntry[] = [
   {
+    id: "bfg",
+    caseStudyHref: "/blog/bilingual-jewelry-storefront-razorpay",
     title: "Bhagyalakshmi Future Gold",
     category: "E-commerce",
     summary:
-      "Bilingual jewelry storefront for a rental-first business that needed premium merchandising, browsing, and a smoother checkout.",
+      "A bilingual jewelry storefront for wedding shoppers, with rentals, catalog browsing, and checkout.",
     problem:
-      "The experience had to feel trustworthy for wedding shoppers while handling catalog depth, rentals, and regional language support.",
+      "Wedding shoppers needed a trustworthy catalog for rentals and purchases in English and Telugu.",
     role:
-      "I handled product design, front-end build, admin workflows, bilingual UX, and Razorpay-backed purchase flows.",
+      "I designed and built the storefront, admin workflows, bilingual experience, and Razorpay checkout.",
     outcome:
-      "The result is a polished storefront with English and Telugu support, rental-led merchandising, and cleaner purchase paths.",
+      "Shipped English and Telugu storefronts with rental-led merchandising and Razorpay purchase flows.",
     tech: ["Next.js", "Supabase", "Razorpay", "Tailwind CSS"],
     action: {
       href: "https://bfg.darisi.in/",
@@ -72,16 +84,18 @@ export const projects: ProjectEntry[] = [
     image: "/screenshots/bfg.webp",
   },
   {
+    id: "devmarket",
+    caseStudyHref: "/blog/designing-two-sided-marketplace",
     title: "DevMarket",
     category: "Marketplace",
     summary:
-      "Two-sided marketplace built to help clients post projects and help developers respond with clear proposals.",
+      "A marketplace where clients post projects and developers respond with proposals.",
     problem:
-      "The product needed to make a complex two-sided flow feel simple from onboarding through messaging and project handoff.",
+      "Clients and developers needed clear paths from onboarding to proposals and project conversations.",
     role:
-      "I owned product design, application architecture, role-based onboarding, proposal workflows, and in-product communication patterns.",
+      "I designed the product and built its architecture, role-based onboarding, proposals, and messaging.",
     outcome:
-      "It shipped as a live marketplace experience with project posting, proposals, messaging, and role-aware navigation.",
+      "Shipped project posting, proposals, messaging, and navigation tailored to each role.",
     tech: ["Next.js", "Supabase", "TanStack Query", "TypeScript"],
     action: {
       href: "https://market.darisi.in/",
@@ -90,24 +104,24 @@ export const projects: ProjectEntry[] = [
     image: "/screenshots/devmarket.webp",
   },
   {
+    id: "texledger",
     title: "TexLedger",
     category: "Internal Tool",
     summary:
-      "Accounting and inventory workspace for textile wholesalers who need faster operational visibility than spreadsheets and ledgers allow.",
+      "An accounting and inventory workspace for a textile wholesaler, covering stock, vouchers, and reporting.",
     problem:
-      "The system had to cover vouchers, stock movement, reporting, and finance-heavy workflows without overwhelming the team using it.",
+      "The team needed vouchers, stock movement, and financial reporting in one usable workspace.",
     role:
-      "I shaped the information architecture, dashboard design, operational workflows, reporting UX, and internal product implementation.",
+      "I designed and built the dashboard, operational workflows, and reporting views.",
     outcome:
-      "The outcome is a structured internal dashboard for vouchers, stock summaries, receivables, and financial reporting views.",
+      "Delivered an internal dashboard for vouchers, stock summaries, receivables, and financial reports.",
     tech: ["Next.js", "Supabase", "PostgreSQL", "shadcn/ui"],
     note: "Internal tool for a textile wholesaler — not publicly accessible.",
     image: "/screenshots/textile.webp",
   },
 ];
 
-/** The projects are only ever described on the homepage — there is no
- *  standalone work index route. */
+/** Link to detailed case studies when available, otherwise to project evidence. */
 function buildWorkItemList() {
   return {
     "@type": "ItemList",
@@ -121,7 +135,9 @@ function buildWorkItemList() {
         name: project.title,
         description: project.summary,
         image: `${SITE_URL}${project.image}`,
-        url: project.action?.href ?? `${SITE_URL}/#work`,
+        url: project.caseStudyHref
+          ? `${SITE_URL}${project.caseStudyHref}`
+          : project.action?.href ?? `${SITE_URL}/#${project.id}`,
         creator: {
           "@id": PERSON_ID,
         },

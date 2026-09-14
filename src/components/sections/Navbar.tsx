@@ -70,12 +70,13 @@ export function Navbar() {
           aria-label="Main navigation"
           className="brand-nav flex h-14 items-center justify-between gap-3 rounded-full bg-nav pl-1.5 pr-2 shadow-[var(--shadow-up)]"
         >
-          <Link href="/" aria-label="Darisi home">
+          <Link href="/" aria-label="Darisi home" className="inline-flex min-h-11 items-center gap-1 rounded-full pr-2 text-sm font-semibold text-[var(--nav-fg)]">
             <BrandMark
               variant="mark"
               alt=""
               className="h-9 w-[42.1875px] text-[var(--nav-mark)]!"
             />
+            {!isHome && <span>Home</span>}
           </Link>
           <div className="flex items-center gap-2">
             <SheetTrigger className="inline-flex h-[2.875rem] items-center gap-3 rounded-full pl-5 pr-4 text-[1.0625rem] font-semibold text-[var(--nav-fg)]">
@@ -96,12 +97,13 @@ export function Navbar() {
           aria-label="Main navigation"
           className="brand-nav animate-[rise_700ms_var(--ease-standard)_both] pointer-events-auto flex max-w-[calc(100vw-1.25rem)] items-center gap-0.5 overflow-x-auto rounded-full bg-nav p-[7px] shadow-[var(--shadow-up)] [scrollbar-width:none]"
         >
-          <Link href="/" aria-label="Darisi home" className="mx-2 shrink-0">
+          <Link href="/" aria-label="Darisi home" className="mx-2 inline-flex min-h-11 shrink-0 items-center gap-1 rounded-full text-sm font-semibold text-[var(--nav-fg)]">
             <BrandMark
               variant="mark"
               alt=""
               className="h-9 w-[42.1875px] text-[var(--nav-mark)]!"
             />
+            {!isHome && <span>Home</span>}
           </Link>
           {links.map((link) => (
             <Link

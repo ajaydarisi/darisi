@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDownToLine, MessageCircle } from "lucide-react";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import AnimatedContent from "@/components/ui/AnimatedContent";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
@@ -45,10 +46,13 @@ export function Story() {
                   className="w-[11.875rem] text-feature-mark!"
                 />
                 <p className="mt-[1.125rem] text-[0.9375rem] leading-[1.7] text-feature-body">
-                  darisi.in is my personal site. It&apos;s where I keep the things
-                  I&apos;ve designed and built, along with how I think about
-                  putting software together. Everything here is work I&apos;ve
-                  personally shaped end to end.
+                  I keep projects moving with clear written updates, decisions
+                  you can respond to on your schedule, and working milestones
+                  you can try for yourself.
+                  {" "}
+                  <a href="/blog/async-projects-global-teams" className="font-semibold underline decoration-current/50 underline-offset-4 hover:decoration-current">
+                    Read how I work with teams across time zones.
+                  </a>
                 </p>
                 <div className="mt-6.5 flex flex-wrap gap-3">
                   <a
@@ -88,7 +92,7 @@ export function Story() {
           <div className="flex flex-col gap-7">
             {values.map((value, index) => (
               <AnimatedContent key={value} delay={index * 0.1}>
-                <div className="flex items-baseline gap-5 rounded-[1.75rem] bg-card px-8 pb-7.5 pt-7 shadow-[var(--shadow-soft)] transition-transform duration-300 ease-[var(--ease-standard)] hover:translate-x-2">
+                <div className="flex items-baseline gap-5 rounded-[1.75rem] bg-card px-8 pb-7.5 pt-7 shadow-[var(--shadow-soft)]">
                   <span className="text-[0.8125rem] font-bold tracking-[0.08em] text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -107,20 +111,25 @@ export function Story() {
           </div>
         </div>
 
-        <div className="mt-7 grid gap-7 [grid-template-columns:repeat(auto-fit,minmax(16.25rem,1fr))]">
+        <div className="mt-7 grid gap-7 [grid-template-columns:repeat(auto-fit,minmax(min(100%,16.25rem),1fr))]">
           {skillAreas.map((skill, index) => (
             <AnimatedContent key={skill.title} delay={index * 0.1} className="flex">
-              <article className="flex w-full flex-col rounded-[2rem] bg-card px-8 pb-8.5 pt-9 shadow-[var(--shadow-soft)] transition-[transform,box-shadow] duration-300 ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:shadow-[var(--shadow-up)]">
-                <h3 className="text-[1.625rem] font-bold leading-[1.1] -tracking-[0.03em] text-foreground">
-                  {skill.title}
-                </h3>
-                <p className="mt-3.5 text-[0.9375rem] leading-[1.65] text-[var(--text-body)]">
-                  {skill.description}
-                </p>
-                <p className="mt-auto border-t-[1.5px] border-line pt-4.5 text-sm leading-[1.6] text-soft">
-                  {skill.tools}
-                </p>
-              </article>
+              <SpotlightCard className="w-full rounded-[2rem] bg-card shadow-[var(--shadow-soft)]">
+                <article className="flex h-full flex-col px-7 pb-8 pt-9">
+                  <h3 className="text-[1.625rem] font-bold leading-[1.1] -tracking-[0.03em] text-foreground">
+                    {skill.title}
+                  </h3>
+                  <p className="mt-3.5 text-[0.9375rem] leading-[1.65] text-[var(--text-body)]">
+                    {skill.description}
+                  </p>
+                  <a href={skill.evidenceHref} className="mb-6 mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-accent underline underline-offset-4">
+                    {skill.evidenceLabel}
+                  </a>
+                  <p className="mt-auto border-t-[1.5px] border-line pt-4.5 text-sm leading-[1.6] text-soft">
+                    {skill.tools}
+                  </p>
+                </article>
+              </SpotlightCard>
             </AnimatedContent>
           ))}
         </div>

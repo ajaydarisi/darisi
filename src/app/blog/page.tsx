@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { NotesNavigation } from "@/components/blog/notes-navigation";
 import { ogImage, seoConfig } from "@/lib/seo";
 import {
   blogIndexDescription,
@@ -59,7 +60,8 @@ export default function BlogIndex() {
           />
 
           <div className="site-shell relative">
-            <p className="hand mb-1.5 rotate-[-2deg] text-[1.75rem] text-soft">
+            <NotesNavigation isIndex />
+            <p className="hand mb-1.5 mt-7 rotate-[-2deg] text-[1.75rem] text-soft">
               decisions, not tutorials
             </p>
             <h1

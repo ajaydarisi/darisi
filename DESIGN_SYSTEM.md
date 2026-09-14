@@ -5,14 +5,13 @@
 Darisi is a portfolio for teams assessing whether Ajay can turn an ambiguous
 product, operational workflow, or platform decision into dependable software.
 The system reads as warm and personal rather than corporate: a cream/deep-green
-palette, a hand-written Caveat accent alongside the working DM Sans/Source
-Serif type, and a rounded, pill-shaped UI vocabulary (navigation, buttons,
+palette, a hand-written Caveat accent alongside the working DM Sans type, and a rounded, pill-shaped UI vocabulary (navigation, buttons,
 cards) instead of hard-edged panels.
 
 The signature pattern is the **labelled brief**: concise `Problem / Role /
 Outcome` (or brief-question) rows that make the evidence easy to scan without
 reading full paragraphs. Motion is a small set of shared keyframes — `rise`,
-`fadein`, `breathe`, `floaty`, `pulsedot` — applied per element via Tailwind's
+`fadein`, `breathe`,  `pulsedot` — applied per element via Tailwind's
 arbitrary `animate-[…]` syntax rather than bespoke per-component animation.
 
 ## Principles
@@ -46,7 +45,7 @@ inline` (`--color-background` → `bg-background`, etc.).
 | Fill | `--fill` / `--on-fill` | `#F6F2EA` on `#0F2724` | `#0F2724` on `#F6F2EA` | Primary filled buttons |
 | Feature | `--feature` / `--on-feature` | `#1C3A37` on `#F6F2EA` | `#0F2724` on `#F6F2EA` | The dark intro/CTA card in Story and post sidebars |
 | Feature body | `--feature-body` | `#A8BEB9` (both themes) | — | Body copy inside a `--feature` panel |
-| Nav | `--nav-bg` | `#1C3A37` | `#0F2724` | Navbar — always dark, independent of site theme |
+| Nav | `--nav-bg` | `#F6F2EA` | `#0F2724` | Navbar reverses the page surface |
 | Accent | `--accent` | `#DDA082` | `#914D30` | Small bold labels, focus rings, links, the hero's full stop |
 | Line | `--line` | `rgba(246,242,234,0.10)` | `rgba(26,36,33,0.10)` | Hairline borders on warm surfaces |
 | Wash 1/2 | `--wash1` / `--wash2` | terracotta → transparent | terracotta → transparent | Ambient radial gradients behind Hero/Contact |
@@ -57,10 +56,8 @@ inline` (`--color-background` → `bg-background`, etc.).
   (`#C4714E`) — see Palette approval below. Do not revert it to the lighter hex
   without re-checking contrast; it was changed specifically because the
   lighter value failed AA on the small bold labels it's used for.
-- `--nav-bg` is independent of `data-theme`: the navbar is always the dark
-  green pill in both themes. `Navbar.tsx` also hardcodes a few literal hex
-  values (`#F6F2EA`, `#0F2724`, `#DDA082`) for exactly this reason — they're
-  the fixed dark-nav palette, not theme-reactive tokens.
+- Navbar tokens reverse the canvas: a cream navbar in dark mode and a deep-green
+  navbar in light mode. Use the semantic `--nav-*` roles for its controls.
 - Brand assets fall into two kinds. Masked assets (`logo.svg`,
   `darisi-wordmark.svg` via `BrandMark`) include the full lockup geometry,
   including its contrast dot, while CSS paints them with the active semantic
@@ -126,8 +123,7 @@ Every other radius is written as a literal Tailwind value at the call site
 - **Shadow:** `--shadow-soft` for resting cards, `--shadow-up` on hover/focus
   and for the floating nav pill.
 - **Keyframes** (`globals.css`): `rise` (fade + rise-in, section reveals),
-  `fadein`, `breathe` (ambient background wash), `floaty` (drifting collage
-  cards, respects a `--tilt` custom property per card), `pulsedot` (the
+  `fadein`, `breathe` (ambient background wash), `pulsedot` (the
   availability indicator).
 - Apply keyframes with Tailwind's arbitrary syntax at the call site —
   `animate-[rise_700ms_var(--ease-standard)_both]` — so each element owns its
@@ -143,11 +139,23 @@ Every other radius is written as a literal Tailwind value at the call site
 
 ### AnimatedContent (`src/components/ui/AnimatedContent.tsx`)
 
-Shared scroll-triggered reveal wrapper. Site defaults for `distance`,
-`duration`, and `ease` live in the component itself, not at call sites — change
-the site's reveal timing there. Renders `invisible` until its GSAP timeline
-plays, then sets `visibility: visible`; on `prefers-reduced-motion` it snaps to
-its final state on mount instead.
+Shared scroll-triggered reveal wrapper. HTML ships visible. Once initialized,
+GSAP animates vertical translation by 24px over 500ms on entry; content already
+in view (including direct anchors) stays in place. Focus finishes an active
+entrance. Scoped `gsap.matchMedia` reverts animations when reduced motion changes.
+The supported props are standard div attributes plus distance, duration, ease,
+and delay; unused upstream disappearing/opacity/scroller options were removed.
+
+### React Bits enhancements
+
+- `SplitText`: one 700ms word entrance for the hero introduction. React owns the
+  spans, text appears once in the accessibility tree, and opacity stays readable.
+- `TiltedCard`: linked desktop project previews, maximum 5° tilt / 1.02× scale;
+  GSAP replaces the upstream Motion dependency. No tracking for touch, reduced
+  motion, or widths below 768px. Static layout rotation is on the outer wrapper.
+- `SpotlightCard`: capability surfaces use a 9% accent wash. Pointer decoration
+  is disabled for touch/reduced motion; focus gets a stable centered wash and
+  ordinary visible link outline. Source license is retained in the UI directory.
 
 ### BrandMark (`src/components/ui/brand-mark.tsx`)
 
@@ -189,21 +197,20 @@ scroll bar, independent client component.
 
 ### Hero
 
-- The hero fills at least one viewport (`min-h-[100svh]`) so the next section
-  never peeks in before the first scroll.
-- A short line of context, the name as an oversized display heading with a
-  full-stop accent, two CTAs, an availability line, and a row of proof pills.
-- A decorative, `aria-hidden` collage of three project screenshots on desktop,
-  each drifting independently via `floaty` with its own `--tilt`.
-- Do not hide hero content while waiting for client-side animation.
+- Visible Ajay introduction, unchanged wordmark, and two immediately usable CTAs.
+- Derived shipped/public product counts and one availability/location line.
+- Three labelled linked project previews on desktop, with bounded pointer tilt.
+- Below 768px, a compact static strip links to the same project anchors.
+- Content determines the section height; no forced viewport minimum or looping collage.
 
 ### Work
 
 - Category + index, title, summary, a `Problem / Role / Outcome` brief, tech
   tags, and one explicit live-product action where public.
 - The homepage's `#work` section is the only place selected work is
-  described — there is no standalone `/work` route. Images there sit below
-  the fold (Hero fills the first viewport) and are left to lazy-load.
+  described — there is no standalone `/work` route. Images lazy-load with reserved space. On mobile they follow the summary, before
+  the brief and actions. Public projects link to existing case studies and live sites;
+  TexLedger stays clearly identified as private.
 
 ### Story
 
@@ -223,7 +230,9 @@ scroll bar, independent client component.
 ### Contact
 
 Use conversational prompt chips that help a visitor identify a relevant
-starting point. The primary action is email; social links remain secondary.
+starting point. The primary action is Email Ajay with a visible, selectable address
+and copy button. A polite live region announces success or manual-copy fallback.
+Social links remain secondary.
 
 ## Accessibility and QA
 

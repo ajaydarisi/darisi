@@ -2,28 +2,58 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-test("homepage reveals ship hidden and are revealed by script", () => {
-  const outputPath = ["out/index.html", "out/index/index.html"].find(existsSync);
-  assert.ok(outputPath, "expected a static homepage");
-  const html = readFileSync(outputPath, "utf8");
+test("homepage content and project journeys are present before hydration", () => {
+  const html = readFileSync("out/index.html", "utf8");
+  const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+  const wrappers = [...markup.matchAll(/<div\b[^>]*data-reveal=""[^>]*>/g)].map(match => match[0]);
+  assert.ok(wrappers.length > 0, "expected enhanced section wrappers");
+  for (const wrapper of wrappers) {
+    assert.doesNotMatch(wrapper, /\binvisible\b|opacity:\s*0|visibility:\s*hidden|\bhidden[= >]/);
+  }
+  for (const id of ["bfg", "devmarket", "texledger"]) {
+    assert.match(markup, new RegExp(`<article[^>]*id="${id}"`));
+    assert.match(markup, new RegExp(`href="#${id}"`));
+  }
+  for (const slug of ["bilingual-jewelry-storefront-razorpay", "designing-two-sided-marketplace"]) {
+    assert.match(markup, new RegExp(`href="/blog/${slug}"`));
+    assert.ok(existsSync(`out/blog/${slug}.html`));
+  }
+  assert.match(markup, /3<\/strong> shipped projects/);
+  assert.match(markup, /2<\/strong> public products/);
+  assert.doesNotMatch(markup, /2024—25/);
+  assert.match(markup, /Email Ajay/);
+  assert.match(markup, /role="status"/);
+});
 
-  // AnimatedContent renders its wrapper as `class="invisible ..."` and only reveals
-  // it from JS. Hero and Contact don't use it (Hero fills the first viewport
-  // and has nothing to reveal on scroll; Contact is a short closing CTA); Work,
-  // Story, and Notes do, and each has literal + mapped instances:
-  //   Work   1 heading + 3 projects              = 4
-  //   Story  1 heading + 1 intro + 3 values + 3 skillAreas = 8
-  //   Notes  1 heading + 5 posts                 = 6
-  // Asserting the exact count is deliberate — a >= threshold would pass while a
-  // whole section was left unmigrated. If projects/values/skillAreas/blogPosts
-  // gain an entry this number moves with them, and updating it here is the
-  // intended prompt to confirm the new item actually animates.
-  const hidden = html.match(/class="invisible/g) ?? [];
-  assert.equal(
-    hidden.length,
-    18,
-    `expected 18 hidden reveal wrappers on the homepage, found ${hidden.length}`
-  );
+test("project structured data points to the available evidence", () => {
+  const html = readFileSync("out/index.html", "utf8");
+  const data = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const work = data["@graph"].find(node => node["@type"] === "ItemList");
+  assert.deepEqual(work.itemListElement.map(entry => entry.item.url), [
+    "https://darisi.in/blog/bilingual-jewelry-storefront-razorpay",
+    "https://darisi.in/blog/designing-two-sided-marketplace",
+    "https://darisi.in/#texledger",
+  ]);
+});
+
+test("case studies have intrinsic imagery and mobile contents before the body", () => {
+  for (const [slug, image] of [
+    ["bilingual-jewelry-storefront-razorpay", "bfg"],
+    ["designing-two-sided-marketplace", "devmarket"],
+  ]) {
+    const html = readFileSync(`out/blog/${slug}.html`, "utf8").replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+    assert.ok(html.indexOf("<details") < html.indexOf('class="blog-prose'));
+    assert.match(html, /<summary\b/);
+    const img = html.match(new RegExp(`<img[^>]*src="/screenshots/${image}\\.webp"[^>]*>`))?.[0];
+    assert.ok(img, "expected case-study screenshot");
+    assert.match(img, /width="1352"/);
+    assert.match(img, /height="748"/);
+    const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+    assert.equal(new Set(ids).size, ids.length, "ids must be unique");
+    for (const match of html.matchAll(/href="#([^"]+)"/g)) {
+      assert.ok(ids.includes(match[1]), `missing contents target: ${match[1]}`);
+    }
+  }
 });
 
 test("homepage includes wordmarks in Hero and Footer", () => {

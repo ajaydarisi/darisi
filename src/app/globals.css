@@ -1,4 +1,4 @@
-/* DM Sans, DM Mono, Source Serif 4, and Caveat are self-hosted via next/font/google
+/* DM Sans and Caveat are self-hosted via next/font/google
    in src/app/layout.tsx (see the comment there) — not loaded here. Lightning CSS,
    Tailwind v4's CSS bundler, doesn't fetch remote @import targets, so a
    `@import url(fonts.googleapis.com/...)` in this file is silently dropped. */
@@ -329,7 +329,7 @@ html[data-theme="dark"] .brand-nav {
 }
 
 /* Ambient motion for the warm homepage: a breathing wash behind the hero and
-   contact sections, drifting screenshot cards, and the availability dot. */
+   contact sections. */
 @keyframes rise {
   from {
     opacity: 0;
@@ -361,16 +361,6 @@ html[data-theme="dark"] .brand-nav {
   50% {
     opacity: 1;
     transform: scale(1.06);
-  }
-}
-
-@keyframes floaty {
-  0%,
-  100% {
-    transform: translateY(0) rotate(var(--tilt, 0deg));
-  }
-  50% {
-    transform: translateY(-10px) rotate(calc(var(--tilt, 0deg) + 2deg));
   }
 }
 
@@ -585,4 +575,34 @@ html[data-theme="dark"] .brand-nav {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* React Bits surfaces use the same warm tokens as the surrounding interface. */
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(24rem circle at var(--spot-x, 50%) var(--spot-y, 50%), color-mix(in srgb, var(--accent) 9%, transparent), transparent 80%);
+  transition: opacity var(--motion-base) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .spotlight-card:hover::before { opacity: 1; }
+}
+.spotlight-card:focus-within::before {
+  opacity: 1;
+  background: radial-gradient(24rem circle at 50% 50%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 80%);
+}
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 4px;
+  border-radius: var(--radius-control);
 }

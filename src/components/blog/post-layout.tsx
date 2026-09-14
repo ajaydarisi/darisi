@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { NotesNavigation } from "@/components/blog/notes-navigation";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { BrandMark } from "@/components/ui/brand-mark";
@@ -39,13 +40,7 @@ export function PostLayout({ post, children }: PostLayoutProps) {
           />
 
           <header className="site-shell relative">
-            <Link
-              href="/blog"
-              className="inline-flex h-[2.625rem] items-center gap-2.5 rounded-full bg-card pl-4 pr-5 text-sm font-semibold text-[var(--text-body)] shadow-[var(--shadow-soft)] transition-[transform,color] duration-200 hover:-translate-x-1 hover:text-foreground"
-            >
-              <ArrowLeft className="size-[1.0625rem]" aria-hidden="true" />
-              All notes
-            </Link>
+            <NotesNavigation />
 
             <div className="mt-7.5 flex flex-wrap items-center gap-3">
               <span className="inline-flex h-8 items-center rounded-full bg-card px-[0.9375rem] text-[0.8125rem] font-semibold text-[var(--text-body)]">
@@ -115,11 +110,24 @@ export function PostLayout({ post, children }: PostLayoutProps) {
                 ))}
               </div>
 
+              {headings.length > 0 && (
+                <details className="mt-6 lg:hidden">
+                  <summary className="cursor-pointer rounded-[1.75rem] bg-card px-7 py-5 text-base font-semibold text-foreground shadow-[var(--shadow-soft)]">
+                    On this page
+                  </summary>
+                  <div className="mt-3">
+                    <PostToc headings={headings} />
+                  </div>
+                </details>
+              )}
+
               <div className="blog-prose mt-12">{content}</div>
             </div>
 
             <aside className="lg:sticky lg:top-[6.875rem]">
-              <PostToc headings={headings} />
+              <div className="hidden lg:block">
+                <PostToc headings={headings} />
+              </div>
 
               <div className="mt-5 rounded-[1.75rem] bg-feature p-7 text-on-feature shadow-[var(--shadow-soft)]">
                 <p className="text-[1.1875rem] font-bold leading-[1.25] -tracking-[0.03em]">
